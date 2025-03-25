@@ -1,36 +1,21 @@
-HELP.md
+# Node modules and build directories
+ui/node_modules/
+ui/.next/
+ui/out/
+ui/.cache/
+ui/coverage/
+
+# Maven build directories
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### STS ###
-.apt_generated
+bin/
+.settings/
 .classpath
-.factorypath
 .project
-.settings
-.springBeans
-.sts4-cache
+.factorypath
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
+# IDE files
+.idea/
 .vscode/
-
-### Ollama models ###
-.ollama/
+*.iml
+*.iws
+*.ipr
