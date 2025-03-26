@@ -1,0 +1,11 @@
+- [x] ProjectServiceTest
+- [x] ProjectControllerTest
+- [x] AiControllerTest
+- [x] HealthControllerTest
+- [x] OllamaConfigTest
+- [x] SQLiteDialectConfigTest
+- [x] WebConfigTest
+- [x] ProjectRepositoryTest
+- [x] RequirementRepositoryTest
+- [x] ProjectTest
+- [x] RequirementTest

@@ -1,0 +1,1089 @@
+nohup: ignoring input
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.3)
+
+2025-03-22T05:34:31.205Z  INFO 17240 --- [           main] c.example.springai.SpringAiApplication   : Starting SpringAiApplication v0.0.1-SNAPSHOT using Java 21.0.6 with PID 17240 (/home/ubuntu/spring-ai-project/target/spring-ai-0.0.1-SNAPSHOT.jar started by ubuntu in /home/ubuntu/spring-ai-project)
+2025-03-22T05:34:31.208Z  INFO 17240 --- [           main] c.example.springai.SpringAiApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-03-22T05:34:32.440Z  INFO 17240 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-22T05:34:32.667Z  INFO 17240 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 214 ms. Found 7 JPA repository interfaces.
+2025-03-22T05:34:34.169Z  INFO 17240 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-03-22T05:34:34.185Z  INFO 17240 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-03-22T05:34:34.185Z  INFO 17240 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2025-03-22T05:34:34.229Z  INFO 17240 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-03-22T05:34:34.230Z  INFO 17240 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2909 ms
+2025-03-22T05:34:34.740Z  INFO 17240 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-22T05:34:34.854Z  INFO 17240 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-03-22T05:34:34.907Z  INFO 17240 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-03-22T05:34:35.301Z  INFO 17240 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-22T05:34:35.353Z  INFO 17240 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-03-22T05:34:35.793Z  INFO 17240 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:file:./project_assistant user=SA
+2025-03-22T05:34:35.796Z  INFO 17240 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-03-22T05:34:35.838Z  WARN 17240 --- [           main] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-03-22T05:34:37.526Z  INFO 17240 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-03-22T05:34:37.589Z  INFO 17240 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-22T05:34:38.667Z  INFO 17240 --- [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-03-22T05:34:38.881Z  WARN 17240 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-03-22T05:34:39.672Z  INFO 17240 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoint(s) beneath base path '/actuator'
+2025-03-22T05:34:39.772Z  INFO 17240 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-03-22T05:34:39.791Z  INFO 17240 --- [           main] c.example.springai.SpringAiApplication   : Started SpringAiApplication in 9.268 seconds (process running for 9.918)
+Hibernate: 
+    select
+        count(*) 
+    from
+        projects p1_0
+Database already contains projects, skipping test data initialization
+2025-03-22T05:34:45.758Z  INFO 17240 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-03-22T05:34:45.759Z  INFO 17240 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-03-22T05:34:45.762Z  INFO 17240 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+Hibernate: 
+    SELECT
+        * 
+    FROM
+        chat_messages 
+    ORDER BY
+        timestamp DESC 
+    LIMIT
+        ?
+Hibernate: 
+    SELECT
+        * 
+    FROM
+        chat_messages 
+    ORDER BY
+        timestamp DESC 
+    LIMIT
+        ?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.description,
+        p1_0.name 
+    from
+        projects p1_0 
+    order by
+        p1_0.name
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.description,
+        p1_0.name 
+    from
+        projects p1_0 
+    order by
+        p1_0.name
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.description,
+        p1_0.name 
+    from
+        projects p1_0 
+    order by
+        p1_0.name
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.description,
+        p1_0.name 
+    from
+        projects p1_0 
+    order by
+        p1_0.name
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.description,
+        p1_0.name 
+    from
+        projects p1_0 
+    order by
+        p1_0.name
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.requirement 
+    from
+        requirements r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        s1_0.project_id,
+        s1_0.id,
+        s1_0.description,
+        s1_0.title 
+    from
+        stories s1_0 
+    where
+        s1_0.project_id=?
+Hibernate: 
+    select
+        q1_0.project_id,
+        q1_0.id,
+        q1_0.context,
+        q1_0.question 
+    from
+        queries q1_0 
+    where
+        q1_0.project_id=?
+Hibernate: 
+    select
+        r1_0.project_id,
+        r1_0.id,
+        r1_0.description,
+        r1_0.mitigation 
+    from
+        risks r1_0 
+    where
+        r1_0.project_id=?
+Hibernate: 
+    select
+        n1_0.project_id,
+        n1_0.id,
+        n1_0.category,
+        n1_0.description 
+    from
+        nfrs n1_0 
+    where
+        n1_0.project_id=?
+2025-03-22T06:15:21.995Z  INFO 17240 --- [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-03-22T06:15:22.005Z  INFO 17240 --- [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-03-22T06:15:22.020Z  INFO 17240 --- [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

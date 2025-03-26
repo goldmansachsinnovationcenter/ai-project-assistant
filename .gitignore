@@ -1,21 +1,28 @@
 # Node modules and build directories
-ui/node_modules/
-ui/.next/
-ui/out/
-ui/.cache/
-ui/coverage/
+**/node_modules/
+**/.next/
+**/out/
+**/.cache/
+**/coverage/
+**/.swc/
 
 # Maven build directories
-target/
-bin/
-.settings/
-.classpath
-.project
-.factorypath
+**/target/
+**/bin/
+**/.settings/
+**/.classpath
+**/.project
+**/.factorypath
 
 # IDE files
-.idea/
-.vscode/
-*.iml
-*.iws
-*.ipr
+**/.idea/
+**/.vscode/
+**/*.iml
+**/*.iws
+**/*.ipr
+
+# Database files
+**/*.db
+**/*.db-journal
+**/*.mv.db
+**/*.trace.db
