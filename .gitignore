@@ -1,36 +1,28 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Node modules and build directories
+**/node_modules/
+**/.next/
+**/out/
+**/.cache/
+**/coverage/
+**/.swc/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Maven build directories
+**/target/
+**/bin/
+**/.settings/
+**/.classpath
+**/.project
+**/.factorypath
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
+# IDE files
+**/.idea/
+**/.vscode/
+**/*.iml
+**/*.iws
+**/*.ipr
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-### Ollama models ###
-.ollama/
+# Database files
+**/*.db
+**/*.db-journal
+**/*.mv.db
+**/*.trace.db
