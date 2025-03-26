@@ -24,6 +24,26 @@ const mockProjects: Project[] = [
     queries: [],
     risks: [],
     nfrs: []
+  },
+  {
+    id: 3,
+    name: 'Test Project 3',
+    description: 'Project with risks and queries',
+    requirements: [],
+    stories: [],
+    queries: [{ id: 1, question: 'Query 1', context: 'Context 1' }],
+    risks: [{ id: 1, description: 'Risk 1', mitigation: 'Mitigation 1' }],
+    nfrs: []
+  },
+  {
+    id: 4,
+    name: 'Test Project 4',
+    description: '',
+    requirements: [],
+    stories: [],
+    queries: [],
+    risks: [],
+    nfrs: []
   }
 ];
 
