@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProjectTest {
 
@@ -85,5 +84,47 @@ public class ProjectTest {
         assertEquals(1, project.getRisks().size());
         assertEquals(1, project.getNfrs().size());
         assertEquals(1, project.getQueries().size());
+    }
+    
+    @Test
+    public void testProjectEqualsAndHashCode() {
+        Project project1 = new Project();
+        project1.setId(1L);
+        project1.setName("Test Project");
+        project1.setDescription("Test Description");
+        
+        Project project2 = new Project();
+        project2.setId(1L);
+        project2.setName("Different Name");
+        project2.setDescription("Different Description");
+        
+        Project project3 = new Project();
+        project3.setId(2L);
+        project3.setName("Test Project");
+        project3.setDescription("Test Description");
+        
+        assertEquals(project1, project1); // Same object
+        assertNotEquals(project1, null); // Null comparison
+        assertNotEquals(project1, new Object()); // Different class
+        assertEquals(project1, project2); // Same ID, different fields
+        assertNotEquals(project1, project3); // Different ID
+        
+        assertEquals(project1.hashCode(), project2.hashCode()); // Same ID should have same hashCode
+        assertNotEquals(project1.hashCode(), project3.hashCode()); // Different ID should have different hashCode
+    }
+    
+    @Test
+    public void testProjectToString() {
+        Project project = new Project();
+        project.setId(1L);
+        project.setName("Test Project");
+        project.setDescription("Test Description");
+        
+        String toString = project.toString();
+        
+        assertNotNull(toString);
+        assertTrue(toString.contains("1"));
+        assertTrue(toString.contains("Test Project"));
+        assertTrue(toString.contains("Test Description"));
     }
 }
