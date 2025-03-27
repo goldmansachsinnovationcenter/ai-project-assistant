@@ -2,6 +2,7 @@ package com.example.springai.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "requirements")
@@ -40,5 +41,26 @@ public class Requirement {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Requirement requirement = (Requirement) o;
+        return Objects.equals(id, requirement.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Requirement{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                '}';
     }
 }
