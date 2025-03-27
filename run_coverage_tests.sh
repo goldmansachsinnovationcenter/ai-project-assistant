@@ -2,6 +2,7 @@
 
 echo "=== Running Backend Tests with Coverage ==="
 cd /home/ubuntu/repos/ai-project-assistant/spring-ai-project
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 mvn clean test jacoco:report
 
 echo ""
