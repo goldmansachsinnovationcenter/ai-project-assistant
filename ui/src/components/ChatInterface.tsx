@@ -24,9 +24,11 @@ const ChatInterface: React.FC = () => {
     try {
       const history = await getChatHistory(20);
       setMessages(history);
+      setError(null);
     } catch (err) {
       console.error('Failed to load chat history:', err);
-      setError('Failed to load chat history. Please refresh the page.');
+      setMessages([]);
+      // setError('Failed to load chat history. Please refresh the page.');
     } finally {
       setIsLoadingHistory(false);
     }
@@ -44,7 +46,7 @@ const ChatInterface: React.FC = () => {
     setInput('');
     
     // Check if the message looks like a command
-    const isCommand = /^(create project|list projects|add requirement|prepare stories|help)/i.test(userMessage);
+    const isCommand = /^(create project|list projects|projects|add requirement|prepare stories|help)/i.test(userMessage);
     
     // Add user message to the chat
     setMessages(prev => [...prev, { prompt: userMessage, response: isCommand ? 'Executing command...' : 'Thinking...' }]);

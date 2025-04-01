@@ -57,8 +57,13 @@ public class AiController {
             response = handleHelpCommand();
         } else {
             // Regular chat
-            ChatResponse aiResponse = chatClient.call(new Prompt(message));
-            response = aiResponse.getResult().getOutput().getContent();
+            try {
+                ChatResponse aiResponse = chatClient.call(new Prompt(message));
+                response = aiResponse.getResult().getOutput().getContent();
+            } catch (Exception e) {
+                response = "I'm sorry, I encountered an error processing your request. Please try again or use one of the available commands. Type 'help' to see the available commands.";
+                System.err.println("Error in AI chat: " + e.getMessage());
+            }
         }
         
         // Save chat message
@@ -91,7 +96,8 @@ public class AiController {
     
     private boolean isListProjectsCommand(String message) {
         return message.toLowerCase().contains("list project") || 
-               message.toLowerCase().contains("show all project");
+               message.toLowerCase().contains("show all project") ||
+               message.toLowerCase().equals("projects");
     }
     
     private boolean isShowProjectCommand(String message) {
