@@ -30,12 +30,37 @@ export async function chatWithAI(message: string): Promise<string> {
 }
 
 /**
- * Send a message to the AI chat endpoint (alias for chatWithAI)
+ * Send a message to the AI chat endpoint
  * @param message The message to send to the AI
  * @returns The AI's response
  */
 export async function sendMessage(message: string): Promise<string> {
-  return chatWithAI(message);
+  return chatWithMcp(message);
+}
+
+/**
+ * Send a message to the AI chat endpoint using MCP
+ * @param message The message to send to the AI
+ * @returns The AI's response
+ */
+export async function chatWithMcp(message: string): Promise<string> {
+  try {
+    const response = await fetch(`${API_URL}/api/ai/mcp-chat?message=${encodeURIComponent(message)}`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    return await response.text();
+  } catch (error) {
+    console.error('Error chatting with MCP AI:', error);
+    throw error;
+  }
 }
 
 /**
