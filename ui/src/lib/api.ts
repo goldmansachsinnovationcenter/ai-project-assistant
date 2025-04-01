@@ -2,7 +2,10 @@
  * API client for interacting with the Spring AI backend
  */
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const apiUrlWithoutCredentials = process.env.NEXT_PUBLIC_API_URL ? 
+  process.env.NEXT_PUBLIC_API_URL.replace(/^(https?:\/\/).*?@/, '$1') : 
+  'http://localhost:8080';
+const API_URL = apiUrlWithoutCredentials;
 
 /**
  * Send a message to the AI chat endpoint
@@ -162,18 +165,22 @@ export interface ChatMessage {
  */
 export async function getChatHistory(limit: number = 20): Promise<ChatMessage[]> {
   try {
+    console.log('Fetching chat history from:', `${API_URL}/api/ai/chat-history?limit=${limit}`);
     const response = await fetch(`${API_URL}/api/ai/chat-history?limit=${limit}`, {
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
     });
     
     if (!response.ok) {
+      console.error(`API error status: ${response.status}`);
       throw new Error(`API error: ${response.status}`);
     }
     
-    return await response.json();
+    const data = await response.json();
+    console.log('Chat history data received:', data);
+    return data;
   } catch (error) {
     console.error('Error getting chat history:', error);
     throw error;
