@@ -3,7 +3,9 @@ package com.example.springai.controller;
 import com.example.springai.entity.*;
 import com.example.springai.model.*;
 import com.example.springai.service.ProjectService;
+import com.example.springai.service.McpToolService;
 import com.example.springai.repository.ChatMessageRepository;
+import com.example.springai.mcp.ToolResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,9 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 @RestController
 @RequestMapping("/api/ai")
@@ -32,33 +37,46 @@ public class AiController {
     
     @Autowired
     private ObjectMapper objectMapper;
+    
+    @Autowired
+    private McpToolService mcpToolService;
+
+    private static final Pattern TOOL_CALL_PATTERN = Pattern.compile("\\{\\s*\"tool\"\\s*:\\s*\"([^\"]+)\"\\s*,\\s*\"parameters\"\\s*:\\s*\\{([^}]+)\\}\\s*\\}");
+    private static final Pattern PARAMETER_PATTERN = Pattern.compile("\"([^\"]+)\"\\s*:\\s*\"([^\"]+)\"");
 
     @GetMapping("/chat")
     public String chat(@RequestParam String message) {
-        // Check if this is a command
         String response;
         
-        if (isCreateProjectCommand(message)) {
-            String projectName = extractProjectName(message);
-            response = handleCreateProject(projectName);
-        } else if (isListProjectsCommand(message)) {
-            response = handleListProjects();
-        } else if (isShowProjectCommand(message)) {
-            String projectName = extractProjectName(message);
-            response = handleShowProject(projectName);
-        } else if (isAddRequirementCommand(message)) {
-            String projectName = extractProjectName(message);
-            String requirement = extractRequirement(message);
-            response = handleAddRequirement(projectName, requirement);
-        } else if (isPrepareStoriesCommand(message)) {
-            String projectName = extractProjectName(message);
-            response = handlePrepareStories(projectName);
-        } else if (isHelpCommand(message)) {
-            response = handleHelpCommand();
-        } else {
-            // Regular chat
-            ChatResponse aiResponse = chatClient.call(new Prompt(message));
-            response = aiResponse.getResult().getOutput().getContent();
+        try {
+            String promptTemplate = "You are an AI assistant for project management. " +
+                "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
+                "respond with a JSON object containing the tool name and parameters. " +
+                "Available tools: create-project, list-projects, show-project, add-requirement, prepare-stories, help. " +
+                "Example: {\"tool\": \"create-project\", \"parameters\": {\"name\": \"ProjectName\"}}. " +
+                "User message: " + message;
+            
+            ChatResponse aiResponse = chatClient.call(new Prompt(promptTemplate));
+            String llmResponse = aiResponse.getResult().getOutput().getContent();
+            
+            if (containsToolCall(llmResponse)) {
+                Map.Entry<String, Map<String, String>> toolCall = extractToolCall(llmResponse);
+                if (toolCall != null) {
+                    String toolName = toolCall.getKey();
+                    Map<String, String> parameters = toolCall.getValue();
+                    
+                    ToolResult toolResult = mcpToolService.executeTool(toolName, parameters);
+                    response = toolResult.getMessage();
+                } else {
+                    response = llmResponse;
+                }
+            } else {
+                response = llmResponse;
+            }
+        } catch (Exception e) {
+            response = "I'm sorry, I encountered an error processing your request. Please try again or use one of the available commands. Type 'help' to see the available commands.";
+            System.err.println("Error in AI chat: " + e.getMessage());
+            e.printStackTrace();
         }
         
         // Save chat message
@@ -386,5 +404,38 @@ public class AiController {
         } catch (Exception e) {
             return "";
         }
+    }
+    
+    /**
+     * Check if the LLM response contains a tool call
+     * @param response LLM response text
+     * @return true if the response contains a tool call
+     */
+    private boolean containsToolCall(String response) {
+        return TOOL_CALL_PATTERN.matcher(response).find();
+    }
+    
+    /**
+     * Extract tool name and parameters from LLM response
+     * @param response LLM response text
+     * @return Map.Entry with tool name as key and parameters map as value, or null if extraction fails
+     */
+    private Map.Entry<String, Map<String, String>> extractToolCall(String response) {
+        Matcher matcher = TOOL_CALL_PATTERN.matcher(response);
+        if (matcher.find()) {
+            String toolName = matcher.group(1);
+            String parametersString = matcher.group(2);
+            
+            Map<String, String> parameters = new HashMap<>();
+            Matcher paramMatcher = PARAMETER_PATTERN.matcher(parametersString);
+            while (paramMatcher.find()) {
+                String paramName = paramMatcher.group(1);
+                String paramValue = paramMatcher.group(2);
+                parameters.put(paramName, paramValue);
+            }
+            
+            return Map.entry(toolName, parameters);
+        }
+        return null;
     }
 }

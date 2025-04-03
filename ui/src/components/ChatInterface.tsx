@@ -42,16 +42,37 @@ const ChatInterface: React.FC = () => {
 
     const userMessage = input;
     setInput('');
+    setError(null); // Clear any previous errors
     
     // Check if the message looks like a command
-    const isCommand = /^(create project|list projects|add requirement|prepare stories|help)/i.test(userMessage);
+    const isCommand = /^(create project|list projects|show project|add requirement|prepare stories|help)/i.test(userMessage);
     
     // Add user message to the chat
     setMessages(prev => [...prev, { prompt: userMessage, response: isCommand ? 'Executing command...' : 'Thinking...' }]);
     
     setIsLoading(true);
     try {
-      const response = await sendMessage(userMessage);
+      console.log('Sending message to API:', userMessage);
+      
+      const apiUrl = 'http://localhost:8080/api/ai/mcp-chat?message=' + encodeURIComponent(userMessage);
+      console.log('API URL:', apiUrl);
+      
+      const fetchResponse = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/plain',
+        },
+      });
+      
+      console.log('Fetch response status:', fetchResponse.status);
+      
+      if (!fetchResponse.ok) {
+        throw new Error(`API error: ${fetchResponse.status}`);
+      }
+      
+      const response = await fetchResponse.text();
+      console.log('Received response from API:', response);
       
       // Update the response in the messages array
       setMessages(prev => 
@@ -59,14 +80,16 @@ const ChatInterface: React.FC = () => {
           idx === prev.length - 1 ? { ...msg, response } : msg
         )
       );
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error sending message:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      console.error('Error details:', errorMessage);
       setError('Failed to get response from AI. Please try again.');
       
       // Update the error in the messages array
       setMessages(prev => 
         prev.map((msg, idx) => 
-          idx === prev.length - 1 ? { ...msg, response: 'Failed to get response from AI. Please try again.' } : msg
+          idx === prev.length - 1 ? { ...msg, response: `Failed to get response from AI: ${errorMessage}. Please try again.` } : msg
         )
       );
     } finally {
