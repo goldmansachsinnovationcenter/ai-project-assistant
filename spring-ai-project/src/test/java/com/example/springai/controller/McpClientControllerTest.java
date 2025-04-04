@@ -6,11 +6,11 @@ import com.example.springai.mcp.McpClient;
 import com.example.springai.mcp.Tool;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.Generation;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.ollama.OllamaChatClient;
+import com.example.springai.mcp.ChatResponse;
+import com.example.springai.mcp.Generation;
+import com.example.springai.mcp.AssistantMessage;
+import com.example.springai.mcp.Prompt;
+import com.example.springai.mcp.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,7 +34,7 @@ public class McpClientControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private OllamaChatClient chatClient;
+    private ChatClient chatClient;
 
     @MockBean
     private ChatMessageRepository chatMessageRepository;
@@ -61,6 +61,7 @@ public class McpClientControllerTest {
         AssistantMessage output = mock(AssistantMessage.class);
         when(output.getContent()).thenReturn("Project 'TestProject' has been created");
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn("Project 'TestProject' has been created");
         when(chatResponse.getResult()).thenReturn(generation);
         when(chatClient.call(any(Prompt.class))).thenReturn(chatResponse);
 

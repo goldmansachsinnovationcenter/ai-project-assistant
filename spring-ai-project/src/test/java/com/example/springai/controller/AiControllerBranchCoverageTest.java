@@ -7,11 +7,11 @@ import com.example.springai.repository.ChatMessageRepository;
 import com.example.springai.service.ProjectService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.Generation;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.ollama.OllamaChatClient;
+import com.example.springai.mcp.ChatResponse;
+import com.example.springai.mcp.Generation;
+import com.example.springai.mcp.AssistantMessage;
+import com.example.springai.mcp.Prompt;
+import com.example.springai.mcp.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -44,7 +44,7 @@ public class AiControllerBranchCoverageTest {
     private ChatMessageRepository chatMessageRepository;
     
     @MockBean
-    private OllamaChatClient chatClient;
+    private ChatClient chatClient;
     
     @MockBean
     private ProjectService projectService;
@@ -57,6 +57,7 @@ public class AiControllerBranchCoverageTest {
         
         when(output.getContent()).thenReturn("Default AI response");
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         
         doReturn(chatResponse).when(chatClient).call(any(String.class));
@@ -71,6 +72,7 @@ public class AiControllerBranchCoverageTest {
         
         when(output.getContent()).thenReturn("AI response");
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         doReturn(chatResponse).when(chatClient).call(any(String.class));
         
@@ -228,6 +230,7 @@ public class AiControllerBranchCoverageTest {
         
         when(output.getContent()).thenReturn("");
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         doReturn(chatResponse).when(chatClient).call(any(Prompt.class));
         
@@ -254,6 +257,7 @@ public class AiControllerBranchCoverageTest {
         
         when(output.getContent()).thenReturn("This is not valid JSON");
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         doReturn(chatResponse).when(chatClient).call(any(Prompt.class));
         
@@ -280,6 +284,7 @@ public class AiControllerBranchCoverageTest {
         
         when(output.getContent()).thenReturn("{\"notStories\": []}");
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         doReturn(chatResponse).when(chatClient).call(any(Prompt.class));
         
@@ -306,6 +311,7 @@ public class AiControllerBranchCoverageTest {
         
         when(output.getContent()).thenReturn("{\"stories\": []}");
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         doReturn(chatResponse).when(chatClient).call(any(Prompt.class));
         
@@ -332,6 +338,7 @@ public class AiControllerBranchCoverageTest {
         
         when(output.getContent()).thenReturn("");
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         doReturn(chatResponse).when(chatClient).call(any(Prompt.class));
         

@@ -6,12 +6,12 @@ import com.example.springai.model.StoryAnalysisResponse;
 import com.example.springai.service.ProjectService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.Generation;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.ollama.OllamaChatClient;
+import com.example.springai.mcp.ChatResponse;
+import com.example.springai.mcp.Generation;
+import com.example.springai.mcp.AssistantMessage;
+import com.example.springai.mcp.UserMessage;
+import com.example.springai.mcp.Prompt;
+import com.example.springai.mcp.ChatClient;
 
 import java.util.*;
 
@@ -23,7 +23,7 @@ public class PrepareStoriesToolTest {
     @Test
     public void testPrepareStoriesSuccess() {
         ProjectService projectService = Mockito.mock(ProjectService.class);
-        OllamaChatClient chatClient = Mockito.mock(OllamaChatClient.class);
+        ChatClient chatClient = Mockito.mock(ChatClient.class);
         
         Project project = new Project();
         project.setName("TestProject");
@@ -89,7 +89,7 @@ public class PrepareStoriesToolTest {
     @Test
     public void testPrepareStoriesProjectNotFound() {
         ProjectService projectService = Mockito.mock(ProjectService.class);
-        OllamaChatClient chatClient = Mockito.mock(OllamaChatClient.class);
+        ChatClient chatClient = Mockito.mock(ChatClient.class);
         
         Mockito.when(projectService.findProjectByName("NonExistentProject"))
                 .thenReturn(Optional.empty());
@@ -109,7 +109,7 @@ public class PrepareStoriesToolTest {
     @Test
     public void testPrepareStoriesNoRequirements() {
         ProjectService projectService = Mockito.mock(ProjectService.class);
-        OllamaChatClient chatClient = Mockito.mock(OllamaChatClient.class);
+        ChatClient chatClient = Mockito.mock(ChatClient.class);
         
         Project project = new Project();
         project.setName("TestProject");

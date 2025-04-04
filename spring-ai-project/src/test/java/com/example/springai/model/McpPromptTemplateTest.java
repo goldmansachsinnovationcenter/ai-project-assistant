@@ -3,7 +3,7 @@ package com.example.springai.model;
 import com.example.springai.mcp.Tool;
 import com.example.springai.mcp.McpClient;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.prompt.Prompt;
+import com.example.springai.mcp.Prompt;
 
 import java.util.Arrays;
 import java.util.List;
