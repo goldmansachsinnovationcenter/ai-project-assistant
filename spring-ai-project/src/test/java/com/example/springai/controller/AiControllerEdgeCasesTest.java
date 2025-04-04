@@ -4,6 +4,7 @@ import com.example.springai.entity.Project;
 import com.example.springai.model.StoryAnalysisResponse;
 import com.example.springai.service.ProjectService;
 import com.example.springai.repository.ChatMessageRepository;
+import com.example.springai.mcp.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,13 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.Generation;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.ollama.OllamaChatClient;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -33,7 +27,7 @@ import static org.mockito.Mockito.*;
 public class AiControllerEdgeCasesTest {
 
     @Mock
-    private OllamaChatClient chatClient;
+    private ChatClient chatClient;
 
     @Mock
     private ProjectService projectService;

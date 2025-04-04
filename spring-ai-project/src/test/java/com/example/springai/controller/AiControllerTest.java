@@ -7,14 +7,14 @@ import com.example.springai.repository.ChatMessageRepository;
 import com.example.springai.service.McpToolService;
 import com.example.springai.service.ProjectService;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.Generation;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.prompt.Prompt;
+import com.example.springai.mcp.ChatResponse;
+import com.example.springai.mcp.Generation;
+import com.example.springai.mcp.AssistantMessage;
+import com.example.springai.mcp.Message;
+import com.example.springai.mcp.Prompt;
 import com.example.springai.mcp.McpClient;
 import com.example.springai.mcp.McpTool;
-import org.springframework.ai.ollama.OllamaChatClient;
+import com.example.springai.mcp.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -41,7 +41,7 @@ public class AiControllerTest {
     private ChatMessageRepository chatMessageRepository;
     
     @MockBean
-    private OllamaChatClient chatClient;
+    private ChatClient chatClient;
     
     @MockBean
     private ProjectService projectService;
@@ -195,12 +195,12 @@ public class AiControllerTest {
     @Test
     public void testNonCommandChat() throws Exception {
         ChatResponse chatResponse = mock(ChatResponse.class);
-        org.springframework.ai.chat.Generation generation = mock(org.springframework.ai.chat.Generation.class);
-        org.springframework.ai.chat.messages.AssistantMessage output = mock(org.springframework.ai.chat.messages.AssistantMessage.class);
+        Generation generation = mock(Generation.class);
+        AssistantMessage output = mock(AssistantMessage.class);
         when(output.getContent()).thenReturn("AI response");
         when(generation.getOutput()).thenReturn(output);
         when(chatResponse.getResult()).thenReturn(generation);
-        when(chatClient.call(any(org.springframework.ai.chat.prompt.Prompt.class))).thenReturn(chatResponse);
+        when(chatClient.call(any(Prompt.class))).thenReturn(chatResponse);
         
         mockMvc.perform(get("/api/ai/chat")
                 .param("message", "Hello AI"))
