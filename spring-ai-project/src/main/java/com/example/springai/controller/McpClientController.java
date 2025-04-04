@@ -4,9 +4,7 @@ import com.example.springai.entity.ChatMessage;
 import com.example.springai.repository.ChatMessageRepository;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.mcp.client.McpClient;
-import org.springframework.ai.mcp.client.McpClientBuilder;
-import org.springframework.ai.mcp.client.transport.webmvc.WebMvcMcpClientTransport;
+import com.example.springai.mcp.McpClient;
 import org.springframework.ai.ollama.OllamaChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,14 +31,11 @@ public class McpClientController {
     private McpClient mcpClient;
     
     /**
-     * Initialize the MCP client
+     * MCP client is autowired from McpConfig
      */
-    @PostConstruct
-    public void init() {
-        WebMvcMcpClientTransport transport = new WebMvcMcpClientTransport(mcpServerPath);
-        mcpClient = McpClientBuilder.builder()
-                .withTransport(transport)
-                .build();
+    @Autowired
+    public void setMcpClient(McpClient mcpClient) {
+        this.mcpClient = mcpClient;
     }
     
     /**
@@ -58,11 +53,11 @@ public class McpClientController {
                 "use the appropriate tool to help them. " +
                 "Available tools: create-project, list-projects, show-project, add-requirement, prepare-stories, help.";
             
-            Prompt prompt = Prompt.builder()
-                    .withSystemMessage(systemPrompt)
-                    .withUserMessage(message)
-                    .withTools(mcpClient.getTools())
-                    .build();
+            java.util.List<org.springframework.ai.chat.messages.Message> messages = new java.util.ArrayList<>();
+            messages.add(new org.springframework.ai.chat.messages.SystemMessage(systemPrompt));
+            messages.add(new org.springframework.ai.chat.messages.UserMessage(message));
+            
+            Prompt prompt = new Prompt(messages);
             
             ChatResponse aiResponse = chatClient.call(prompt);
             

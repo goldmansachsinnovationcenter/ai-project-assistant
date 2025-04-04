@@ -2,7 +2,7 @@ package com.example.springai.model;
 
 import com.example.springai.mcp.Tool;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.mcp.client.McpClient;
+import com.example.springai.mcp.McpClient;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -50,13 +50,25 @@ public class McpPromptTemplate {
     public Prompt createMcpPrompt(String userMessage, McpClient mcpClient) {
         String systemPrompt = "You are an AI assistant for project management. " +
             "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
-            "use the appropriate tool to help them.";
+            "use the appropriate tool to help them.\n\n" +
+            "Available tools:\n";
+            
+        for (Tool tool : mcpClient.getTools()) {
+            systemPrompt += "- " + tool.getName() + ": " + tool.getDescription() + "\n";
+            String[] paramNames = tool.getParameterNames();
+            if (paramNames.length > 0) {
+                systemPrompt += "  Parameters: " + String.join(", ", paramNames) + "\n";
+            }
+        }
         
-        return Prompt.builder()
-                .withSystemMessage(systemPrompt)
-                .withUserMessage(userMessage)
-                .withTools(mcpClient.getTools())
-                .build();
+        systemPrompt += "\nWhen the user asks to perform an action, respond with a JSON object containing the tool name and parameters.\n";
+        systemPrompt += "Example: {\"tool\": \"create-project\", \"parameters\": {\"name\": \"MyProject\", \"description\": \"A sample project\"}}\n\n";
+        
+        java.util.List<org.springframework.ai.chat.messages.Message> messages = new java.util.ArrayList<>();
+        messages.add(new org.springframework.ai.chat.messages.SystemMessage(systemPrompt));
+        messages.add(new org.springframework.ai.chat.messages.UserMessage(userMessage));
+        
+        return new Prompt(messages);
     }
     
     /**

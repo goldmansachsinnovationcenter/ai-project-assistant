@@ -13,6 +13,6 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     List<ChatMessage> findRecentMessages();
     
     default List<ChatMessage> findRecentMessages(@Param("limit") int limit) {
-        return findRecentMessages().stream().limit(limit).toList();
+        return findRecentMessages().stream().limit(limit).collect(java.util.stream.Collectors.toList());
     }
 }

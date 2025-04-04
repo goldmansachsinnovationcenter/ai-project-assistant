@@ -1,13 +1,12 @@
 package com.example.springai.config;
 
 import com.example.springai.mcp.*;
-import org.springframework.ai.mcp.server.McpServer;
-import org.springframework.ai.mcp.server.McpServerBuilder;
-import org.springframework.ai.mcp.server.transport.webmvc.WebMvcMcpServerTransport;
+import com.example.springai.service.McpToolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,20 +34,35 @@ public class McpConfig {
     private HelpTool helpTool;
 
     /**
-     * Configure the MCP server with WebMVC transport
-     * @param transport WebMVC transport for the MCP server
-     * @return Configured MCP server
+     * Configure the MCP client with available tools
+     * @return Configured MCP client
      */
     @Bean
-    public McpServer mcpServer(WebMvcMcpServerTransport transport) {
-        return McpServerBuilder.builder()
-                .withTransport(transport)
-                .withTool(createProjectTool)
-                .withTool(listProjectsTool)
-                .withTool(showProjectTool)
-                .withTool(addRequirementTool)
-                .withTool(prepareStoriesTool)
-                .withTool(helpTool)
-                .build();
+    public McpClient mcpClient() {
+        List<Tool> tools = Arrays.asList(
+                createProjectTool,
+                listProjectsTool,
+                showProjectTool,
+                addRequirementTool,
+                prepareStoriesTool,
+                helpTool
+        );
+        return new McpClient(tools);
+    }
+    
+    /**
+     * Configure the MCP tool service with available tools
+     * @return Configured MCP tool service
+     */
+    @Bean
+    public McpToolService mcpToolService() {
+        return new McpToolService(
+                createProjectTool,
+                listProjectsTool,
+                showProjectTool,
+                addRequirementTool,
+                prepareStoriesTool,
+                helpTool
+        );
     }
 }

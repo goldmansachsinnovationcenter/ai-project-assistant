@@ -49,13 +49,15 @@ public class AiController {
         String response;
         
         try {
-            Prompt prompt = Prompt.builder()
-                    .withSystemMessage("You are an AI assistant for project management. " +
-                        "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
-                        "use the appropriate tool to help them.")
-                    .withUserMessage(message)
-                    .withTools(mcpToolService.getMcpTools())
-                    .build();
+            String systemPrompt = "You are an AI assistant for project management. " +
+                    "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
+                    "use the appropriate tool to help them.";
+            
+            java.util.List<org.springframework.ai.chat.messages.Message> messages = new java.util.ArrayList<>();
+            messages.add(new org.springframework.ai.chat.messages.SystemMessage(systemPrompt));
+            messages.add(new org.springframework.ai.chat.messages.UserMessage(message));
+            
+            Prompt prompt = new Prompt(messages);
             
             ChatResponse aiResponse = chatClient.call(prompt);
             

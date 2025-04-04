@@ -5,9 +5,7 @@ import com.example.springai.model.McpPromptTemplate;
 import com.example.springai.repository.ChatMessageRepository;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.mcp.client.McpClient;
-import org.springframework.ai.mcp.client.McpClientBuilder;
-import org.springframework.ai.mcp.client.transport.webmvc.WebMvcMcpClientTransport;
+import com.example.springai.mcp.McpClient;
 import org.springframework.ai.ollama.OllamaChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,14 +35,11 @@ public class McpAiController {
     private McpClient mcpClient;
     
     /**
-     * Initialize the MCP client
+     * MCP client is autowired from McpConfig
      */
-    @PostConstruct
-    public void init() {
-        WebMvcMcpClientTransport transport = new WebMvcMcpClientTransport(mcpServerPath);
-        mcpClient = McpClientBuilder.builder()
-                .withTransport(transport)
-                .build();
+    @Autowired
+    public void setMcpClient(McpClient mcpClient) {
+        this.mcpClient = mcpClient;
     }
     
     /**

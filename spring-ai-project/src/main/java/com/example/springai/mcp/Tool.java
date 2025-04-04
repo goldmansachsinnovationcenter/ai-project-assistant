@@ -1,16 +1,11 @@
 package com.example.springai.mcp;
 
-import org.springframework.ai.mcp.server.tool.McpTool;
-import org.springframework.ai.mcp.server.tool.McpToolDefinition;
-import org.springframework.ai.mcp.server.tool.McpToolParameter;
-import org.springframework.ai.mcp.server.tool.McpToolResult;
-
 import java.util.Map;
 
 /**
  * Interface for all tools that can be called by the LLM using MCP
  */
-public interface Tool extends McpTool {
+public interface Tool {
     /**
      * Get the name of the tool
      * @return the tool name
@@ -46,7 +41,6 @@ public interface Tool extends McpTool {
      * Get the MCP tool definition
      * @return the MCP tool definition
      */
-    @Override
     default McpToolDefinition getToolDefinition() {
         McpToolDefinition.Builder builder = McpToolDefinition.builder()
                 .withName(getName())
@@ -62,25 +56,5 @@ public interface Tool extends McpTool {
         }
         
         return builder.build();
-    }
-    
-    /**
-     * Execute the tool with the given parameters using MCP
-     * @param parameters Map of parameter names to values
-     * @return the MCP tool result
-     */
-    @Override
-    default McpToolResult execute(Map<String, Object> parameters) {
-        Map<String, String> stringParams = parameters.entrySet().stream()
-                .collect(java.util.stream.Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> entry.getValue() != null ? entry.getValue().toString() : ""
-                ));
-        
-        ToolResult result = execute(stringParams);
-        
-        return result.isSuccess() 
-                ? McpToolResult.success(result.getMessage()) 
-                : McpToolResult.failure(result.getMessage());
     }
 }
