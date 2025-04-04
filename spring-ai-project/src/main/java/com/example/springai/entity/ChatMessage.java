@@ -1,6 +1,6 @@
 package com.example.springai.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
