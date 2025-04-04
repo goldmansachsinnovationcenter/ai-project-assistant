@@ -60,7 +60,6 @@ public class AiControllerBranchCoverageTest {
         when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         
-        doReturn(chatResponse).when(chatClient).call(any(String.class));
         doReturn(chatResponse).when(chatClient).call(any(Prompt.class));
     }
     
@@ -74,7 +73,7 @@ public class AiControllerBranchCoverageTest {
         when(generation.getOutput()).thenReturn(output);
         when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
-        doReturn(chatResponse).when(chatClient).call(any(String.class));
+        doReturn(chatResponse).when(chatClient).call(any(Prompt.class));
         
         mockMvc.perform(get("/api/ai/chat")
                 .param("message", "add requirement  to project TestProject"))
