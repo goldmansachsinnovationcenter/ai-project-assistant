@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Service for managing MCP tools
@@ -65,5 +66,21 @@ public class McpToolService {
         }
         
         return tool.execute(parameters);
+    }
+    
+    /**
+     * Get all tools for use with the MCP client
+     * @return List of tools
+     */
+    public List<Tool> getMcpTools() {
+        return tools;
+    }
+    
+    /**
+     * Get all tools (alias for getAllTools)
+     * @return List of all tools
+     */
+    public List<Tool> getTools() {
+        return getAllTools();
     }
 }

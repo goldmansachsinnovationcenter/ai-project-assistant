@@ -15,10 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.Generation;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.ollama.OllamaChatClient;
+import com.example.springai.mcp.ChatResponse;
+import com.example.springai.mcp.Generation;
+import com.example.springai.mcp.Prompt;
+import com.example.springai.mcp.ChatClient;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.*;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 public class AiControllerExtendedTest {
 
     @Mock
-    private OllamaChatClient chatClient;
+    private ChatClient chatClient;
 
     @Mock
     private ProjectService projectService;
@@ -300,7 +300,7 @@ public class AiControllerExtendedTest {
         // Create a mock ChatResponse
         ChatResponse mockResponse = mock(ChatResponse.class);
         Generation mockGeneration = mock(Generation.class);
-        org.springframework.ai.chat.messages.AssistantMessage mockAssistantMessage = mock(org.springframework.ai.chat.messages.AssistantMessage.class);
+        com.example.springai.mcp.AssistantMessage mockAssistantMessage = mock(com.example.springai.mcp.AssistantMessage.class);
         when(mockAssistantMessage.getContent()).thenReturn("{\"stories\":[\"Story 1\"],\"risks\":[\"Risk 1\"],\"nfrs\":[\"NFR 1\"],\"queries\":[\"Query 1\"],\"summary\":\"Test summary\"}");
         when(mockGeneration.getOutput()).thenReturn(mockAssistantMessage);
         when(mockResponse.getResult()).thenReturn(mockGeneration);

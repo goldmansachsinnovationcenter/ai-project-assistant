@@ -7,11 +7,11 @@ import com.example.springai.service.ProjectService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.Generation;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.ollama.OllamaChatClient;
+import com.example.springai.mcp.ChatResponse;
+import com.example.springai.mcp.Generation;
+import com.example.springai.mcp.AssistantMessage;
+import com.example.springai.mcp.Prompt;
+import com.example.springai.mcp.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,7 +35,7 @@ public class AiControllerPublicMethodsTest {
     private ChatMessageRepository chatMessageRepository;
     
     @MockBean
-    private OllamaChatClient chatClient;
+    private ChatClient chatClient;
     
     @MockBean
     private ProjectService projectService;
@@ -77,6 +77,7 @@ public class AiControllerPublicMethodsTest {
         
         when(output.getContent()).thenReturn(invalidJsonResponse);
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         when(chatClient.call(any(Prompt.class))).thenReturn(chatResponse);
         
@@ -116,6 +117,7 @@ public class AiControllerPublicMethodsTest {
         
         when(output.getContent()).thenReturn(jsonResponse);
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         when(chatClient.call(any(Prompt.class))).thenReturn(chatResponse);
         
@@ -250,6 +252,7 @@ public class AiControllerPublicMethodsTest {
         
         when(output.getContent()).thenReturn(jsonResponse);
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         when(chatClient.call(any(Prompt.class))).thenReturn(chatResponse);
         
@@ -276,6 +279,7 @@ public class AiControllerPublicMethodsTest {
         
         when(output.getContent()).thenReturn("Template response");
         when(generation.getOutput()).thenReturn(output);
+        when(generation.getContent()).thenReturn(output.getContent());
         when(chatResponse.getResult()).thenReturn(generation);
         when(chatClient.call(any(Prompt.class))).thenReturn(chatResponse);
         

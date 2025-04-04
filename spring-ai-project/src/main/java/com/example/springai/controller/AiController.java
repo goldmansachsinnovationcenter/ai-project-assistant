@@ -5,13 +5,10 @@ import com.example.springai.model.*;
 import com.example.springai.service.ProjectService;
 import com.example.springai.service.McpToolService;
 import com.example.springai.repository.ChatMessageRepository;
-import com.example.springai.mcp.ToolResult;
+import com.example.springai.mcp.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.ollama.OllamaChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
@@ -27,7 +24,7 @@ import java.util.regex.Matcher;
 @RequestMapping("/api/ai")
 public class AiController {
     @Autowired
-    private OllamaChatClient chatClient;
+    private ChatClient chatClient;
 
     @Autowired
     private ProjectService projectService;
@@ -49,30 +46,21 @@ public class AiController {
         String response;
         
         try {
-            String promptTemplate = "You are an AI assistant for project management. " +
-                "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
-                "respond with a JSON object containing the tool name and parameters. " +
-                "Available tools: create-project, list-projects, show-project, add-requirement, prepare-stories, help. " +
-                "Example: {\"tool\": \"create-project\", \"parameters\": {\"name\": \"ProjectName\"}}. " +
-                "User message: " + message;
+            String systemPrompt = "You are an AI assistant for project management. " +
+                    "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
+                    "use the appropriate tool to help them.";
             
-            ChatResponse aiResponse = chatClient.call(new Prompt(promptTemplate));
-            String llmResponse = aiResponse.getResult().getOutput().getContent();
+            java.util.List<Message> messages = new java.util.ArrayList<>();
+            messages.add(new SystemMessage(systemPrompt));
+            messages.add(new UserMessage(message));
             
-            if (containsToolCall(llmResponse)) {
-                Map.Entry<String, Map<String, String>> toolCall = extractToolCall(llmResponse);
-                if (toolCall != null) {
-                    String toolName = toolCall.getKey();
-                    Map<String, String> parameters = toolCall.getValue();
-                    
-                    ToolResult toolResult = mcpToolService.executeTool(toolName, parameters);
-                    response = toolResult.getMessage();
-                } else {
-                    response = llmResponse;
-                }
-            } else {
-                response = llmResponse;
-            }
+            Prompt prompt = new Prompt(messages);
+            
+            ChatResponse aiResponse = chatClient.call(prompt);
+            
+            response = aiResponse.getResult().getContent();
+            
+            System.out.println("DEBUG - LLM Response: " + response);
         } catch (Exception e) {
             response = "I'm sorry, I encountered an error processing your request. Please try again or use one of the available commands. Type 'help' to see the available commands.";
             System.err.println("Error in AI chat: " + e.getMessage());
@@ -99,7 +87,7 @@ public class AiController {
     public String getTemplate(@RequestParam String topic) {
         String prompt = String.format("Give me a summary about %s", topic);
         ChatResponse response = chatClient.call(new Prompt(prompt));
-        return response.getResult().getOutput().getContent();
+        return response.getResult().getContent();
     }
     
     private boolean isCreateProjectCommand(String message) {
@@ -270,7 +258,7 @@ public class AiController {
         
         // Call AI
         ChatResponse aiResponse = chatClient.call(new Prompt(prompt.toString()));
-        String responseText = aiResponse.getResult().getOutput().getContent();
+        String responseText = aiResponse.getResult().getContent();
         
         try {
             // Parse JSON response

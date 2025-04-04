@@ -1,7 +1,6 @@
 package com.example.springai.controller;
 
 import com.example.springai.entity.ChatMessage;
-import com.example.springai.model.McpPromptTemplate;
 import com.example.springai.repository.ChatMessageRepository;
 import com.example.springai.mcp.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +14,13 @@ import javax.annotation.PostConstruct;
  */
 @RestController
 @RequestMapping("/api/ai")
-public class McpAiController {
+public class McpClientController {
     
     @Autowired
     private ChatClient chatClient;
     
     @Autowired
     private ChatMessageRepository chatMessageRepository;
-    
-    @Autowired
-    private McpPromptTemplate promptTemplate;
     
     @Value("${spring.ai.mcp.server.transport.webmvc.path:/api/mcp}")
     private String mcpServerPath;
@@ -44,25 +40,32 @@ public class McpAiController {
      * @param message User's message
      * @return Response from the AI or tool execution
      */
-    @GetMapping("/mcp-chat")
-    public String mcpChat(@RequestParam String message) {
+    @GetMapping("/mcp-client-chat")
+    public String mcpClientChat(@RequestParam String message) {
         String response;
         
         try {
-            Prompt prompt = promptTemplate.createMcpPrompt(message, mcpClient);
+            String systemPrompt = "You are an AI assistant for project management. " +
+                "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
+                "use the appropriate tool to help them. " +
+                "Available tools: create-project, list-projects, show-project, add-requirement, prepare-stories, help.";
+            
+            java.util.List<Message> messages = new java.util.ArrayList<>();
+            messages.add(new SystemMessage(systemPrompt));
+            messages.add(new UserMessage(message));
+            
+            Prompt prompt = new Prompt(messages);
             
             ChatResponse aiResponse = chatClient.call(prompt);
             
-            response = aiResponse.getResult().getContent();
+            response = aiResponse.getResult().getOutput().getContent();
             
-            System.out.println("DEBUG - LLM Response: " + response);
+            saveChatMessage(message, response);
         } catch (Exception e) {
             response = "I'm sorry, I encountered an error processing your request. Please try again or use one of the available commands. Type 'help' to see the available commands.";
-            System.err.println("Error in MCP AI chat: " + e.getMessage());
+            System.err.println("Error in MCP client chat: " + e.getMessage());
             e.printStackTrace();
         }
-        
-        saveChatMessage(message, response);
         
         return response;
     }

@@ -4,9 +4,7 @@ import com.example.springai.entity.Project;
 import com.example.springai.entity.Requirement;
 import com.example.springai.model.StoryAnalysisResponse;
 import com.example.springai.service.ProjectService;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.ollama.OllamaChatClient;
+import com.example.springai.mcp.*;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,10 +17,10 @@ import java.util.Optional;
 @Component("mcpPrepareStoriesTool")
 public class PrepareStoriesTool extends ProjectManagementTool {
     private final ProjectService projectService;
-    private final OllamaChatClient chatClient;
+    private final ChatClient chatClient;
     private final ObjectMapper objectMapper;
 
-    public PrepareStoriesTool(ProjectService projectService, OllamaChatClient chatClient) {
+    public PrepareStoriesTool(ProjectService projectService, ChatClient chatClient) {
         super("prepare-stories", "Prepare user stories for a specific project");
         this.projectService = projectService;
         this.chatClient = chatClient;
@@ -70,7 +68,7 @@ public class PrepareStoriesTool extends ProjectManagementTool {
             prompt.append("}\n");
             
             ChatResponse aiResponse = chatClient.call(new Prompt(prompt.toString()));
-            String responseText = aiResponse.getResult().getOutput().getContent();
+            String responseText = aiResponse.getResult().getContent();
             
             try {
                 StoryAnalysisResponse analysisResponse = parseStoryAnalysisResponse(responseText);

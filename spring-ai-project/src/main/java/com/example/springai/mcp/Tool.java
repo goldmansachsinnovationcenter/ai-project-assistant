@@ -3,7 +3,7 @@ package com.example.springai.mcp;
 import java.util.Map;
 
 /**
- * Interface for all tools that can be called by the LLM
+ * Interface for all tools that can be called by the LLM using MCP
  */
 public interface Tool {
     /**
@@ -36,4 +36,25 @@ public interface Tool {
      * @return the result of the tool execution
      */
     ToolResult execute(Map<String, String> parameters);
+    
+    /**
+     * Get the MCP tool definition
+     * @return the MCP tool definition
+     */
+    default McpToolDefinition getToolDefinition() {
+        McpToolDefinition.Builder builder = McpToolDefinition.builder()
+                .withName(getName())
+                .withDescription(getDescription());
+        
+        for (String paramName : getParameterNames()) {
+            builder.withParameter(McpToolParameter.builder()
+                    .withName(paramName)
+                    .withDescription("Parameter: " + paramName)
+                    .withRequired(paramName.equals("name") || paramName.equals("project"))
+                    .withType("string")
+                    .build());
+        }
+        
+        return builder.build();
+    }
 }
