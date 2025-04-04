@@ -75,4 +75,12 @@ public class McpToolService {
     public List<Tool> getMcpTools() {
         return tools;
     }
+    
+    /**
+     * Get all tools (alias for getAllTools)
+     * @return List of all tools
+     */
+    public List<Tool> getTools() {
+        return getAllTools();
+    }
 }

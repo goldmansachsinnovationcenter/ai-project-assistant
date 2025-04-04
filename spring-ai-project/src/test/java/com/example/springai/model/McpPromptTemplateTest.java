@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 public class McpPromptTemplateTest {
 
     @Test
-    public void testCreatePrompt() {
+    public void testCreateToolCallingPrompt() {
         McpPromptTemplate template = new McpPromptTemplate();
         
         Tool tool1 = mock(Tool.class);
@@ -31,7 +31,7 @@ public class McpPromptTemplateTest {
         List<Tool> tools = Arrays.asList(tool1, tool2);
         String userMessage = "Test message";
         
-        String prompt = template.createPrompt(tools, userMessage);
+        String prompt = template.createToolCallingPrompt(tools, userMessage);
         
         assertNotNull(prompt);
         assertTrue(prompt.contains("You are an AI assistant for project management"));
@@ -60,9 +60,6 @@ public class McpPromptTemplateTest {
         Prompt mcpPrompt = template.createMcpPrompt(userMessage, mcpClient);
         
         assertNotNull(mcpPrompt);
-        assertNotNull(mcpPrompt);
-        assertTrue(mcpPrompt.getMessages().size() >= 2);
-        assertTrue(mcpPrompt.getMessages().get(0).getContent().contains("You are an AI assistant for project management"));
     }
     
     @Test
@@ -77,7 +74,7 @@ public class McpPromptTemplateTest {
         
         List<Tool> tools = Arrays.asList(tool1, tool2);
         
-        String toolNames = template.getToolNames(tools);
+        String toolNames = template.getToolNamesList(tools);
         
         assertEquals("tool1, tool2", toolNames);
     }

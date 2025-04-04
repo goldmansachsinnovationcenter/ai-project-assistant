@@ -3,6 +3,8 @@ package com.example.springai.tool;
 import org.junit.jupiter.api.Test;
 import com.example.springai.mcp.McpToolDefinition;
 import com.example.springai.mcp.McpToolResult;
+import com.example.springai.mcp.Tool;
+import com.example.springai.mcp.ToolResult;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collections;
