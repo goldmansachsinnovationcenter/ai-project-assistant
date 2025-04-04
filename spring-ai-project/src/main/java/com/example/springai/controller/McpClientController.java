@@ -20,7 +20,7 @@ import jakarta.annotation.PostConstruct;
 public class McpClientController {
     
     @Autowired
-    private OllamaChatClient chatClient;
+    private ChatClient chatClient;
     
     @Autowired
     private ChatMessageRepository chatMessageRepository;
