@@ -49,30 +49,19 @@ public class AiController {
         String response;
         
         try {
-            String promptTemplate = "You are an AI assistant for project management. " +
-                "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
-                "respond with a JSON object containing the tool name and parameters. " +
-                "Available tools: create-project, list-projects, show-project, add-requirement, prepare-stories, help. " +
-                "Example: {\"tool\": \"create-project\", \"parameters\": {\"name\": \"ProjectName\"}}. " +
-                "User message: " + message;
+            Prompt prompt = Prompt.builder()
+                    .withSystemMessage("You are an AI assistant for project management. " +
+                        "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
+                        "use the appropriate tool to help them.")
+                    .withUserMessage(message)
+                    .withTools(mcpToolService.getMcpTools())
+                    .build();
             
-            ChatResponse aiResponse = chatClient.call(new Prompt(promptTemplate));
-            String llmResponse = aiResponse.getResult().getOutput().getContent();
+            ChatResponse aiResponse = chatClient.call(prompt);
             
-            if (containsToolCall(llmResponse)) {
-                Map.Entry<String, Map<String, String>> toolCall = extractToolCall(llmResponse);
-                if (toolCall != null) {
-                    String toolName = toolCall.getKey();
-                    Map<String, String> parameters = toolCall.getValue();
-                    
-                    ToolResult toolResult = mcpToolService.executeTool(toolName, parameters);
-                    response = toolResult.getMessage();
-                } else {
-                    response = llmResponse;
-                }
-            } else {
-                response = llmResponse;
-            }
+            response = aiResponse.getResult().getOutput().getContent();
+            
+            System.out.println("DEBUG - LLM Response: " + response);
         } catch (Exception e) {
             response = "I'm sorry, I encountered an error processing your request. Please try again or use one of the available commands. Type 'help' to see the available commands.";
             System.err.println("Error in AI chat: " + e.getMessage());

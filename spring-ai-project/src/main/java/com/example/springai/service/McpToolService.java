@@ -1,11 +1,13 @@
 package com.example.springai.service;
 
 import com.example.springai.mcp.*;
+import org.springframework.ai.mcp.server.tool.McpTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Service for managing MCP tools
@@ -65,5 +67,15 @@ public class McpToolService {
         }
         
         return tool.execute(parameters);
+    }
+    
+    /**
+     * Get all tools as MCP tools for use with the MCP client
+     * @return List of MCP tools
+     */
+    public List<McpTool> getMcpTools() {
+        return tools.stream()
+                .map(tool -> (McpTool) tool)
+                .collect(Collectors.toList());
     }
 }
