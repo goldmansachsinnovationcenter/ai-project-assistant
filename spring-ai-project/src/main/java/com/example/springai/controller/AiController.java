@@ -5,13 +5,10 @@ import com.example.springai.model.*;
 import com.example.springai.service.ProjectService;
 import com.example.springai.service.McpToolService;
 import com.example.springai.repository.ChatMessageRepository;
-import com.example.springai.mcp.ToolResult;
+import com.example.springai.mcp.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.ollama.OllamaChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
@@ -27,7 +24,7 @@ import java.util.regex.Matcher;
 @RequestMapping("/api/ai")
 public class AiController {
     @Autowired
-    private OllamaChatClient chatClient;
+    private ChatClient chatClient;
 
     @Autowired
     private ProjectService projectService;
@@ -53,15 +50,15 @@ public class AiController {
                     "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
                     "use the appropriate tool to help them.";
             
-            java.util.List<org.springframework.ai.chat.messages.Message> messages = new java.util.ArrayList<>();
-            messages.add(new org.springframework.ai.chat.messages.SystemMessage(systemPrompt));
-            messages.add(new org.springframework.ai.chat.messages.UserMessage(message));
+            java.util.List<Message> messages = new java.util.ArrayList<>();
+            messages.add(new SystemMessage(systemPrompt));
+            messages.add(new UserMessage(message));
             
             Prompt prompt = new Prompt(messages);
             
             ChatResponse aiResponse = chatClient.call(prompt);
             
-            response = aiResponse.getResult().getOutput().getContent();
+            response = aiResponse.getResult().getContent();
             
             System.out.println("DEBUG - LLM Response: " + response);
         } catch (Exception e) {
@@ -90,7 +87,7 @@ public class AiController {
     public String getTemplate(@RequestParam String topic) {
         String prompt = String.format("Give me a summary about %s", topic);
         ChatResponse response = chatClient.call(new Prompt(prompt));
-        return response.getResult().getOutput().getContent();
+        return response.getResult().getContent();
     }
     
     private boolean isCreateProjectCommand(String message) {
@@ -261,7 +258,7 @@ public class AiController {
         
         // Call AI
         ChatResponse aiResponse = chatClient.call(new Prompt(prompt.toString()));
-        String responseText = aiResponse.getResult().getOutput().getContent();
+        String responseText = aiResponse.getResult().getContent();
         
         try {
             // Parse JSON response

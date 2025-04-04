@@ -2,15 +2,12 @@ package com.example.springai.controller;
 
 import com.example.springai.entity.ChatMessage;
 import com.example.springai.repository.ChatMessageRepository;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
-import com.example.springai.mcp.McpClient;
-import org.springframework.ai.ollama.OllamaChatClient;
+import com.example.springai.mcp.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.annotation.PostConstruct;
+import javax.annotation.PostConstruct;
 
 /**
  * Controller for handling AI chat with MCP tool calling
@@ -53,9 +50,9 @@ public class McpClientController {
                 "use the appropriate tool to help them. " +
                 "Available tools: create-project, list-projects, show-project, add-requirement, prepare-stories, help.";
             
-            java.util.List<org.springframework.ai.chat.messages.Message> messages = new java.util.ArrayList<>();
-            messages.add(new org.springframework.ai.chat.messages.SystemMessage(systemPrompt));
-            messages.add(new org.springframework.ai.chat.messages.UserMessage(message));
+            java.util.List<Message> messages = new java.util.ArrayList<>();
+            messages.add(new SystemMessage(systemPrompt));
+            messages.add(new UserMessage(message));
             
             Prompt prompt = new Prompt(messages);
             

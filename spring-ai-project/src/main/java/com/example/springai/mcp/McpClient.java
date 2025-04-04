@@ -1,9 +1,9 @@
 package com.example.springai.mcp;
 
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Simple MCP client implementation
@@ -33,9 +33,9 @@ public class McpClient {
         systemPrompt.append("When the user asks to perform an action, respond with a JSON object containing the tool name and parameters.\n");
         systemPrompt.append("Example: {\"tool\": \"create-project\", \"parameters\": {\"name\": \"MyProject\", \"description\": \"A sample project\"}}\n\n");
         
-        java.util.List<org.springframework.ai.chat.messages.Message> messages = new java.util.ArrayList<>();
-        messages.add(new org.springframework.ai.chat.messages.SystemMessage(systemPrompt.toString()));
-        messages.add(new org.springframework.ai.chat.messages.UserMessage(userMessage));
+        List<Message> messages = new ArrayList<>();
+        messages.add(new SystemMessage(systemPrompt.toString()));
+        messages.add(new UserMessage(userMessage));
         
         return new Prompt(messages);
     }

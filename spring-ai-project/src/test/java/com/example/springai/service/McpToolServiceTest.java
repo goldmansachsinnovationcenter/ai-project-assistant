@@ -3,7 +3,7 @@ package com.example.springai.service;
 import com.example.springai.mcp.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.mcp.server.tool.McpTool;
+// import org.springframework.ai.mcp.server.tool.McpTool;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -111,7 +111,7 @@ public class McpToolServiceTest {
     
     @Test
     public void testGetMcpTools() {
-        List<McpTool> mcpTools = mcpToolService.getMcpTools();
+        List<Tool> mcpTools = mcpToolService.getTools();
         
         assertNotNull(mcpTools);
         assertEquals(6, mcpTools.size());

@@ -78,18 +78,13 @@
 		<!-- Spring AI dependencies -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
-			<version>${spring-ai.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-core</artifactId>
-			<version>${spring-ai.version}</version>
+			<version>0.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-spring-boot-autoconfigure</artifactId>
-			<version>${spring-ai.version}</version>
+			<version>0.8.0</version>
 		</dependency>
 		<!-- Custom MCP implementation since Spring AI MCP is not available in 0.7.0 -->
 		<dependency>

@@ -3,15 +3,12 @@ package com.example.springai.controller;
 import com.example.springai.entity.ChatMessage;
 import com.example.springai.model.McpPromptTemplate;
 import com.example.springai.repository.ChatMessageRepository;
-import org.springframework.ai.chat.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
-import com.example.springai.mcp.McpClient;
-import org.springframework.ai.ollama.OllamaChatClient;
+import com.example.springai.mcp.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.annotation.PostConstruct;
+import javax.annotation.PostConstruct;
 
 /**
  * Controller for handling AI chat with MCP tool calling
@@ -21,7 +18,7 @@ import jakarta.annotation.PostConstruct;
 public class McpAiController {
     
     @Autowired
-    private OllamaChatClient chatClient;
+    private ChatClient chatClient;
     
     @Autowired
     private ChatMessageRepository chatMessageRepository;
@@ -56,7 +53,7 @@ public class McpAiController {
             
             ChatResponse aiResponse = chatClient.call(prompt);
             
-            response = aiResponse.getResult().getOutput().getContent();
+            response = aiResponse.getResult().getContent();
             
             System.out.println("DEBUG - LLM Response: " + response);
         } catch (Exception e) {

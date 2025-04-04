@@ -1,8 +1,7 @@
 package com.example.springai.model;
 
-import com.example.springai.mcp.Tool;
-import org.springframework.ai.chat.prompt.Prompt;
-import com.example.springai.mcp.McpClient;
+import com.example.springai.mcp.*;
+import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -64,9 +63,9 @@ public class McpPromptTemplate {
         systemPrompt += "\nWhen the user asks to perform an action, respond with a JSON object containing the tool name and parameters.\n";
         systemPrompt += "Example: {\"tool\": \"create-project\", \"parameters\": {\"name\": \"MyProject\", \"description\": \"A sample project\"}}\n\n";
         
-        java.util.List<org.springframework.ai.chat.messages.Message> messages = new java.util.ArrayList<>();
-        messages.add(new org.springframework.ai.chat.messages.SystemMessage(systemPrompt));
-        messages.add(new org.springframework.ai.chat.messages.UserMessage(userMessage));
+        java.util.List<Message> messages = new ArrayList<>();
+        messages.add(new SystemMessage(systemPrompt));
+        messages.add(new UserMessage(userMessage));
         
         return new Prompt(messages);
     }
