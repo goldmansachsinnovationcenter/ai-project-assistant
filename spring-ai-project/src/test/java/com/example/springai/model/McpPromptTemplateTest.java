@@ -31,7 +31,7 @@ public class McpPromptTemplateTest {
         List<Tool> tools = Arrays.asList(tool1, tool2);
         String userMessage = "Test message";
         
-        String prompt = template.createToolCallingPrompt(tools, userMessage);
+        String prompt = template.createToolCallingPrompt(userMessage, tools);
         
         assertNotNull(prompt);
         assertTrue(prompt.contains("You are an AI assistant for project management"));
