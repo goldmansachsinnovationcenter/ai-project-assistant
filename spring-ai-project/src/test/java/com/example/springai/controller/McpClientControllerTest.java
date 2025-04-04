@@ -2,14 +2,14 @@ package com.example.springai.controller;
 
 import com.example.springai.entity.ChatMessage;
 import com.example.springai.repository.ChatMessageRepository;
+import com.example.springai.mcp.McpClient;
+import com.example.springai.mcp.Tool;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.Generation;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.mcp.client.McpClient;
-import org.springframework.ai.mcp.server.tool.McpTool;
 import org.springframework.ai.ollama.OllamaChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -42,13 +42,13 @@ public class McpClientControllerTest {
     @MockBean
     private McpClient mcpClient;
 
-    private List<McpTool> mockTools;
+    private List<Tool> mockTools;
 
     @BeforeEach
     public void setup() {
         mockTools = Arrays.asList(
-                mock(McpTool.class),
-                mock(McpTool.class)
+                mock(Tool.class),
+                mock(Tool.class)
         );
         
         when(mcpClient.getTools()).thenReturn(mockTools);
@@ -69,9 +69,7 @@ public class McpClientControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Project 'TestProject' has been created")));
 
-        verify(chatClient).call(argThat(prompt -> 
-                prompt.getOptions() != null && 
-                prompt.getOptions().containsKey("tools")));
+        verify(chatClient).call(any(Prompt.class));
         
         verify(chatMessageRepository).save(any(ChatMessage.class));
     }

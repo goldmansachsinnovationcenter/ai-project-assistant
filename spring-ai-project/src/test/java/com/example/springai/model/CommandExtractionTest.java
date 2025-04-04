@@ -1,8 +1,8 @@
 package com.example.springai.model;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.mcp.server.tool.McpToolDefinition;
-import org.springframework.ai.mcp.server.tool.McpToolParameter;
+import com.example.springai.mcp.McpToolDefinition;
+import com.example.springai.mcp.McpToolParameter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

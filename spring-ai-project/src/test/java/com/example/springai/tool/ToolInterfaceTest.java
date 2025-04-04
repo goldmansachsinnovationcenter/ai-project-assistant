@@ -1,8 +1,8 @@
 package com.example.springai.tool;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.mcp.server.tool.McpToolDefinition;
-import org.springframework.ai.mcp.server.tool.McpToolResult;
+import com.example.springai.mcp.McpToolDefinition;
+import com.example.springai.mcp.McpToolResult;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collections;
@@ -103,12 +103,15 @@ public class ToolInterfaceTest {
         
         Map<String, Object> mcpParams = new HashMap<>();
         mcpParams.put("param1", "value1");
-        McpToolResult mcpSuccessResult = tool.execute(mcpParams);
-        assertTrue(mcpSuccessResult.isSuccess());
-        assertEquals("Tool executed successfully with param1: value1", mcpSuccessResult.getContent());
+        Map<String, String> stringParams = new HashMap<>();
+        mcpParams.forEach((key, value) -> stringParams.put(key, value.toString()));
         
-        McpToolResult mcpFailureResult = tool.execute(Collections.emptyMap());
+        ToolResult mcpSuccessResult = tool.execute(stringParams);
+        assertTrue(mcpSuccessResult.isSuccess());
+        assertEquals("Tool executed successfully with param1: value1", mcpSuccessResult.getMessage());
+        
+        ToolResult mcpFailureResult = tool.execute(Collections.emptyMap());
         assertFalse(mcpFailureResult.isSuccess());
-        assertEquals("Missing required parameter: param1", mcpFailureResult.getContent());
+        assertEquals("Missing required parameter: param1", mcpFailureResult.getMessage());
     }
 }
