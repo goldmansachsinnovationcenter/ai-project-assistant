@@ -1,6 +1,8 @@
 package com.example.springai.tool;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.mcp.server.tool.McpToolDefinition;
+import org.springframework.ai.mcp.server.tool.McpToolResult;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collections;
@@ -56,5 +58,57 @@ public class ToolInterfaceTest {
         ToolResult failureResult = tool.execute(Collections.emptyMap());
         assertFalse(failureResult.isSuccess());
         assertTrue(failureResult.getMessage().contains("Missing required parameter"));
+    }
+    
+    @Test
+    public void testMcpToolImplementation() {
+        Tool tool = new Tool() {
+            @Override
+            public String getName() {
+                return "test-mcp-tool";
+            }
+
+            @Override
+            public String getDescription() {
+                return "Test MCP tool description";
+            }
+
+            @Override
+            public String getUri() {
+                return "project-assistant/test-mcp-tool";
+            }
+
+            @Override
+            public String[] getParameterNames() {
+                return new String[]{"param1", "param2"};
+            }
+
+            @Override
+            public ToolResult execute(Map<String, String> parameters) {
+                if (parameters.containsKey("param1")) {
+                    return ToolResult.success("Tool executed successfully with param1: " + parameters.get("param1"));
+                } else {
+                    return ToolResult.failure("Missing required parameter: param1");
+                }
+            }
+        };
+        
+        McpToolDefinition toolDefinition = tool.getToolDefinition();
+        assertNotNull(toolDefinition);
+        assertEquals("test-mcp-tool", toolDefinition.getName());
+        assertEquals("Test MCP tool description", toolDefinition.getDescription());
+        assertEquals(2, toolDefinition.getParameters().size());
+        assertTrue(toolDefinition.getParameters().stream().anyMatch(p -> p.getName().equals("param1")));
+        assertTrue(toolDefinition.getParameters().stream().anyMatch(p -> p.getName().equals("param2")));
+        
+        Map<String, Object> mcpParams = new HashMap<>();
+        mcpParams.put("param1", "value1");
+        McpToolResult mcpSuccessResult = tool.execute(mcpParams);
+        assertTrue(mcpSuccessResult.isSuccess());
+        assertEquals("Tool executed successfully with param1: value1", mcpSuccessResult.getContent());
+        
+        McpToolResult mcpFailureResult = tool.execute(Collections.emptyMap());
+        assertFalse(mcpFailureResult.isSuccess());
+        assertEquals("Missing required parameter: param1", mcpFailureResult.getContent());
     }
 }

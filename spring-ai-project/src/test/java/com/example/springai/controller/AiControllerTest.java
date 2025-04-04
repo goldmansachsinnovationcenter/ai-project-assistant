@@ -1,12 +1,19 @@
 package com.example.springai.controller;
 
 import com.example.springai.entity.*;
+import com.example.springai.mcp.Tool;
 import com.example.springai.model.StoryAnalysisResponse;
 import com.example.springai.repository.ChatMessageRepository;
+import com.example.springai.service.McpToolService;
 import com.example.springai.service.ProjectService;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.ChatResponse;
+import org.springframework.ai.chat.Generation;
+import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.mcp.client.McpClient;
+import org.springframework.ai.mcp.server.tool.McpTool;
 import org.springframework.ai.ollama.OllamaChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -38,6 +45,12 @@ public class AiControllerTest {
     
     @MockBean
     private ProjectService projectService;
+    
+    @MockBean
+    private McpToolService mcpToolService;
+    
+    @MockBean
+    private McpClient mcpClient;
 
     @Test
     public void testGetChatHistory() throws Exception {
@@ -200,16 +213,66 @@ public class AiControllerTest {
     @Test
     public void testGetTemplate() throws Exception {
         ChatResponse chatResponse = mock(ChatResponse.class);
-        org.springframework.ai.chat.Generation generation = mock(org.springframework.ai.chat.Generation.class);
-        org.springframework.ai.chat.messages.AssistantMessage output = mock(org.springframework.ai.chat.messages.AssistantMessage.class);
+        Generation generation = mock(Generation.class);
+        AssistantMessage output = mock(AssistantMessage.class);
         when(output.getContent()).thenReturn("Template response");
         when(generation.getOutput()).thenReturn(output);
         when(chatResponse.getResult()).thenReturn(generation);
-        when(chatClient.call(any(org.springframework.ai.chat.prompt.Prompt.class))).thenReturn(chatResponse);
+        when(chatClient.call(any(Prompt.class))).thenReturn(chatResponse);
         
         mockMvc.perform(get("/api/ai/template")
                 .param("topic", "Java"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Template response"));
+    }
+    
+    @Test
+    public void testMcpToolCalling() throws Exception {
+        List<McpTool> mcpTools = Arrays.asList(
+                mock(McpTool.class),
+                mock(McpTool.class)
+        );
+        when(mcpToolService.getMcpTools()).thenReturn(mcpTools);
+        
+        ChatResponse chatResponse = mock(ChatResponse.class);
+        Generation generation = mock(Generation.class);
+        AssistantMessage output = mock(AssistantMessage.class);
+        when(output.getContent()).thenReturn("Project 'TestProject' has been created");
+        when(generation.getOutput()).thenReturn(output);
+        when(chatResponse.getResult()).thenReturn(generation);
+        when(chatClient.call(any(Prompt.class))).thenReturn(chatResponse);
+        
+        mockMvc.perform(get("/api/ai/chat")
+                .param("message", "create project TestProject"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Project 'TestProject' has been created")));
+        
+        verify(chatClient).call(argThat(prompt -> 
+                prompt.getOptions() != null && 
+                prompt.getOptions().containsKey("tools")));
+        
+        verify(chatMessageRepository).save(any(ChatMessage.class));
+    }
+    
+    @Test
+    public void testMcpClientChat() throws Exception {
+        when(mcpClient.getTools()).thenReturn(Arrays.asList(mock(McpTool.class)));
+        
+        ChatResponse chatResponse = mock(ChatResponse.class);
+        Generation generation = mock(Generation.class);
+        AssistantMessage output = mock(AssistantMessage.class);
+        when(output.getContent()).thenReturn("MCP client response");
+        when(generation.getOutput()).thenReturn(output);
+        when(chatResponse.getResult()).thenReturn(generation);
+        when(chatClient.call(any(Prompt.class))).thenReturn(chatResponse);
+        
+        mockMvc.perform(get("/api/mcp-client/chat")
+                .param("message", "create project TestProject"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("MCP client response")));
+        
+        verify(chatClient).call(argThat(prompt -> 
+                prompt.getOptions() != null && 
+                prompt.getOptions().containsKey("tools")));
     }
 }
