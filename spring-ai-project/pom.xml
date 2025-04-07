@@ -77,19 +77,8 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>spring-snapshots-repo</id>
-			<name>Spring Snapshots Repository</name>
-			<url>https://repo.spring.io/snapshot</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>sonatype-snapshots</id>
-			<name>Sonatype Snapshots</name>
+			<id>sonatype-snapshots-s01</id>
+			<name>Sonatype Snapshots S01</name>
 			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
@@ -108,11 +97,6 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>
-		<repository>
-			<id>maven-central</id>
-			<name>Maven Central</name>
-			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
 		<repository>
 			<id>jitpack.io</id>

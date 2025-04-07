@@ -124,8 +124,8 @@ public class PrepareStoriesTool implements McpTool {
     }
 
     @Override
-    public String[] getParameterNames() {
-        return new String[]{"project"};
+    public Map<String, Object> getParameters() {
+        return Map.of("project", "string");
     }
     
     protected StoryAnalysisResponse parseStoryAnalysisResponse(String jsonString) {
