@@ -1,9 +1,14 @@
 package com.example.springai.model;
 
-import com.example.springai.mcp.*;
-import java.util.ArrayList;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.mcp.server.McpServer;
+import org.springframework.ai.mcp.server.McpTool;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +24,7 @@ public class McpPromptTemplate {
      * @param tools List of available tools
      * @return Prompt template string
      */
-    public String createToolCallingPrompt(String userMessage, List<Tool> tools) {
+    public String createToolCallingPrompt(String userMessage, List<McpTool> tools) {
         StringBuilder prompt = new StringBuilder();
         
         prompt.append("You are an AI assistant for project management. ");
@@ -27,11 +32,10 @@ public class McpPromptTemplate {
         prompt.append("use the appropriate tool to help them.\n\n");
         
         prompt.append("Available tools:\n");
-        for (Tool tool : tools) {
+        for (McpTool tool : tools) {
             prompt.append("- ").append(tool.getName()).append(": ").append(tool.getDescription()).append("\n");
-            String[] paramNames = tool.getParameterNames();
-            if (paramNames.length > 0) {
-                prompt.append("  Parameters: ").append(String.join(", ", paramNames)).append("\n");
+            if (tool.getParameters() != null && !tool.getParameters().isEmpty()) {
+                prompt.append("  Parameters: ").append(tool.getParameters().toString()).append("\n");
             }
         }
         
@@ -43,28 +47,31 @@ public class McpPromptTemplate {
     /**
      * Create a Prompt object for MCP tool calling
      * @param userMessage User's message
-     * @param mcpClient MCP client with available tools
+     * @param mcpServer MCP server with available tools
      * @return Prompt object for the LLM
      */
-    public Prompt createMcpPrompt(String userMessage, McpClient mcpClient) {
-        String systemPrompt = "You are an AI assistant for project management. " +
-            "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
-            "use the appropriate tool to help them.\n\n" +
-            "Available tools:\n";
-            
-        for (Tool tool : mcpClient.getTools()) {
-            systemPrompt += "- " + tool.getName() + ": " + tool.getDescription() + "\n";
-            String[] paramNames = tool.getParameterNames();
-            if (paramNames.length > 0) {
-                systemPrompt += "  Parameters: " + String.join(", ", paramNames) + "\n";
+    public Prompt createMcpPrompt(String userMessage, McpServer mcpServer) {
+        StringBuilder systemPrompt = new StringBuilder();
+        systemPrompt.append("You are an AI assistant for project management. ");
+        systemPrompt.append("You can help users create and manage projects, add requirements, and generate user stories. ");
+        systemPrompt.append("You can use the following tools:\n\n");
+        
+        mcpServer.getTools().forEach(tool -> {
+            systemPrompt.append("- ").append(tool.getName()).append(": ").append(tool.getDescription()).append("\n");
+            systemPrompt.append("  Parameters: ");
+            if (tool.getParameters() != null && !tool.getParameters().isEmpty()) {
+                systemPrompt.append(tool.getParameters().toString());
+            } else {
+                systemPrompt.append("None");
             }
-        }
+            systemPrompt.append("\n\n");
+        });
         
-        systemPrompt += "\nWhen the user asks to perform an action, respond with a JSON object containing the tool name and parameters.\n";
-        systemPrompt += "Example: {\"tool\": \"create-project\", \"parameters\": {\"name\": \"MyProject\", \"description\": \"A sample project\"}}\n\n";
+        systemPrompt.append("When the user asks to perform an action, use the appropriate tool to help them.\n");
+        systemPrompt.append("If no tool is appropriate, just respond conversationally.\n");
         
-        java.util.List<Message> messages = new ArrayList<>();
-        messages.add(new SystemMessage(systemPrompt));
+        List<Message> messages = new ArrayList<>();
+        messages.add(new SystemMessage(systemPrompt.toString()));
         messages.add(new UserMessage(userMessage));
         
         return new Prompt(messages);
@@ -75,9 +82,9 @@ public class McpPromptTemplate {
      * @param tools List of tools
      * @return Comma-separated list of tool names
      */
-    public String getToolNamesList(List<Tool> tools) {
+    public String getToolNamesList(List<McpTool> tools) {
         return tools.stream()
-                .map(Tool::getName)
+                .map(McpTool::getName)
                 .collect(Collectors.joining(", "));
     }
 }
