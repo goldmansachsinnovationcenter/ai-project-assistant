@@ -162,13 +162,13 @@
 		<!-- Spring AI Chat Client -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-chat-spring-boot-starter</artifactId>
+			<artifactId>spring-ai-chat</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<!-- Spring AI MCP -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-mcp-spring-boot-starter</artifactId>
+			<artifactId>spring-ai-mcp</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<!-- MCP Java SDK -->
