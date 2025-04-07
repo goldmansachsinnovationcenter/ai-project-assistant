@@ -105,7 +105,7 @@
 		<!-- MCP Server Boot Starter -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-mcp</artifactId>
+			<artifactId>spring-ai-starter-mcp-server</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<dependency>
