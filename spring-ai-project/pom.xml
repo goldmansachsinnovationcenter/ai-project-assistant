@@ -159,15 +159,10 @@
 			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
-		<!-- Spring AI Chat Client -->
+		<!-- Spring AI Chat -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-chat-messages</artifactId>
-			<version>${spring-ai.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-chat-client</artifactId>
+			<artifactId>spring-ai-client-chat</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<!-- Spring AI MCP -->
