@@ -1,0 +1,15 @@
+Junior Dev needs at least days if not weeks to become productive, and requries time to understand different frameworks, tools and how they integrate together.
+
+
+Devin was able to understand prompts with minimal details and compelted UI and backedn project with Java with SpringBoot backend and NextJs 15 witht ailwind frontend. It integrated Backend and Frontend with API's.
+It also downloaded and started Ollama with tinyllama model for compelte testing locally. It took most dcisions autonomously.
+
+It sometimes ignored some prompts and took it's own decisions like sticking with Java 17 even when asked for Java 21. Needed additional promt to upgrade to 21 
+"can you check why can't we use java 21 and upgrde to 21 if possible"
+
+Devin:Mar 21, 2025, 9:13 AM
+I'll check why Java 21 isn't working and attempt to upgrade. Let me analyze the project dependencies and Spring Boot version compatibility.
+Devin: Mar 21, 2025, 9:16 AM
+I've investigated Java 21 compatibility for our Spring Boot project. The current project uses Java 17, but Spring Boot 3.2.3 fully supports Java 21. We can upgrade by installing OpenJDK 21 and updating the pom.xml configuration. No code changes would be needed as the codebase doesn't use any Java version-specific features.
+
+Devin was able to take up more than one task at a time.
