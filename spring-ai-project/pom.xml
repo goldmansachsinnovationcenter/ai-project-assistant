@@ -166,11 +166,21 @@
 			<artifactId>spring-ai-mcp-server-webmvc-spring-boot-starter</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
-		<!-- MCP SDK dependencies from JitPack -->
+		<!-- MCP SDK dependencies -->
 		<dependency>
-			<groupId>com.github.modelcontextprotocol</groupId>
-			<artifactId>java-sdk</artifactId>
-			<version>v${mcp.sdk.version}</version>
+			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<artifactId>mcp-core</artifactId>
+			<version>${mcp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<artifactId>mcp-client</artifactId>
+			<version>${mcp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<artifactId>mcp-server</artifactId>
+			<version>${mcp.version}</version>
 		</dependency>
 
 
