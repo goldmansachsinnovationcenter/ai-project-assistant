@@ -93,6 +93,11 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>jitpack.io</id>
+			<name>JitPack Repository</name>
+			<url>https://jitpack.io</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -161,19 +166,19 @@
 			<artifactId>spring-ai-client-chat</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
-		<!-- MCP SDK dependencies -->
+		<!-- MCP SDK dependencies from JitPack -->
 		<dependency>
-			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<groupId>com.github.modelcontextprotocol.java-sdk</groupId>
 			<artifactId>mcp-core</artifactId>
 			<version>${mcp.sdk.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<groupId>com.github.modelcontextprotocol.java-sdk</groupId>
 			<artifactId>mcp-server</artifactId>
 			<version>${mcp.sdk.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<groupId>com.github.modelcontextprotocol.java-sdk</groupId>
 			<artifactId>mcp-client</artifactId>
 			<version>${mcp.sdk.version}</version>
 		</dependency>
