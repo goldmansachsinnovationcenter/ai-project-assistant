@@ -159,10 +159,24 @@
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-client-chat</artifactId>
+			<version>${spring-ai.version}</version>
 		</dependency>
-		<!-- Spring AI MCP dependencies should be sufficient -->
-		<!-- We'll rely on transitive dependencies from Spring AI MCP Server -->
-		<!-- If needed, we can add specific MCP SDK dependencies later -->
+		<!-- MCP SDK dependencies -->
+		<dependency>
+			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<artifactId>mcp-core</artifactId>
+			<version>${mcp.sdk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<artifactId>mcp-server</artifactId>
+			<version>${mcp.sdk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<artifactId>mcp-client</artifactId>
+			<version>${mcp.sdk.version}</version>
+		</dependency>
 
 
 		<dependency>
