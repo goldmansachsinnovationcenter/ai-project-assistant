@@ -40,6 +40,11 @@
 	
 	<repositories>
 		<repository>
+			<id>central</id>
+			<name>Maven Central</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
@@ -61,7 +66,7 @@
 		<repository>
 			<id>central-portal-snapshots</id>
 			<name>Central Portal Snapshots</name>
-			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
