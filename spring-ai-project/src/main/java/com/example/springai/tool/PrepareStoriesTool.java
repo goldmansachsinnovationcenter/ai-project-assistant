@@ -7,7 +7,7 @@ import com.example.springai.service.ProjectService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.mcp.McpTool;
+import org.springframework.ai.mcp.server.McpTool;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

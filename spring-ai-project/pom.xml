@@ -19,6 +19,7 @@
 		<maven.compiler.target>17</maven.compiler.target>
 		<spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
 		<mcp.version>0.8.1</mcp.version>
+		<mcp.sdk.version>v0.8.1</mcp.sdk.version>
 	</properties>
 	
 	<dependencyManagement>
@@ -27,13 +28,6 @@
 				<groupId>org.springframework.ai</groupId>
 				<artifactId>spring-ai-bom</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>io.modelcontextprotocol.sdk</groupId>
-				<artifactId>mcp-bom</artifactId>
-				<version>${mcp.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -68,6 +62,28 @@
 		<repository>
 			<id>central-portal-snapshots</id>
 			<name>Central Portal Snapshots</name>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>oss-sonatype-snapshots</id>
+			<name>OSS Sonatype Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>sonatype-snapshots</id>
+			<name>Sonatype Snapshots</name>
 			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
@@ -80,6 +96,12 @@
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
 		</repository>
+		<repository>
+			<id>maven-central</id>
+			<name>Maven Central</name>
+			<url>https://repo1.maven.org/maven2/</url>
+		</repository>
+
 	</repositories>
 
 	<pluginRepositories>
@@ -126,7 +148,7 @@
 			<artifactId>spring-ai-spring-boot-autoconfigure</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
-		<!-- MCP Server Boot Starter -->
+		<!-- Spring AI MCP Server -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-starter-mcp-server</artifactId>
@@ -143,25 +165,13 @@
 			<artifactId>spring-ai-client-chat</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
-		<!-- Spring AI MCP Server dependencies are included transitively through the starters -->
+		<!-- Spring AI MCP -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-mcp</artifactId>
+			<version>${spring-ai.version}</version>
+		</dependency>
 
-		<!-- MCP Java SDK -->
-		<dependency>
-			<groupId>io.modelcontextprotocol.sdk</groupId>
-			<artifactId>mcp</artifactId>
-			<version>${mcp.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.modelcontextprotocol.sdk</groupId>
-			<artifactId>mcp-spring-webmvc</artifactId>
-			<version>${mcp.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.modelcontextprotocol.sdk</groupId>
-			<artifactId>mcp-test</artifactId>
-			<version>${mcp.version}</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>

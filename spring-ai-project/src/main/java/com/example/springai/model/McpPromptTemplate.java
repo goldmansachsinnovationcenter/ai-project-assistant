@@ -4,8 +4,8 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.mcp.McpServer;
-import org.springframework.ai.mcp.McpTool;
+import org.springframework.ai.mcp.server.McpServer;
+import org.springframework.ai.mcp.server.McpTool;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
