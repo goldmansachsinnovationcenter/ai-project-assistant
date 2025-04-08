@@ -54,24 +54,7 @@ const ChatInterface: React.FC = () => {
     try {
       console.log('Sending message to API:', userMessage);
       
-      const apiUrl = 'http://localhost:8080/api/ai/mcp-chat?message=' + encodeURIComponent(userMessage);
-      console.log('API URL:', apiUrl);
-      
-      const fetchResponse = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'text/plain',
-        },
-      });
-      
-      console.log('Fetch response status:', fetchResponse.status);
-      
-      if (!fetchResponse.ok) {
-        throw new Error(`API error: ${fetchResponse.status}`);
-      }
-      
-      const response = await fetchResponse.text();
+      const response = await sendMessage(userMessage);
       console.log('Received response from API:', response);
       
       // Update the response in the messages array
