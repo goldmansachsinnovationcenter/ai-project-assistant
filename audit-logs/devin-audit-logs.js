@@ -125,8 +125,17 @@ async function main(apiKey, queryParams = {}) {
     const fileName = `devin-audit-logs-${timestamp}.json`;
     const localFilePath = `/tmp/${fileName}`;
     
+    const defaultParams = { ...queryParams };
+    if (!defaultParams.after && !defaultParams.before) {
+      const now = new Date();
+      const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+      defaultParams.after = oneHourAgo.toISOString();
+      defaultParams.before = now.toISOString();
+      console.log(`Setting default time range: after=${defaultParams.after}, before=${defaultParams.before}`);
+    }
+    
     console.log('Fetching audit logs from Devin AI...');
-    const rawAuditLogs = await fetchDevinAuditLogs(apiKey, queryParams);
+    const rawAuditLogs = await fetchDevinAuditLogs(apiKey, defaultParams);
     
     console.log('Formatting API response as JSON...');
     const formattedLogs = formatResponseAsJson(rawAuditLogs);
