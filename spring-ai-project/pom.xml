@@ -69,7 +69,7 @@
 		<repository>
 			<id>central-portal-snapshots</id>
 			<name>Central Portal Snapshots</name>
-			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -148,17 +148,14 @@
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-starter-mcp-server</artifactId>
-			<version>${spring-ai.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
-			<version>${spring-ai.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-mcp</artifactId>
-			<version>${spring-ai.version}</version>
 		</dependency>
 		<!-- Spring AI Chat -->
 		<dependency>
