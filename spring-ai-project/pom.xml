@@ -145,7 +145,11 @@
 			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
-		<!-- Remove direct dependency on spring-ai-mcp-server as it's included in the starter -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-mcp-server</artifactId>
+			<version>${spring-ai.version}</version>
+		</dependency>
 		<!-- Spring AI Chat -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
