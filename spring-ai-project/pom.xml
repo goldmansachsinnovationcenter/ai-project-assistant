@@ -66,28 +66,6 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>sonatype-snapshots-central</id>
-			<name>Sonatype Snapshots Central</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>sonatype-snapshots-s01</id>
-			<name>Sonatype Snapshots S01</name>
-			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
 			<id>central-portal-snapshots</id>
 			<name>Central Portal Snapshots</name>
 			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
@@ -152,35 +130,34 @@
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-starter-mcp-server</artifactId>
-			<version>${spring-ai.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
-			<version>${spring-ai.version}</version>
 		</dependency>
 		<!-- Spring AI Chat -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-client-chat</artifactId>
-			<version>${spring-ai.version}</version>
 		</dependency>
-		<!-- Spring AI MCP -->
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-mcp</artifactId>
-			<version>${spring-ai.version}</version>
-		</dependency>
+		<!-- Spring AI MCP Server dependencies are included transitively through the starters -->
+
 		<!-- MCP Java SDK -->
 		<dependency>
 			<groupId>io.modelcontextprotocol.sdk</groupId>
 			<artifactId>mcp</artifactId>
-			<version>0.8.1</version>
+			<version>${mcp.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.modelcontextprotocol.sdk</groupId>
 			<artifactId>mcp-spring-webmvc</artifactId>
-			<version>0.8.1</version>
+			<version>${mcp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<artifactId>mcp-test</artifactId>
+			<version>${mcp.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -206,9 +183,8 @@
 			<version>0.1.2</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>javax.persistence-api</artifactId>
-			<version>2.2</version>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

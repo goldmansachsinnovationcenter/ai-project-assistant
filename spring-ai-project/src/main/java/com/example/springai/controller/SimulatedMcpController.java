@@ -2,8 +2,8 @@ package com.example.springai.controller;
 
 import com.example.springai.entity.ChatMessage;
 import com.example.springai.repository.ChatMessageRepository;
-import org.springframework.ai.chat.ChatClient;
-import org.springframework.ai.chat.ChatResponse;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatResponse;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
