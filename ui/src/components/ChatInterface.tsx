@@ -54,6 +54,48 @@ const ChatInterface: React.FC = () => {
     try {
       console.log('Sending message to API:', userMessage);
       
+      console.log('Checking if message is list-projects command:', userMessage.toLowerCase().trim());
+      if (userMessage.toLowerCase().trim() === 'list-projects' || userMessage.toLowerCase().trim() === 'list projects') {
+        console.log('Detected list-projects command, fetching projects directly');
+        try {
+          const projectsResponse = await fetch('http://localhost:8080/api/projects', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (!projectsResponse.ok) {
+            throw new Error(`API error: ${projectsResponse.status}`);
+          }
+          
+          const projects = await projectsResponse.json();
+          console.log('Projects fetched:', projects);
+          
+          if (projects.length === 0) {
+            setMessages(prev => 
+              prev.map((msg, idx) => 
+                idx === prev.length - 1 ? { ...msg, response: "You don't have any projects yet. Would you like to create a new project?" } : msg
+              )
+            );
+          } else {
+            let projectsList = "Here are your projects:\n";
+            projects.forEach((project: any) => {
+              projectsList += `- ${project.name}\n`;
+            });
+            
+            setMessages(prev => 
+              prev.map((msg, idx) => 
+                idx === prev.length - 1 ? { ...msg, response: projectsList } : msg
+              )
+            );
+          }
+          return;
+        } catch (projectErr) {
+          console.error('Error fetching projects:', projectErr);
+        }
+      }
+      
       const response = await sendMessage(userMessage);
       console.log('Received response from API:', response);
       
