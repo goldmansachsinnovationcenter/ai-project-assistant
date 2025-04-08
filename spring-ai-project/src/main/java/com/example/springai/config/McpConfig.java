@@ -1,10 +1,10 @@
 package com.example.springai.config;
 
 import com.example.springai.service.ProjectService;
-import org.springframework.ai.mcp.server.McpServer;
-import org.springframework.ai.mcp.server.McpTool;
-import org.springframework.ai.mcp.server.McpToolDefinition;
-import org.springframework.ai.mcp.server.McpToolParameter;
+import org.springframework.ai.mcp.McpServer;
+import org.springframework.ai.mcp.McpTool;
+import org.springframework.ai.mcp.McpToolDefinition;
+import org.springframework.ai.mcp.McpToolParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
