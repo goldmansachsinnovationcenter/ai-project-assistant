@@ -1,7 +1,7 @@
 package com.example.springai.service;
 
-import org.springframework.ai.mcp.McpServer;
-import org.springframework.ai.mcp.McpTool;
+import org.springframework.ai.mcp.server.McpServer;
+import org.springframework.ai.mcp.server.McpTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
