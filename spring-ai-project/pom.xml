@@ -168,19 +168,9 @@
 		</dependency>
 		<!-- MCP SDK dependencies from JitPack -->
 		<dependency>
-			<groupId>com.github.modelcontextprotocol.java-sdk</groupId>
-			<artifactId>mcp-core</artifactId>
-			<version>${mcp.sdk.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.modelcontextprotocol.java-sdk</groupId>
-			<artifactId>mcp-server</artifactId>
-			<version>${mcp.sdk.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.modelcontextprotocol.java-sdk</groupId>
-			<artifactId>mcp-client</artifactId>
-			<version>${mcp.sdk.version}</version>
+			<groupId>com.github.modelcontextprotocol</groupId>
+			<artifactId>java-sdk</artifactId>
+			<version>v${mcp.sdk.version}</version>
 		</dependency>
 
 
