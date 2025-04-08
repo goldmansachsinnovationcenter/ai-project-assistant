@@ -2,26 +2,26 @@ package com.example.springai.controller;
 
 import com.example.springai.entity.ChatMessage;
 import com.example.springai.repository.ChatMessageRepository;
-import com.example.springai.mcp.McpClient;
-import com.example.springai.mcp.Tool;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.example.springai.mcp.ChatResponse;
-import com.example.springai.mcp.Generation;
-import com.example.springai.mcp.AssistantMessage;
-import com.example.springai.mcp.Prompt;
-import com.example.springai.mcp.ChatClient;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatResponse;
+import org.springframework.ai.chat.client.Generation;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.mcp.server.McpServer;
+import org.springframework.ai.mcp.server.McpTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -40,27 +40,31 @@ public class McpClientControllerTest {
     private ChatMessageRepository chatMessageRepository;
 
     @MockBean
-    private McpClient mcpClient;
+    private McpServer mcpServer;
 
-    private List<Tool> mockTools;
+    private List<McpTool> mockTools;
 
     @BeforeEach
     public void setup() {
-        mockTools = Arrays.asList(
-                mock(Tool.class),
-                mock(Tool.class)
-        );
+        McpTool mockTool1 = mock(McpTool.class);
+        when(mockTool1.getName()).thenReturn("create-project");
+        when(mockTool1.getDescription()).thenReturn("Create a new project");
+        when(mockTool1.getParameters()).thenReturn(Collections.emptyMap());
         
-        when(mcpClient.getTools()).thenReturn(mockTools);
+        McpTool mockTool2 = mock(McpTool.class);
+        when(mockTool2.getName()).thenReturn("list-projects");
+        when(mockTool2.getDescription()).thenReturn("List all projects");
+        when(mockTool2.getParameters()).thenReturn(Collections.emptyMap());
+        
+        mockTools = Arrays.asList(mockTool1, mockTool2);
+        
+        when(mcpServer.getTools()).thenReturn(mockTools);
     }
 
     @Test
     public void testMcpClientChat() throws Exception {
         ChatResponse chatResponse = mock(ChatResponse.class);
         Generation generation = mock(Generation.class);
-        AssistantMessage output = mock(AssistantMessage.class);
-        when(output.getContent()).thenReturn("Project 'TestProject' has been created");
-        when(generation.getOutput()).thenReturn(output);
         when(generation.getContent()).thenReturn("Project 'TestProject' has been created");
         when(chatResponse.getResult()).thenReturn(generation);
         when(chatClient.call(any(Prompt.class))).thenReturn(chatResponse);
@@ -71,7 +75,6 @@ public class McpClientControllerTest {
                 .andExpect(content().string(containsString("Project 'TestProject' has been created")));
 
         verify(chatClient).call(any(Prompt.class));
-        
         verify(chatMessageRepository).save(any(ChatMessage.class));
     }
 

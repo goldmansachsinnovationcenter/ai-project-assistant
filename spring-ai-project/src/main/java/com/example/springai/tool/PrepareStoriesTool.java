@@ -4,8 +4,10 @@ import com.example.springai.entity.Project;
 import com.example.springai.entity.Requirement;
 import com.example.springai.model.StoryAnalysisResponse;
 import com.example.springai.service.ProjectService;
-import com.example.springai.mcp.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.mcp.McpTool;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -16,35 +18,45 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Tool for preparing user stories for a project
  */
 @Component
-public class PrepareStoriesTool extends ProjectManagementTool {
+public class PrepareStoriesTool implements McpTool {
     private final ProjectService projectService;
     private final ChatClient chatClient;
     private final ObjectMapper objectMapper;
+    private final String name = "prepare-stories";
+    private final String description = "Prepare user stories for a specific project";
 
     public PrepareStoriesTool(ProjectService projectService, ChatClient chatClient) {
-        super("prepare-stories", "Prepare user stories for a specific project");
         this.projectService = projectService;
         this.chatClient = chatClient;
         this.objectMapper = new ObjectMapper();
     }
 
     @Override
-    public ToolResult execute(Map<String, String> parameters) {
-        String projectName = parameters.get("project");
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    public String execute(Map<String, Object> parameters) {
+        String projectName = (String) parameters.get("project");
         
         if (projectName == null || projectName.trim().isEmpty()) {
-            return ToolResult.failure("Project name is required");
+            return "Project name is required";
         }
         
         try {
             Optional<Project> projectOpt = projectService.findProjectByName(projectName);
             if (projectOpt.isEmpty()) {
-                return ToolResult.failure(String.format("Project '%s' not found. Please check the name and try again.", projectName));
+                return String.format("Project '%s' not found. Please check the name and try again.", projectName);
             }
             
             Project project = projectOpt.get();
             if (project.getRequirements().isEmpty()) {
-                return ToolResult.failure(String.format("Project '%s' doesn't have any requirements yet. Please add requirements first.", project.getName()));
+                return String.format("Project '%s' doesn't have any requirements yet. Please add requirements first.", project.getName());
             }
             
             StringBuilder prompt = new StringBuilder();
@@ -101,19 +113,19 @@ public class PrepareStoriesTool extends ProjectManagementTool {
                 
                 response.append("\nSummary: ").append(analysisResponse.getSummary());
                 
-                return ToolResult.success(response.toString());
+                return response.toString();
                 
             } catch (Exception e) {
-                return ToolResult.failure("I encountered an error while analyzing the requirements: " + e.getMessage());
+                return "I encountered an error while analyzing the requirements: " + e.getMessage();
             }
         } catch (Exception e) {
-            return ToolResult.failure("Failed to prepare stories: " + e.getMessage());
+            return "Failed to prepare stories: " + e.getMessage();
         }
     }
 
     @Override
-    public String[] getParameterNames() {
-        return new String[]{"project"};
+    public Map<String, Object> getParameters() {
+        return Map.of("project", "string");
     }
     
     protected StoryAnalysisResponse parseStoryAnalysisResponse(String jsonString) {

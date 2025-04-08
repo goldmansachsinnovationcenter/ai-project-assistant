@@ -1,151 +1,91 @@
 package com.example.springai.controller;
 
 import com.example.springai.entity.ChatMessage;
-import com.example.springai.entity.Project;
-import com.example.springai.entity.Requirement;
 import com.example.springai.repository.ChatMessageRepository;
-import com.example.springai.service.ProjectService;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatResponse;
+import org.springframework.ai.chat.client.Generation;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.mcp.McpServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
- * Controller for simulating MCP tool calling functionality
- * This is a workaround for the Ollama model not supporting tool calling
+ * Controller for MCP tool calling functionality using Spring AI MCP server
+ * This replaces the previous regex-based implementation with proper LLM-based tool calling
  */
 @RestController
-@RequestMapping("/api/ai/simulated-mcp")
+@RequestMapping("/api/ai/mcp-chat")
 public class SimulatedMcpController {
     
     @Autowired
-    private ProjectService projectService;
+    private ChatClient chatClient;
     
     @Autowired
     private ChatMessageRepository chatMessageRepository;
     
-    private static final Pattern CREATE_PROJECT_PATTERN = Pattern.compile("(?i)create\\s+project\\s+(\\w+)");
-    private static final Pattern LIST_PROJECTS_PATTERN = Pattern.compile("(?i)list\\s+projects");
-    private static final Pattern SHOW_PROJECT_PATTERN = Pattern.compile("(?i)show\\s+project\\s+(\\w+)");
-    private static final Pattern ADD_REQUIREMENT_PATTERN = Pattern.compile("(?i)add\\s+requirement\\s+(.+?)\\s+to\\s+project\\s+(\\w+)");
+    @Autowired
+    private McpServer mcpServer;
     
     /**
-     * Simulate MCP tool calling by parsing the message and executing the appropriate action
+     * Process a chat message using MCP tool calling
      * @param message User's message
-     * @return Response from the simulated tool execution
+     * @return Response from the AI or tool execution
      */
     @GetMapping("/chat")
-    public String simulatedMcpChat(@RequestParam String message) {
+    public String mcpChat(@RequestParam String message) {
         String response;
         
         try {
-            Matcher createProjectMatcher = CREATE_PROJECT_PATTERN.matcher(message);
-            if (createProjectMatcher.find()) {
-                String projectName = createProjectMatcher.group(1);
-                response = handleCreateProject(projectName);
-            }
-            else if (LIST_PROJECTS_PATTERN.matcher(message).find()) {
-                response = handleListProjects();
-            }
-            else if (SHOW_PROJECT_PATTERN.matcher(message).find()) {
-                Matcher showProjectMatcher = SHOW_PROJECT_PATTERN.matcher(message);
-                showProjectMatcher.find();
-                String projectName = showProjectMatcher.group(1);
-                response = handleShowProject(projectName);
-            }
-            else if (ADD_REQUIREMENT_PATTERN.matcher(message).find()) {
-                Matcher addRequirementMatcher = ADD_REQUIREMENT_PATTERN.matcher(message);
-                addRequirementMatcher.find();
-                String requirementText = addRequirementMatcher.group(1);
-                String projectName = addRequirementMatcher.group(2);
-                response = handleAddRequirement(projectName, requirementText);
-            }
-            else {
-                response = "I'm sorry, I don't understand that command. Please try one of the following:\n" +
-                        "- create project ProjectName\n" +
-                        "- list projects\n" +
-                        "- show project ProjectName\n" +
-                        "- add requirement RequirementText to project ProjectName";
-            }
+            StringBuilder systemPrompt = new StringBuilder();
+            systemPrompt.append("You are an AI assistant for project management. ");
+            systemPrompt.append("You can help users create and manage projects, add requirements, and generate user stories. ");
+            systemPrompt.append("You can use the following tools:\n\n");
             
-            saveChatMessage(message, response);
+            mcpServer.getTools().forEach(tool -> {
+                systemPrompt.append("- ").append(tool.getName()).append(": ").append(tool.getDescription()).append("\n");
+                systemPrompt.append("  Parameters: ");
+                if (tool.getParameters() != null && !tool.getParameters().isEmpty()) {
+                    systemPrompt.append(tool.getParameters().toString());
+                } else {
+                    systemPrompt.append("None");
+                }
+                systemPrompt.append("\n\n");
+            });
+            
+            systemPrompt.append("When the user asks to perform an action, use the appropriate tool to help them.\n");
+            systemPrompt.append("If no tool is appropriate, just respond conversationally.\n");
+            systemPrompt.append("Examples of commands users might ask:\n");
+            systemPrompt.append("- Create a new project called ProjectName\n");
+            systemPrompt.append("- List all projects\n");
+            systemPrompt.append("- Show details of project ProjectName\n");
+            systemPrompt.append("- Add requirement RequirementText to project ProjectName\n");
+            
+            List<Message> messages = new ArrayList<>();
+            messages.add(new SystemMessage(systemPrompt.toString()));
+            messages.add(new UserMessage(message));
+            
+            Prompt prompt = new Prompt(messages);
+            ChatResponse aiResponse = chatClient.call(prompt);
+            
+            response = aiResponse.getResult().getContent();
+            
+            System.out.println("DEBUG - LLM Response: " + response);
         } catch (Exception e) {
-            response = "I'm sorry, I encountered an error processing your request. Please try again.";
-            System.err.println("Error in simulated MCP chat: " + e.getMessage());
+            response = "I'm sorry, I encountered an error processing your request. Please try again or use one of the available commands.";
+            System.err.println("Error in MCP chat: " + e.getMessage());
             e.printStackTrace();
         }
         
+        saveChatMessage(message, response);
+        
         return response;
-    }
-    
-    private String handleCreateProject(String projectName) {
-        if (projectName.isEmpty()) {
-            return "I couldn't understand the project name. Please try again with a clear project name.";
-        }
-        
-        Project project = projectService.createProject(projectName, "");
-        return String.format("Project '%s' has been created. You can now add requirements to it.", project.getName());
-    }
-    
-    private String handleListProjects() {
-        if (!projectService.hasProjects()) {
-            return "You don't have any projects yet. Would you like to create a new project?";
-        }
-        
-        List<Project> projects = projectService.getAllProjects();
-        StringBuilder response = new StringBuilder("Here are your projects:\n");
-        for (Project project : projects) {
-            response.append("- ").append(project.getName()).append("\n");
-        }
-        return response.toString();
-    }
-    
-    private String handleShowProject(String projectName) {
-        if (projectName.isEmpty()) {
-            return "I couldn't understand which project you want to see. Please specify a project name.";
-        }
-        
-        Optional<Project> projectOpt = projectService.findProjectByName(projectName);
-        if (projectOpt.isEmpty()) {
-            return String.format("Project '%s' not found. Please check the name and try again.", projectName);
-        }
-        
-        Project project = projectOpt.get();
-        StringBuilder response = new StringBuilder(String.format("Project: %s\n", project.getName()));
-        if (project.getDescription() != null && !project.getDescription().isEmpty()) {
-            response.append(String.format("Description: %s\n\n", project.getDescription()));
-        }
-        
-        response.append("Requirements:\n");
-        if (project.getRequirements().isEmpty()) {
-            response.append("No requirements yet.\n");
-        } else {
-            for (Requirement req : project.getRequirements()) {
-                response.append("- ").append(req.getText()).append("\n");
-            }
-        }
-        
-        return response.toString();
-    }
-    
-    private String handleAddRequirement(String projectName, String requirementText) {
-        if (projectName.isEmpty() || requirementText.isEmpty()) {
-            return "I couldn't understand the project name or requirement. Please try again with a clear format.";
-        }
-        
-        Optional<Project> projectOpt = projectService.findProjectByName(projectName);
-        if (projectOpt.isEmpty()) {
-            return String.format("Project '%s' not found. Please check the name and try again.", projectName);
-        }
-        
-        Project project = projectOpt.get();
-        projectService.addRequirement(project, requirementText);
-        
-        return String.format("Requirement '%s' has been added to project '%s'.", 
-                            requirementText, project.getName());
     }
     
     private void saveChatMessage(String prompt, String response) {

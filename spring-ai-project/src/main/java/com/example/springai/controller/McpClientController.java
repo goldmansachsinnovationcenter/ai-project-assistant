@@ -2,15 +2,22 @@ package com.example.springai.controller;
 
 import com.example.springai.entity.ChatMessage;
 import com.example.springai.repository.ChatMessageRepository;
-import com.example.springai.mcp.*;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatResponse;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.mcp.McpServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Controller for handling AI chat with MCP tool calling
+ * Controller for handling AI chat with MCP tool calling using Spring AI MCP server
  */
 @RestController
 @RequestMapping("/api/ai")
@@ -22,18 +29,11 @@ public class McpClientController {
     @Autowired
     private ChatMessageRepository chatMessageRepository;
     
+    @Autowired
+    private McpServer mcpServer;
+    
     @Value("${spring.ai.mcp.server.transport.webmvc.path:/api/mcp}")
     private String mcpServerPath;
-    
-    private McpClient mcpClient;
-    
-    /**
-     * MCP client is autowired from McpConfig
-     */
-    @Autowired
-    public void setMcpClient(McpClient mcpClient) {
-        this.mcpClient = mcpClient;
-    }
     
     /**
      * Process a chat message using MCP tool calling
@@ -45,20 +45,33 @@ public class McpClientController {
         String response;
         
         try {
-            String systemPrompt = "You are an AI assistant for project management. " +
-                "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
-                "use the appropriate tool to help them. " +
-                "Available tools: create-project, list-projects, show-project, add-requirement, prepare-stories, help.";
+            StringBuilder systemPrompt = new StringBuilder();
+            systemPrompt.append("You are an AI assistant for project management. ");
+            systemPrompt.append("You can help users create and manage projects, add requirements, and generate user stories. ");
+            systemPrompt.append("You can use the following tools:\n\n");
             
-            java.util.List<Message> messages = new java.util.ArrayList<>();
-            messages.add(new SystemMessage(systemPrompt));
+            mcpServer.getTools().forEach(tool -> {
+                systemPrompt.append("- ").append(tool.getName()).append(": ").append(tool.getDescription()).append("\n");
+                systemPrompt.append("  Parameters: ");
+                if (tool.getParameters() != null && !tool.getParameters().isEmpty()) {
+                    systemPrompt.append(tool.getParameters().toString());
+                } else {
+                    systemPrompt.append("None");
+                }
+                systemPrompt.append("\n\n");
+            });
+            
+            systemPrompt.append("When the user asks to perform an action, use the appropriate tool to help them.\n");
+            systemPrompt.append("If no tool is appropriate, just respond conversationally.\n");
+            
+            List<Message> messages = new ArrayList<>();
+            messages.add(new SystemMessage(systemPrompt.toString()));
             messages.add(new UserMessage(message));
             
             Prompt prompt = new Prompt(messages);
-            
             ChatResponse aiResponse = chatClient.call(prompt);
             
-            response = aiResponse.getResult().getOutput().getContent();
+            response = aiResponse.getResult().getContent();
             
             saveChatMessage(message, response);
         } catch (Exception e) {
