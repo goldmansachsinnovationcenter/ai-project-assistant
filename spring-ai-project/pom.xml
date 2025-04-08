@@ -17,7 +17,7 @@
 		<java.version>17</java.version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
-		<spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
+		<spring-ai.version>0.8.1</spring-ai.version>
 		<mcp.version>0.8.1</mcp.version>
 		<mcp.sdk.version>0.8.1</mcp.sdk.version>
 	</properties>
@@ -27,7 +27,7 @@
 			<dependency>
 				<groupId>org.springframework.ai</groupId>
 				<artifactId>spring-ai-bom</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>0.8.1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -142,7 +142,7 @@
 		<!-- Spring AI dependencies -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-model-ollama</artifactId>
+			<artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<dependency>
@@ -158,12 +158,12 @@
 		<!-- Spring AI MCP Server -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-mcp-server</artifactId>
+			<artifactId>spring-ai-mcp-server-spring-boot-starter</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+			<artifactId>spring-ai-mcp-server-webmvc-spring-boot-starter</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<dependency>
@@ -174,7 +174,7 @@
 		<!-- Spring AI Chat -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-client-chat</artifactId>
+			<artifactId>spring-ai-chat-spring-boot-starter</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<!-- MCP SDK dependencies from JitPack -->
