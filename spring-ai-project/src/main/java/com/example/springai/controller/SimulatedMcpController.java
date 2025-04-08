@@ -4,11 +4,12 @@ import com.example.springai.entity.ChatMessage;
 import com.example.springai.repository.ChatMessageRepository;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatResponse;
+import org.springframework.ai.chat.client.Generation;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.mcp.server.McpServer;
+import org.springframework.ai.mcp.McpServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
