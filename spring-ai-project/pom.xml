@@ -165,7 +165,7 @@
 			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
-		<!-- MCP SDK dependencies -->
+	<!-- MCP SDK dependencies -->
 		<dependency>
 			<groupId>io.modelcontextprotocol.sdk</groupId>
 			<artifactId>mcp</artifactId>
@@ -181,6 +181,23 @@
 			<artifactId>mcp-parent</artifactId>
 			<version>${mcp.sdk.version}</version>
 			<type>pom</type>
+		</dependency>
+		
+		<!-- Spring AI Chat dependencies -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-chat</artifactId>
+			<version>${spring-ai.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-chat-messages</artifactId>
+			<version>${spring-ai.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-chat-client</artifactId>
+			<version>${spring-ai.version}</version>
 		</dependency>
 
 
