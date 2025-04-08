@@ -109,7 +109,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-model-ollama</artifactId>
+			<artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<dependency>
@@ -124,12 +124,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-mcp-server</artifactId>
+			<artifactId>spring-ai-mcp-server-spring-boot-starter</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+			<artifactId>spring-ai-mcp-server-webmvc-spring-boot-starter</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<dependency>
