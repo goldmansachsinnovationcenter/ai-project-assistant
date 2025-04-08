@@ -50,7 +50,7 @@
 	<repository>
 			<id>central-portal-snapshots</id>
 			<name>Central Portal Snapshots</name>
-			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -138,12 +138,6 @@
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-spring-boot-autoconfigure</artifactId>
-			<version>${spring-ai.version}</version>
-		</dependency>
-	<!-- Spring AI Core -->
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-core</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		
