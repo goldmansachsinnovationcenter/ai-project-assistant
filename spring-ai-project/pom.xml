@@ -19,7 +19,7 @@
 		<maven.compiler.target>17</maven.compiler.target>
 		<spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
 		<mcp.version>0.8.1</mcp.version>
-		<mcp.sdk.version>v0.8.1</mcp.sdk.version>
+		<mcp.sdk.version>0.8.1</mcp.sdk.version>
 	</properties>
 	
 	<dependencyManagement>
@@ -28,6 +28,13 @@
 				<groupId>org.springframework.ai</groupId>
 				<artifactId>spring-ai-bom</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>io.modelcontextprotocol.sdk</groupId>
+				<artifactId>mcp-bom</artifactId>
+				<version>${mcp.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -62,7 +69,7 @@
 		<repository>
 			<id>central-portal-snapshots</id>
 			<name>Central Portal Snapshots</name>
-			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -70,38 +77,6 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>oss-sonatype-snapshots</id>
-			<name>OSS Sonatype Snapshots</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>sonatype-snapshots</id>
-			<name>Sonatype Snapshots</name>
-			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-		<repository>
-			<id>maven-central</id>
-			<name>Maven Central</name>
-			<url>https://repo1.maven.org/maven2/</url>
-		</repository>
-
 	</repositories>
 
 	<pluginRepositories>
@@ -159,6 +134,7 @@
 			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
+		<!-- Remove direct dependency on spring-ai-mcp-server as it's included in the starter -->
 		<!-- Spring AI Chat -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
@@ -171,24 +147,19 @@
 			<artifactId>spring-ai-mcp</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
-		<!-- Spring AI Autoconfigure MCP Server -->
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-autoconfigure-mcp-server</artifactId>
-			<version>${spring-ai.version}</version>
-		</dependency>
 		<!-- MCP Java SDK -->
 		<dependency>
-			<groupId>io.modelcontextprotocol</groupId>
+			<groupId>io.modelcontextprotocol.sdk</groupId>
 			<artifactId>mcp</artifactId>
 			<version>${mcp.version}</version>
 		</dependency>
 		<!-- MCP Spring WebMVC -->
 		<dependency>
-			<groupId>io.modelcontextprotocol</groupId>
+			<groupId>io.modelcontextprotocol.sdk</groupId>
 			<artifactId>mcp-spring-webmvc</artifactId>
 			<version>${mcp.version}</version>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
