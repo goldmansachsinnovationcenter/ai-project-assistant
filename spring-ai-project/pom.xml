@@ -47,10 +47,10 @@
 			<name>Maven Central</name>
 			<url>https://repo.maven.apache.org/maven2</url>
 		</repository>
-		<repository>
+	<repository>
 			<id>central-portal-snapshots</id>
 			<name>Central Portal Snapshots</name>
-			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
@@ -88,11 +88,7 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>maven-central</id>
-			<name>Maven Central</name>
-			<url>https://repo.maven.apache.org/maven2</url>
-		</repository>
+
 		<repository>
 			<id>jitpack.io</id>
 			<name>JitPack Repository</name>
@@ -155,9 +151,29 @@
 			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
-		<dependency>
+	<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-mcp</artifactId>
+			<version>${spring-ai.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-mcp-server</artifactId>
+			<version>${spring-ai.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-mcp-client</artifactId>
+			<version>${spring-ai.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-chat-messages</artifactId>
+			<version>${spring-ai.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-chat-client</artifactId>
 			<version>${spring-ai.version}</version>
 		</dependency>
 		<!-- Spring AI Chat -->
@@ -176,6 +192,12 @@
 			<groupId>io.modelcontextprotocol.sdk</groupId>
 			<artifactId>mcp-spring-webmvc</artifactId>
 			<version>${mcp.sdk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.modelcontextprotocol.sdk</groupId>
+			<artifactId>mcp-parent</artifactId>
+			<version>${mcp.sdk.version}</version>
+			<type>pom</type>
 		</dependency>
 
 
