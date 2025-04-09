@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProjectController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-ai</a> &gt; <a href="index.source.html" class="el_package">com.example.springai.controller</a> &gt; <span class="el_source">ProjectController.java</span></div><h1>ProjectController.java</h1><pre class="source lang-java linenums">package com.example.springai.controller;
+
+import com.example.springai.entity.Project;
+import com.example.springai.entity.Requirement;
+import com.example.springai.service.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+/**
+ * Controller for direct project management operations
+ */
+@RestController
+@RequestMapping(&quot;/api/projects&quot;)
+<span class="nc" id="L19">public class ProjectController {</span>
+
+    @Autowired
+    private ProjectService projectService;
+
+    /**
+     * Get all projects
+     * @return List of all projects
+     */
+    @GetMapping
+    public ResponseEntity&lt;List&lt;Project&gt;&gt; getAllProjects() {
+<span class="nc" id="L30">        List&lt;Project&gt; projects = projectService.getAllProjects();</span>
+<span class="nc" id="L31">        return ResponseEntity.ok(projects);</span>
+    }
+
+    /**
+     * Get a project by name
+     * @param name Project name
+     * @return Project if found
+     */
+    @GetMapping(&quot;/{name}&quot;)
+    public ResponseEntity&lt;Project&gt; getProjectByName(@PathVariable String name) {
+<span class="nc" id="L41">        Optional&lt;Project&gt; project = projectService.findProjectByName(name);</span>
+<span class="nc" id="L42">        return project.map(ResponseEntity::ok)</span>
+<span class="nc" id="L43">                .orElseGet(() -&gt; ResponseEntity.notFound().build());</span>
+    }
+
+    /**
+     * Create a new project
+     * @param projectData Project data
+     * @return Created project
+     */
+    @PostMapping
+    public ResponseEntity&lt;Project&gt; createProject(@RequestBody Map&lt;String, String&gt; projectData) {
+<span class="nc" id="L53">        String name = projectData.get(&quot;name&quot;);</span>
+<span class="nc" id="L54">        String description = projectData.getOrDefault(&quot;description&quot;, &quot;&quot;);</span>
+        
+<span class="nc bnc" id="L56" title="All 4 branches missed.">        if (name == null || name.isEmpty()) {</span>
+<span class="nc" id="L57">            return ResponseEntity.badRequest().build();</span>
+        }
+        
+<span class="nc" id="L60">        Project project = projectService.createProject(name, description);</span>
+<span class="nc" id="L61">        return ResponseEntity.ok(project);</span>
+    }
+
+    /**
+     * Add a requirement to a project
+     * @param name Project name
+     * @param requirementData Requirement data
+     * @return Updated project
+     */
+    @PostMapping(&quot;/{name}/requirements&quot;)
+    public ResponseEntity&lt;?&gt; addRequirement(
+            @PathVariable String name,
+            @RequestBody Map&lt;String, String&gt; requirementData) {
+        
+<span class="nc" id="L75">        String text = requirementData.get(&quot;text&quot;);</span>
+<span class="nc bnc" id="L76" title="All 4 branches missed.">        if (text == null || text.isEmpty()) {</span>
+<span class="nc" id="L77">            return ResponseEntity.badRequest().build();</span>
+        }
+        
+<span class="nc" id="L80">        Optional&lt;Project&gt; projectOpt = projectService.findProjectByName(name);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (projectOpt.isEmpty()) {</span>
+<span class="nc" id="L82">            return ResponseEntity.notFound().build();</span>
+        }
+        
+<span class="nc" id="L85">        Project project = projectOpt.get();</span>
+<span class="nc" id="L86">        Requirement requirement = projectService.addRequirement(project, text);</span>
+        
+<span class="nc" id="L88">        return ResponseEntity.ok(requirement);</span>
+    }
+
+    /**
+     * Get all requirements for a project
+     * @param name Project name
+     * @return List of requirements
+     */
+    @GetMapping(&quot;/{name}/requirements&quot;)
+    public ResponseEntity&lt;?&gt; getRequirements(@PathVariable String name) {
+<span class="nc" id="L98">        Optional&lt;Project&gt; projectOpt = projectService.findProjectByName(name);</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (projectOpt.isEmpty()) {</span>
+<span class="nc" id="L100">            return ResponseEntity.notFound().build();</span>
+        }
+        
+<span class="nc" id="L103">        Project project = projectOpt.get();</span>
+<span class="nc" id="L104">        return ResponseEntity.ok(project.getRequirements());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

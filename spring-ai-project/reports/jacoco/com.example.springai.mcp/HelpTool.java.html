@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HelpTool.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-ai</a> &gt; <a href="index.source.html" class="el_package">com.example.springai.mcp</a> &gt; <span class="el_source">HelpTool.java</span></div><h1>HelpTool.java</h1><pre class="source lang-java linenums">package com.example.springai.mcp;
+
+import com.example.springai.entity.Project;
+import com.example.springai.service.ProjectService;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+/**
+ * Tool for displaying help information
+ */
+@Component(&quot;mcpHelpTool&quot;)
+public class HelpTool extends ProjectManagementTool {
+    private final ProjectService projectService;
+
+    public HelpTool(ProjectService projectService) {
+<span class="nc" id="L17">        super(&quot;help&quot;, &quot;Display available commands and usage examples&quot;);</span>
+<span class="nc" id="L18">        this.projectService = projectService;</span>
+<span class="nc" id="L19">    }</span>
+
+    @Override
+    public ToolResult execute(Map&lt;String, String&gt; parameters) {
+<span class="nc" id="L23">        StringBuilder response = new StringBuilder(&quot;Available commands:\n\n&quot;);</span>
+        
+<span class="nc" id="L25">        response.append(&quot;1. Create a new project:\n&quot;);</span>
+<span class="nc" id="L26">        response.append(&quot;   Example: create project ProjectName\n\n&quot;);</span>
+        
+<span class="nc" id="L28">        response.append(&quot;2. List all projects:\n&quot;);</span>
+<span class="nc" id="L29">        response.append(&quot;   Example: list projects\n\n&quot;);</span>
+        
+<span class="nc" id="L31">        response.append(&quot;3. Show project details:\n&quot;);</span>
+<span class="nc" id="L32">        response.append(&quot;   Example: show project ProjectName\n\n&quot;);</span>
+        
+<span class="nc" id="L34">        response.append(&quot;4. Add requirement to a project:\n&quot;);</span>
+<span class="nc" id="L35">        response.append(&quot;   Example: add requirement The system should allow user login to project ProjectName\n\n&quot;);</span>
+        
+<span class="nc" id="L37">        response.append(&quot;5. Prepare stories for a project:\n&quot;);</span>
+<span class="nc" id="L38">        response.append(&quot;   Example: prepare stories for project ProjectName\n\n&quot;);</span>
+        
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (projectService.hasProjects()) {</span>
+<span class="nc" id="L41">            Project exampleProject = projectService.getFirstProject();</span>
+<span class="nc" id="L42">            response.append(&quot;Example with existing project:\n&quot;);</span>
+<span class="nc" id="L43">            response.append(String.format(&quot;- show project %s\n&quot;, exampleProject.getName()));</span>
+<span class="nc" id="L44">            response.append(String.format(&quot;- add requirement New login feature to project %s\n&quot;, exampleProject.getName()));</span>
+<span class="nc" id="L45">            response.append(String.format(&quot;- prepare stories for project %s\n&quot;, exampleProject.getName()));</span>
+        }
+        
+<span class="nc" id="L48">        return ToolResult.success(response.toString());</span>
+    }
+
+    @Override
+    public String[] getParameterNames() {
+<span class="nc" id="L53">        return new String[]{};</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

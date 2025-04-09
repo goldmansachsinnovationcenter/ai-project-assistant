@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>McpPromptTemplate.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-ai</a> &gt; <a href="index.source.html" class="el_package">com.example.springai.model</a> &gt; <span class="el_source">McpPromptTemplate.java</span></div><h1>McpPromptTemplate.java</h1><pre class="source lang-java linenums">package com.example.springai.model;
+
+import com.example.springai.mcp.*;
+import java.util.ArrayList;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Helper class for creating MCP-compatible prompts
+ */
+@Component
+<span class="nc" id="L14">public class McpPromptTemplate {</span>
+    
+    /**
+     * Create a prompt template for tool calling
+     * @param userMessage User's message
+     * @param tools List of available tools
+     * @return Prompt template string
+     */
+    public String createToolCallingPrompt(String userMessage, List&lt;Tool&gt; tools) {
+<span class="nc" id="L23">        StringBuilder prompt = new StringBuilder();</span>
+        
+<span class="nc" id="L25">        prompt.append(&quot;You are an AI assistant for project management. &quot;);</span>
+<span class="nc" id="L26">        prompt.append(&quot;If the user is asking to perform any of the following actions, &quot;);</span>
+<span class="nc" id="L27">        prompt.append(&quot;use the appropriate tool to help them.\n\n&quot;);</span>
+        
+<span class="nc" id="L29">        prompt.append(&quot;Available tools:\n&quot;);</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        for (Tool tool : tools) {</span>
+<span class="nc" id="L31">            prompt.append(&quot;- &quot;).append(tool.getName()).append(&quot;: &quot;).append(tool.getDescription()).append(&quot;\n&quot;);</span>
+<span class="nc" id="L32">            String[] paramNames = tool.getParameterNames();</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (paramNames.length &gt; 0) {</span>
+<span class="nc" id="L34">                prompt.append(&quot;  Parameters: &quot;).append(String.join(&quot;, &quot;, paramNames)).append(&quot;\n&quot;);</span>
+            }
+<span class="nc" id="L36">        }</span>
+        
+<span class="nc" id="L38">        prompt.append(&quot;\nUser message: &quot;).append(userMessage);</span>
+        
+<span class="nc" id="L40">        return prompt.toString();</span>
+    }
+    
+    /**
+     * Create a Prompt object for MCP tool calling
+     * @param userMessage User's message
+     * @param mcpClient MCP client with available tools
+     * @return Prompt object for the LLM
+     */
+    public Prompt createMcpPrompt(String userMessage, McpClient mcpClient) {
+<span class="nc" id="L50">        String systemPrompt = &quot;You are an AI assistant for project management. &quot; +</span>
+            &quot;If the user is asking to create, list, or show projects, add requirements, or prepare stories, &quot; +
+            &quot;use the appropriate tool to help them.\n\n&quot; +
+            &quot;Available tools:\n&quot;;
+            
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        for (Tool tool : mcpClient.getTools()) {</span>
+<span class="nc" id="L56">            systemPrompt += &quot;- &quot; + tool.getName() + &quot;: &quot; + tool.getDescription() + &quot;\n&quot;;</span>
+<span class="nc" id="L57">            String[] paramNames = tool.getParameterNames();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (paramNames.length &gt; 0) {</span>
+<span class="nc" id="L59">                systemPrompt += &quot;  Parameters: &quot; + String.join(&quot;, &quot;, paramNames) + &quot;\n&quot;;</span>
+            }
+<span class="nc" id="L61">        }</span>
+        
+<span class="nc" id="L63">        systemPrompt += &quot;\nWhen the user asks to perform an action, respond with a JSON object containing the tool name and parameters.\n&quot;;</span>
+<span class="nc" id="L64">        systemPrompt += &quot;Example: {\&quot;tool\&quot;: \&quot;create-project\&quot;, \&quot;parameters\&quot;: {\&quot;name\&quot;: \&quot;MyProject\&quot;, \&quot;description\&quot;: \&quot;A sample project\&quot;}}\n\n&quot;;</span>
+        
+<span class="nc" id="L66">        java.util.List&lt;Message&gt; messages = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L67">        messages.add(new SystemMessage(systemPrompt));</span>
+<span class="nc" id="L68">        messages.add(new UserMessage(userMessage));</span>
+        
+<span class="nc" id="L70">        return new Prompt(messages);</span>
+    }
+    
+    /**
+     * Get a list of tool names from a list of tools
+     * @param tools List of tools
+     * @return Comma-separated list of tool names
+     */
+    public String getToolNamesList(List&lt;Tool&gt; tools) {
+<span class="nc" id="L79">        return tools.stream()</span>
+<span class="nc" id="L80">                .map(Tool::getName)</span>
+<span class="nc" id="L81">                .collect(Collectors.joining(&quot;, &quot;));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
