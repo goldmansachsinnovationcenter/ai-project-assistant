@@ -3,6 +3,7 @@ package com.example.springai.service;
 import com.example.springai.entity.*;
 import com.example.springai.model.StoryAnalysisResponse;
 import com.example.springai.repository.*;
+import com.github.ksuid.Ksuid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -18,6 +19,7 @@ public class ProjectService {
 
     public Project createProject(String name, String description) {
         Project project = new Project();
+        project.setId(Ksuid.newKsuid().toString());
         project.setName(name);
         project.setDescription(description);
         return projectRepository.save(project);
