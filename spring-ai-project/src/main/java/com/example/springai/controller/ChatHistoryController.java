@@ -17,7 +17,7 @@ public class ChatHistoryController {
         this.chatMessageRepository = chatMessageRepository;
     }
 
-    @GetMapping("/ai/chat-history")
+    @GetMapping({"/ai/chat-history", "/api/ai/chat-history"})
     public List<ChatMessage> getChatHistory(
             @RequestParam(value = "limit", defaultValue = "20") int limit) {
         return chatMessageRepository.findRecentMessages(limit);
