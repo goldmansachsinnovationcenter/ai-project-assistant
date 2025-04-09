@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Project.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-ai</a> &gt; <a href="index.source.html" class="el_package">com.example.springai.entity</a> &gt; <span class="el_source">Project.java</span></div><h1>Project.java</h1><pre class="source lang-java linenums">package com.example.springai.entity;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+@Entity
+@Table(name = &quot;projects&quot;)
+<span class="fc" id="L11">public class Project {</span>
+    @Id
+    private String id;
+
+    private String name;
+    private String description;
+
+<span class="fc" id="L18">    @OneToMany(mappedBy = &quot;project&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    @JsonManagedReference
+    private List&lt;Requirement&gt; requirements = new ArrayList&lt;&gt;();
+
+<span class="fc" id="L22">    @OneToMany(mappedBy = &quot;project&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    @JsonManagedReference
+    private List&lt;Story&gt; stories = new ArrayList&lt;&gt;();
+
+<span class="fc" id="L26">    @OneToMany(mappedBy = &quot;project&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    @JsonManagedReference
+    private List&lt;Risk&gt; risks = new ArrayList&lt;&gt;();
+
+<span class="fc" id="L30">    @OneToMany(mappedBy = &quot;project&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    @JsonManagedReference
+    private List&lt;NFR&gt; nfrs = new ArrayList&lt;&gt;();
+
+<span class="fc" id="L34">    @OneToMany(mappedBy = &quot;project&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+    @JsonManagedReference
+    private List&lt;Query&gt; queries = new ArrayList&lt;&gt;();
+
+    public String getId() {
+<span class="fc" id="L39">        return id;</span>
+    }
+
+    public void setId(String id) {
+<span class="fc" id="L43">        this.id = id;</span>
+<span class="fc" id="L44">    }</span>
+
+    public String getName() {
+<span class="fc" id="L47">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="fc" id="L51">        this.name = name;</span>
+<span class="fc" id="L52">    }</span>
+
+    public String getDescription() {
+<span class="fc" id="L55">        return description;</span>
+    }
+
+    public void setDescription(String description) {
+<span class="fc" id="L59">        this.description = description;</span>
+<span class="fc" id="L60">    }</span>
+
+    public List&lt;Requirement&gt; getRequirements() {
+<span class="fc" id="L63">        return requirements;</span>
+    }
+
+    public void setRequirements(List&lt;Requirement&gt; requirements) {
+<span class="fc" id="L67">        this.requirements = requirements;</span>
+<span class="fc" id="L68">    }</span>
+
+    public List&lt;Story&gt; getStories() {
+<span class="fc" id="L71">        return stories;</span>
+    }
+
+    public void setStories(List&lt;Story&gt; stories) {
+<span class="fc" id="L75">        this.stories = stories;</span>
+<span class="fc" id="L76">    }</span>
+
+    public List&lt;Risk&gt; getRisks() {
+<span class="fc" id="L79">        return risks;</span>
+    }
+
+    public void setRisks(List&lt;Risk&gt; risks) {
+<span class="fc" id="L83">        this.risks = risks;</span>
+<span class="fc" id="L84">    }</span>
+
+    public List&lt;NFR&gt; getNfrs() {
+<span class="fc" id="L87">        return nfrs;</span>
+    }
+
+    public void setNfrs(List&lt;NFR&gt; nfrs) {
+<span class="fc" id="L91">        this.nfrs = nfrs;</span>
+<span class="fc" id="L92">    }</span>
+
+    public List&lt;Query&gt; getQueries() {
+<span class="fc" id="L95">        return queries;</span>
+    }
+
+    public void setQueries(List&lt;Query&gt; queries) {
+<span class="fc" id="L99">        this.queries = queries;</span>
+<span class="fc" id="L100">    }</span>
+    
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L105" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L106">        Project project = (Project) o;</span>
+<span class="fc" id="L107">        return Objects.equals(id, project.id);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L112">        return Objects.hash(id);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L117">        return &quot;Project{&quot; +</span>
+                &quot;id=&quot; + id +
+                &quot;, name='&quot; + name + '\'' +
+                &quot;, description='&quot; + description + '\'' +
+                '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
