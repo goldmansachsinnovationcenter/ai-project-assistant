@@ -22,11 +22,12 @@ const ChatInterface: React.FC = () => {
   const loadChatHistory = async () => {
     setIsLoadingHistory(true);
     try {
-      const history = await getChatHistory(20);
-      setMessages(history);
-    } catch (err) {
-      console.error('Failed to load chat history:', err);
-      setError('Failed to load chat history. Please refresh the page.');
+      try {
+        const history = await getChatHistory(20);
+        setMessages(history);
+      } catch (err) {
+        console.error('Failed to load chat history:', err);
+      }
     } finally {
       setIsLoadingHistory(false);
     }
