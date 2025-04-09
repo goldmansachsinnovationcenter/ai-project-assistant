@@ -11,7 +11,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
  */
 export async function chatWithAI(message: string): Promise<string> {
   try {
-    const response = await fetch(`${API_URL}/api/ai/chat?message=${encodeURIComponent(message)}`, {
+    const response = await fetch(`${API_URL}/ai/chat?message=${encodeURIComponent(message)}`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
@@ -22,7 +22,8 @@ export async function chatWithAI(message: string): Promise<string> {
       throw new Error(`API error: ${response.status}`);
     }
     
-    return await response.text();
+    const data = await response.json();
+    return data.generation || "No response from AI";
   } catch (error) {
     console.error('Error chatting with AI:', error);
     throw error;
