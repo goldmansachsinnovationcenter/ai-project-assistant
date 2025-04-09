@@ -188,7 +188,7 @@ export interface ChatMessage {
  */
 export async function getChatHistory(limit: number = 20): Promise<ChatMessage[]> {
   try {
-    const response = await fetch(`${API_URL}/api/ai/chat-history?limit=${limit}`, {
+    const response = await fetch(`${API_URL}/ai/chat-history?limit=${limit}`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
