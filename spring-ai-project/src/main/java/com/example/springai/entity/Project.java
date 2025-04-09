@@ -10,8 +10,7 @@ import java.util.Objects;
 @Table(name = "projects")
 public class Project {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String name;
     private String description;
@@ -36,11 +35,11 @@ public class Project {
     @JsonManagedReference
     private List<Query> queries = new ArrayList<>();
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
