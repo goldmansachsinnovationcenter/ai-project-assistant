@@ -7,6 +7,13 @@ import com.example.springai.repository.ChatMessageRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.ollama.OllamaChatClient;
@@ -20,6 +27,7 @@ import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/api/ai")
+@Tag(name = "AI Controller", description = "API for AI-powered chat and project management")
 public class AiController {
     @Autowired
     private OllamaChatClient chatClient;
@@ -33,8 +41,16 @@ public class AiController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Operation(summary = "Chat with AI", description = "Send a message to the AI and get a response. Supports various commands for project management.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successful operation", 
+                     content = @Content(mediaType = "text/plain", schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
     @GetMapping("/chat")
-    public String chat(@RequestParam String message) {
+    public String chat(
+            @Parameter(description = "Message to send to the AI", required = true) 
+            @RequestParam String message) {
         // Check if this is a command
         String response;
         
@@ -72,13 +88,28 @@ public class AiController {
         chatMessageRepository.save(chatMessage);
     }
 
+    @Operation(summary = "Get chat history", description = "Retrieve recent chat messages")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successful operation", 
+                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ChatMessage.class)))
+    })
     @GetMapping("/chat-history")
-    public List<ChatMessage> getChatHistory(@RequestParam(defaultValue = "20") int limit) {
+    public List<ChatMessage> getChatHistory(
+            @Parameter(description = "Maximum number of messages to return", example = "20") 
+            @RequestParam(defaultValue = "20") int limit) {
         return chatMessageRepository.findRecentMessages(limit);
     }
 
+    @Operation(summary = "Get template", description = "Generate a summary about a specific topic")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successful operation", 
+                     content = @Content(mediaType = "text/plain", schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
     @GetMapping("/template")
-    public String getTemplate(@RequestParam String topic) {
+    public String getTemplate(
+            @Parameter(description = "Topic to generate summary for", required = true) 
+            @RequestParam String topic) {
         String prompt = String.format("Give me a summary about %s", topic);
         ChatResponse response = chatClient.call(new Prompt(prompt));
         return response.getResult().getOutput().getContent();
