@@ -8,24 +8,24 @@ public abstract class ProjectManagementTool implements Tool {
     private final String description;
     private static final String BASE_URI = &quot;project-assistant&quot;;
     
-<span class="nc" id="L11">    public ProjectManagementTool(String name, String description) {</span>
-<span class="nc" id="L12">        this.name = name;</span>
-<span class="nc" id="L13">        this.description = description;</span>
-<span class="nc" id="L14">    }</span>
+<span class="fc" id="L11">    public ProjectManagementTool(String name, String description) {</span>
+<span class="fc" id="L12">        this.name = name;</span>
+<span class="fc" id="L13">        this.description = description;</span>
+<span class="fc" id="L14">    }</span>
     
     @Override
     public String getName() {
-<span class="nc" id="L18">        return name;</span>
+<span class="fc" id="L18">        return name;</span>
     }
     
     @Override
     public String getDescription() {
-<span class="nc" id="L23">        return description;</span>
+<span class="fc" id="L23">        return description;</span>
     }
     
     @Override
     public String getUri() {
-<span class="nc" id="L28">        return BASE_URI + &quot;/&quot; + name;</span>
+<span class="fc" id="L28">        return BASE_URI + &quot;/&quot; + name;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

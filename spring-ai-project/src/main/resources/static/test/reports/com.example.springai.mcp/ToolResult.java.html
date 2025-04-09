@@ -7,25 +7,25 @@ public class ToolResult {
     private final boolean success;
     private final String message;
 
-<span class="nc" id="L10">    public ToolResult(boolean success, String message) {</span>
-<span class="nc" id="L11">        this.success = success;</span>
-<span class="nc" id="L12">        this.message = message;</span>
-<span class="nc" id="L13">    }</span>
+<span class="fc" id="L10">    public ToolResult(boolean success, String message) {</span>
+<span class="fc" id="L11">        this.success = success;</span>
+<span class="fc" id="L12">        this.message = message;</span>
+<span class="fc" id="L13">    }</span>
 
     public boolean isSuccess() {
-<span class="nc" id="L16">        return success;</span>
+<span class="fc" id="L16">        return success;</span>
     }
 
     public String getMessage() {
-<span class="nc" id="L20">        return message;</span>
+<span class="fc" id="L20">        return message;</span>
     }
 
     public static ToolResult success(String message) {
-<span class="nc" id="L24">        return new ToolResult(true, message);</span>
+<span class="fc" id="L24">        return new ToolResult(true, message);</span>
     }
 
     public static ToolResult failure(String message) {
-<span class="nc" id="L28">        return new ToolResult(false, message);</span>
+<span class="fc" id="L28">        return new ToolResult(false, message);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -15,39 +15,39 @@ public class AddRequirementTool extends ProjectManagementTool {
     private final ProjectService projectService;
 
     public AddRequirementTool(ProjectService projectService) {
-<span class="nc" id="L18">        super(&quot;add-requirement&quot;, &quot;Add a requirement to a specific project&quot;);</span>
-<span class="nc" id="L19">        this.projectService = projectService;</span>
-<span class="nc" id="L20">    }</span>
+<span class="fc" id="L18">        super(&quot;add-requirement&quot;, &quot;Add a requirement to a specific project&quot;);</span>
+<span class="fc" id="L19">        this.projectService = projectService;</span>
+<span class="fc" id="L20">    }</span>
 
     @Override
     public ToolResult execute(Map&lt;String, String&gt; parameters) {
-<span class="nc" id="L24">        String projectName = parameters.get(&quot;project&quot;);</span>
-<span class="nc" id="L25">        String requirementText = parameters.get(&quot;requirement&quot;);</span>
+<span class="fc" id="L24">        String projectName = parameters.get(&quot;project&quot;);</span>
+<span class="fc" id="L25">        String requirementText = parameters.get(&quot;requirement&quot;);</span>
         
-<span class="nc bnc" id="L27" title="All 6 branches missed.">        if (projectName == null || projectName.trim().isEmpty() || </span>
-<span class="nc bnc" id="L28" title="All 2 branches missed.">            requirementText == null || requirementText.trim().isEmpty()) {</span>
-<span class="nc" id="L29">            return ToolResult.failure(&quot;Project name and requirement text are required&quot;);</span>
+<span class="fc bfc" id="L27" title="All 6 branches covered.">        if (projectName == null || projectName.trim().isEmpty() || </span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">            requirementText == null || requirementText.trim().isEmpty()) {</span>
+<span class="fc" id="L29">            return ToolResult.failure(&quot;Project name and requirement text are required&quot;);</span>
         }
         
         try {
-<span class="nc" id="L33">            Optional&lt;Project&gt; projectOpt = projectService.findProjectByName(projectName);</span>
-<span class="nc bnc" id="L34" title="All 2 branches missed.">            if (projectOpt.isEmpty()) {</span>
-<span class="nc" id="L35">                return ToolResult.failure(String.format(&quot;Project '%s' not found. Please check the name and try again.&quot;, projectName));</span>
+<span class="fc" id="L33">            Optional&lt;Project&gt; projectOpt = projectService.findProjectByName(projectName);</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">            if (projectOpt.isEmpty()) {</span>
+<span class="fc" id="L35">                return ToolResult.failure(String.format(&quot;Project '%s' not found. Please check the name and try again.&quot;, projectName));</span>
             }
             
-<span class="nc" id="L38">            Project project = projectOpt.get();</span>
-<span class="nc" id="L39">            projectService.addRequirement(project, requirementText);</span>
+<span class="fc" id="L38">            Project project = projectOpt.get();</span>
+<span class="fc" id="L39">            projectService.addRequirement(project, requirementText);</span>
             
-<span class="nc" id="L41">            return ToolResult.success(String.format(&quot;Requirement '%s' has been added to project '%s'.&quot;, </span>
-<span class="nc" id="L42">                                     requirementText, project.getName()));</span>
-<span class="nc" id="L43">        } catch (Exception e) {</span>
-<span class="nc" id="L44">            return ToolResult.failure(&quot;Failed to add requirement: &quot; + e.getMessage());</span>
+<span class="fc" id="L41">            return ToolResult.success(String.format(&quot;Requirement '%s' has been added to project '%s'.&quot;, </span>
+<span class="fc" id="L42">                                     requirementText, project.getName()));</span>
+<span class="fc" id="L43">        } catch (Exception e) {</span>
+<span class="fc" id="L44">            return ToolResult.failure(&quot;Failed to add requirement: &quot; + e.getMessage());</span>
         }
     }
 
     @Override
     public String[] getParameterNames() {
-<span class="nc" id="L50">        return new String[]{&quot;project&quot;, &quot;requirement&quot;};</span>
+<span class="fc" id="L50">        return new String[]{&quot;project&quot;, &quot;requirement&quot;};</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

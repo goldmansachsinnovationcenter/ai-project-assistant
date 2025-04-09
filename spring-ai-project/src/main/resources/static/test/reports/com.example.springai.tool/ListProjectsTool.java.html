@@ -15,32 +15,32 @@ public class ListProjectsTool extends ProjectManagementTool {
     private final ProjectService projectService;
 
     public ListProjectsTool(ProjectService projectService) {
-<span class="nc" id="L18">        super(&quot;list-projects&quot;, &quot;List all available projects&quot;);</span>
-<span class="nc" id="L19">        this.projectService = projectService;</span>
-<span class="nc" id="L20">    }</span>
+<span class="fc" id="L18">        super(&quot;list-projects&quot;, &quot;List all available projects&quot;);</span>
+<span class="fc" id="L19">        this.projectService = projectService;</span>
+<span class="fc" id="L20">    }</span>
 
     @Override
     public ToolResult execute(Map&lt;String, String&gt; parameters) {
         try {
-<span class="nc bnc" id="L25" title="All 2 branches missed.">            if (!projectService.hasProjects()) {</span>
-<span class="nc" id="L26">                return ToolResult.success(&quot;You don't have any projects yet. Would you like to create a new project?&quot;);</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">            if (!projectService.hasProjects()) {</span>
+<span class="fc" id="L26">                return ToolResult.success(&quot;You don't have any projects yet. Would you like to create a new project?&quot;);</span>
             }
             
-<span class="nc" id="L29">            List&lt;Project&gt; projects = projectService.getAllProjects();</span>
-<span class="nc" id="L30">            StringBuilder response = new StringBuilder(&quot;Here are your projects:\n&quot;);</span>
-<span class="nc bnc" id="L31" title="All 2 branches missed.">            for (Project project : projects) {</span>
-<span class="nc" id="L32">                response.append(&quot;- &quot;).append(project.getName()).append(&quot;\n&quot;);</span>
-<span class="nc" id="L33">            }</span>
+<span class="fc" id="L29">            List&lt;Project&gt; projects = projectService.getAllProjects();</span>
+<span class="fc" id="L30">            StringBuilder response = new StringBuilder(&quot;Here are your projects:\n&quot;);</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">            for (Project project : projects) {</span>
+<span class="fc" id="L32">                response.append(&quot;- &quot;).append(project.getName()).append(&quot;\n&quot;);</span>
+<span class="fc" id="L33">            }</span>
             
-<span class="nc" id="L35">            return ToolResult.success(response.toString());</span>
-<span class="nc" id="L36">        } catch (Exception e) {</span>
-<span class="nc" id="L37">            return ToolResult.failure(&quot;Failed to list projects: &quot; + e.getMessage());</span>
+<span class="fc" id="L35">            return ToolResult.success(response.toString());</span>
+<span class="fc" id="L36">        } catch (Exception e) {</span>
+<span class="fc" id="L37">            return ToolResult.failure(&quot;Failed to list projects: &quot; + e.getMessage());</span>
         }
     }
 
     @Override
     public String[] getParameterNames() {
-<span class="nc" id="L43">        return new String[]{};</span>
+<span class="fc" id="L43">        return new String[]{};</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

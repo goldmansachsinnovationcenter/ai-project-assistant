@@ -22,8 +22,8 @@ public class McpToolService {
             ShowProjectTool showProjectTool,
             AddRequirementTool addRequirementTool,
             PrepareStoriesTool prepareStoriesTool,
-<span class="nc" id="L25">            HelpTool helpTool) {</span>
-<span class="nc" id="L26">        this.tools = List.of(</span>
+<span class="fc" id="L25">            HelpTool helpTool) {</span>
+<span class="fc" id="L26">        this.tools = List.of(</span>
             createProjectTool,
             listProjectsTool,
             showProjectTool,
@@ -31,14 +31,14 @@ public class McpToolService {
             prepareStoriesTool,
             helpTool
         );
-<span class="nc" id="L34">    }</span>
+<span class="fc" id="L34">    }</span>
 
     /**
      * Get all registered tools
      * @return List of all tools
      */
     public List&lt;Tool&gt; getAllTools() {
-<span class="nc" id="L41">        return tools;</span>
+<span class="fc" id="L41">        return tools;</span>
     }
     
     /**
@@ -47,10 +47,10 @@ public class McpToolService {
      * @return Tool if found, null otherwise
      */
     public Tool getToolByName(String name) {
-<span class="nc" id="L50">        return tools.stream()</span>
-<span class="nc" id="L51">                .filter(tool -&gt; tool.getName().equals(name))</span>
-<span class="nc" id="L52">                .findFirst()</span>
-<span class="nc" id="L53">                .orElse(null);</span>
+<span class="fc" id="L50">        return tools.stream()</span>
+<span class="fc" id="L51">                .filter(tool -&gt; tool.getName().equals(name))</span>
+<span class="fc" id="L52">                .findFirst()</span>
+<span class="fc" id="L53">                .orElse(null);</span>
     }
     
     /**
@@ -60,12 +60,12 @@ public class McpToolService {
      * @return Result of the tool execution
      */
     public ToolResult executeTool(String toolName, Map&lt;String, String&gt; parameters) {
-<span class="nc" id="L63">        Tool tool = getToolByName(toolName);</span>
-<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (tool == null) {</span>
-<span class="nc" id="L65">            return ToolResult.failure(String.format(&quot;Tool '%s' not found&quot;, toolName));</span>
+<span class="fc" id="L63">        Tool tool = getToolByName(toolName);</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (tool == null) {</span>
+<span class="fc" id="L65">            return ToolResult.failure(String.format(&quot;Tool '%s' not found&quot;, toolName));</span>
         }
         
-<span class="nc" id="L68">        return tool.execute(parameters);</span>
+<span class="fc" id="L68">        return tool.execute(parameters);</span>
     }
     
     /**
@@ -73,7 +73,7 @@ public class McpToolService {
      * @return List of tools
      */
     public List&lt;Tool&gt; getMcpTools() {
-<span class="nc" id="L76">        return tools;</span>
+<span class="fc" id="L76">        return tools;</span>
     }
     
     /**
@@ -81,7 +81,7 @@ public class McpToolService {
      * @return List of all tools
      */
     public List&lt;Tool&gt; getTools() {
-<span class="nc" id="L84">        return getAllTools();</span>
+<span class="fc" id="L84">        return getAllTools();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
