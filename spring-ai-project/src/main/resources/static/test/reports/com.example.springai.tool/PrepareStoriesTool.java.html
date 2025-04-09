@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrepareStoriesTool.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-ai</a> &gt; <a href="index.source.html" class="el_package">com.example.springai.tool</a> &gt; <span class="el_source">PrepareStoriesTool.java</span></div><h1>PrepareStoriesTool.java</h1><pre class="source lang-java linenums">package com.example.springai.tool;
+
+import com.example.springai.entity.Project;
+import com.example.springai.entity.Requirement;
+import com.example.springai.model.StoryAnalysisResponse;
+import com.example.springai.service.ProjectService;
+import com.example.springai.mcp.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+import java.util.Optional;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+/**
+ * Tool for preparing user stories for a project
+ */
+@Component
+public class PrepareStoriesTool extends ProjectManagementTool {
+    private final ProjectService projectService;
+    private final ChatClient chatClient;
+    private final ObjectMapper objectMapper;
+
+    public PrepareStoriesTool(ProjectService projectService, ChatClient chatClient) {
+<span class="nc" id="L25">        super(&quot;prepare-stories&quot;, &quot;Prepare user stories for a specific project&quot;);</span>
+<span class="nc" id="L26">        this.projectService = projectService;</span>
+<span class="nc" id="L27">        this.chatClient = chatClient;</span>
+<span class="nc" id="L28">        this.objectMapper = new ObjectMapper();</span>
+<span class="nc" id="L29">    }</span>
+
+    @Override
+    public ToolResult execute(Map&lt;String, String&gt; parameters) {
+<span class="nc" id="L33">        String projectName = parameters.get(&quot;project&quot;);</span>
+        
+<span class="nc bnc" id="L35" title="All 4 branches missed.">        if (projectName == null || projectName.trim().isEmpty()) {</span>
+<span class="nc" id="L36">            return ToolResult.failure(&quot;Project name is required&quot;);</span>
+        }
+        
+        try {
+<span class="nc" id="L40">            Optional&lt;Project&gt; projectOpt = projectService.findProjectByName(projectName);</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">            if (projectOpt.isEmpty()) {</span>
+<span class="nc" id="L42">                return ToolResult.failure(String.format(&quot;Project '%s' not found. Please check the name and try again.&quot;, projectName));</span>
+            }
+            
+<span class="nc" id="L45">            Project project = projectOpt.get();</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            if (project.getRequirements().isEmpty()) {</span>
+<span class="nc" id="L47">                return ToolResult.failure(String.format(&quot;Project '%s' doesn't have any requirements yet. Please add requirements first.&quot;, project.getName()));</span>
+            }
+            
+<span class="nc" id="L50">            StringBuilder prompt = new StringBuilder();</span>
+<span class="nc" id="L51">            prompt.append(&quot;Analyze the following project requirements and create user stories, identify risks, non-functional requirements, and any clarification queries:\n\n&quot;);</span>
+<span class="nc" id="L52">            prompt.append(&quot;Project: &quot;).append(project.getName()).append(&quot;\n&quot;);</span>
+<span class="nc bnc" id="L53" title="All 4 branches missed.">            if (project.getDescription() != null &amp;&amp; !project.getDescription().isEmpty()) {</span>
+<span class="nc" id="L54">                prompt.append(&quot;Description: &quot;).append(project.getDescription()).append(&quot;\n\n&quot;);</span>
+            }
+            
+<span class="nc" id="L57">            prompt.append(&quot;Requirements:\n&quot;);</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            for (Requirement req : project.getRequirements()) {</span>
+<span class="nc" id="L59">                prompt.append(&quot;- &quot;).append(req.getText()).append(&quot;\n&quot;);</span>
+<span class="nc" id="L60">            }</span>
+            
+<span class="nc" id="L62">            prompt.append(&quot;\nPlease return a JSON with the following structure:\n&quot;);</span>
+<span class="nc" id="L63">            prompt.append(&quot;{\n&quot;);</span>
+<span class="nc" id="L64">            prompt.append(&quot;  \&quot;stories\&quot;: [\&quot;story 1\&quot;, \&quot;story 2\&quot;, ...],\n&quot;);</span>
+<span class="nc" id="L65">            prompt.append(&quot;  \&quot;risks\&quot;: [\&quot;risk 1\&quot;, \&quot;risk 2\&quot;, ...],\n&quot;);</span>
+<span class="nc" id="L66">            prompt.append(&quot;  \&quot;nfrs\&quot;: [\&quot;nfr 1\&quot;, \&quot;nfr 2\&quot;, ...],\n&quot;);</span>
+<span class="nc" id="L67">            prompt.append(&quot;  \&quot;queries\&quot;: [\&quot;query 1\&quot;, \&quot;query 2\&quot;, ...],\n&quot;);</span>
+<span class="nc" id="L68">            prompt.append(&quot;  \&quot;summary\&quot;: \&quot;overall project summary\&quot;\n&quot;);</span>
+<span class="nc" id="L69">            prompt.append(&quot;}\n&quot;);</span>
+            
+<span class="nc" id="L71">            ChatResponse aiResponse = chatClient.call(new Prompt(prompt.toString()));</span>
+<span class="nc" id="L72">            String responseText = aiResponse.getResult().getContent();</span>
+            
+            try {
+<span class="nc" id="L75">                StoryAnalysisResponse analysisResponse = parseStoryAnalysisResponse(responseText);</span>
+                
+<span class="nc" id="L77">                projectService.saveStoryAnalysisResult(project, analysisResponse);</span>
+                
+<span class="nc" id="L79">                StringBuilder response = new StringBuilder();</span>
+<span class="nc" id="L80">                response.append(String.format(&quot;I've analyzed the requirements for project '%s' and created:\n\n&quot;, project.getName()));</span>
+                
+<span class="nc" id="L82">                response.append(&quot;User Stories:\n&quot;);</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">                for (String story : analysisResponse.getStories()) {</span>
+<span class="nc" id="L84">                    response.append(&quot;- &quot;).append(story).append(&quot;\n&quot;);</span>
+<span class="nc" id="L85">                }</span>
+                
+<span class="nc" id="L87">                response.append(&quot;\nRisks:\n&quot;);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                for (String risk : analysisResponse.getRisks()) {</span>
+<span class="nc" id="L89">                    response.append(&quot;- &quot;).append(risk).append(&quot;\n&quot;);</span>
+<span class="nc" id="L90">                }</span>
+                
+<span class="nc" id="L92">                response.append(&quot;\nNon-Functional Requirements:\n&quot;);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                for (String nfr : analysisResponse.getNfrs()) {</span>
+<span class="nc" id="L94">                    response.append(&quot;- &quot;).append(nfr).append(&quot;\n&quot;);</span>
+<span class="nc" id="L95">                }</span>
+                
+<span class="nc" id="L97">                response.append(&quot;\nQueries for Clarification:\n&quot;);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                for (String query : analysisResponse.getQueries()) {</span>
+<span class="nc" id="L99">                    response.append(&quot;- &quot;).append(query).append(&quot;\n&quot;);</span>
+<span class="nc" id="L100">                }</span>
+                
+<span class="nc" id="L102">                response.append(&quot;\nSummary: &quot;).append(analysisResponse.getSummary());</span>
+                
+<span class="nc" id="L104">                return ToolResult.success(response.toString());</span>
+                
+<span class="nc" id="L106">            } catch (Exception e) {</span>
+<span class="nc" id="L107">                return ToolResult.failure(&quot;I encountered an error while analyzing the requirements: &quot; + e.getMessage());</span>
+            }
+<span class="nc" id="L109">        } catch (Exception e) {</span>
+<span class="nc" id="L110">            return ToolResult.failure(&quot;Failed to prepare stories: &quot; + e.getMessage());</span>
+        }
+    }
+
+    @Override
+    public String[] getParameterNames() {
+<span class="nc" id="L116">        return new String[]{&quot;project&quot;};</span>
+    }
+    
+    protected StoryAnalysisResponse parseStoryAnalysisResponse(String jsonString) {
+        try {
+<span class="nc" id="L121">            return objectMapper.readValue(jsonString, StoryAnalysisResponse.class);</span>
+<span class="nc" id="L122">        } catch (Exception e) {</span>
+<span class="nc" id="L123">            throw new RuntimeException(&quot;Failed to parse AI response: &quot; + e.getMessage(), e);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -2,6 +2,7 @@ package com.example.springai.config;
 
 import com.example.springai.entity.*;
 import com.example.springai.repository.*;
+import com.github.ksuid.Ksuid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ public class TestDataInitializer {
                 
                 // Project 1: E-Commerce Platform
                 Project ecommerce = new Project();
+                ecommerce.setId(Ksuid.newKsuid().toString());
                 ecommerce.setName("E-Commerce Platform");
                 ecommerce.setDescription("A modern e-commerce platform with advanced features");
                 projectRepository.save(ecommerce);
@@ -53,6 +55,7 @@ public class TestDataInitializer {
                 
                 // Project 2: Task Management App
                 Project taskApp = new Project();
+                taskApp.setId(Ksuid.newKsuid().toString());
                 taskApp.setName("Task Management App");
                 taskApp.setDescription("A collaborative task management application for teams");
                 projectRepository.save(taskApp);
@@ -78,6 +81,7 @@ public class TestDataInitializer {
                 
                 // Project 3: Health Monitoring System
                 Project healthSystem = new Project();
+                healthSystem.setId(Ksuid.newKsuid().toString());
                 healthSystem.setName("Health Monitoring System");
                 healthSystem.setDescription("A system for tracking and analyzing health metrics");
                 projectRepository.save(healthSystem);
@@ -103,6 +107,7 @@ public class TestDataInitializer {
                 
                 // Project 4: Smart Home Automation
                 Project smartHome = new Project();
+                smartHome.setId(Ksuid.newKsuid().toString());
                 smartHome.setName("Smart Home Automation");
                 smartHome.setDescription("A system for controlling and automating home devices");
                 projectRepository.save(smartHome);
@@ -128,6 +133,7 @@ public class TestDataInitializer {
                 
                 // Project 5: Learning Management System
                 Project lms = new Project();
+                lms.setId(Ksuid.newKsuid().toString());
                 lms.setName("Learning Management System");
                 lms.setDescription("A platform for creating and delivering educational content");
                 projectRepository.save(lms);

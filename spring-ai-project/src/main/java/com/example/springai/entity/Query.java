@@ -1,7 +1,7 @@
 package com.example.springai.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -53,7 +53,7 @@ public class Query {
     public void setProject(Project project) {
         this.project = project;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

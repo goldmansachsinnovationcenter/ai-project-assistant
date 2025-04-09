@@ -3,82 +3,81 @@ package com.example.springai.config;
 import com.example.springai.entity.Project;
 import com.example.springai.repository.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class TestDataInitializerTest {
 
     @Mock
     private ProjectRepository projectRepository;
-    
+
     @Mock
     private RequirementRepository requirementRepository;
-    
+
     @Mock
     private StoryRepository storyRepository;
-    
+
     @Mock
     private RiskRepository riskRepository;
-    
-    @Mock
-    private QueryRepository queryRepository;
-    
+
     @Mock
     private NFRRepository nfrRepository;
+
+    @Mock
+    private QueryRepository queryRepository;
+
+    @Mock
+    private ChatMessageRepository chatMessageRepository;
 
     @InjectMocks
     private TestDataInitializer testDataInitializer;
 
     @Test
-    public void testInitTestData() throws Exception {
-        // Setup
+    public void testInitTestData() {
         when(projectRepository.count()).thenReturn(0L);
-        when(projectRepository.save(any(Project.class))).thenReturn(new Project());
+        when(projectRepository.save(any(Project.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Execute
         CommandLineRunner runner = testDataInitializer.initTestData(
-                projectRepository, 
-                requirementRepository, 
-                storyRepository, 
-                riskRepository, 
-                queryRepository, 
-                nfrRepository);
+                projectRepository, requirementRepository, storyRepository,
+                riskRepository, queryRepository, nfrRepository);
         
         assertNotNull(runner);
-        runner.run();
+        
+        assertDoesNotThrow(() -> runner.run("test"));
 
-        // Verify
-        verify(projectRepository, times(1)).count();
-        verify(projectRepository, atLeastOnce()).save(any(Project.class));
+        verify(projectRepository, times(5)).save(any(Project.class));
+        verify(requirementRepository, atLeast(5)).save(any());
+        verify(storyRepository, atLeast(5)).save(any());
+        verify(riskRepository, atLeast(5)).save(any());
+        verify(nfrRepository, atLeast(5)).save(any());
+        verify(queryRepository, atLeast(5)).save(any());
     }
 
     @Test
-    public void testInitTestDataWhenProjectsExist() throws Exception {
-        // Setup
+    public void testInitTestDataWhenDataExists() {
         when(projectRepository.count()).thenReturn(5L);
 
-        // Execute
         CommandLineRunner runner = testDataInitializer.initTestData(
-                projectRepository, 
-                requirementRepository, 
-                storyRepository, 
-                riskRepository, 
-                queryRepository, 
-                nfrRepository);
+                projectRepository, requirementRepository, storyRepository,
+                riskRepository, queryRepository, nfrRepository);
         
         assertNotNull(runner);
-        runner.run();
+        
+        assertDoesNotThrow(() -> runner.run("test"));
 
-        // Verify
-        verify(projectRepository, times(1)).count();
-        verify(projectRepository, never()).save(any(Project.class));
+        verify(projectRepository, never()).save(any());
+        verify(requirementRepository, never()).save(any());
+        verify(storyRepository, never()).save(any());
+        verify(riskRepository, never()).save(any());
+        verify(nfrRepository, never()).save(any());
+        verify(queryRepository, never()).save(any());
     }
 }

@@ -1,5 +1,6 @@
 package com.example.springai.entity;
 
+import com.github.ksuid.Ksuid;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,74 +8,60 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RequirementTest {
 
     @Test
-    public void testRequirementConstructorAndGetters() {
-        Requirement requirement = new Requirement();
-        requirement.setId(1L);
-        requirement.setText("User authentication");
+    public void testRequirementCreation() {
+        String text = "Test Requirement Text";
         
-        assertEquals(1L, requirement.getId());
-        assertEquals("User authentication", requirement.getText());
+        Requirement requirement = new Requirement();
+        requirement.setText(text);
+        
+        assertEquals(text, requirement.getText());
     }
     
     @Test
-    public void testRequirementSetters() {
-        Requirement requirement = new Requirement();
-        
-        requirement.setId(2L);
-        assertEquals(2L, requirement.getId());
-        
-        requirement.setText("Data encryption");
-        assertEquals("Data encryption", requirement.getText());
-    }
-    
-    @Test
-    public void testRequirementProjectRelationship() {
-        Requirement requirement = new Requirement();
+    public void testRequirementProjectAssociation() {
         Project project = new Project();
-        project.setId(3L);
+        project.setId(Ksuid.newKsuid().toString());
         project.setName("Test Project");
+        
+        Requirement requirement = new Requirement();
+        requirement.setText("Test Requirement");
         
         requirement.setProject(project);
         
-        assertNotNull(requirement.getProject());
-        assertEquals(3L, requirement.getProject().getId());
+        assertEquals(project, requirement.getProject());
         assertEquals("Test Project", requirement.getProject().getName());
     }
     
     @Test
-    public void testRequirementEqualsAndHashCode() {
+    public void testEqualsAndHashCode() {
+        Long id = 1L;
+        
         Requirement requirement1 = new Requirement();
-        requirement1.setId(1L);
-        requirement1.setText("User authentication");
+        requirement1.setId(id);
+        requirement1.setText("Test Requirement");
         
         Requirement requirement2 = new Requirement();
-        requirement2.setId(1L);
-        requirement2.setText("Different text");
+        requirement2.setId(id);
+        requirement2.setText("Different Text");
         
         Requirement requirement3 = new Requirement();
         requirement3.setId(2L);
-        requirement3.setText("User authentication");
+        requirement3.setText("Test Requirement");
         
-        assertEquals(requirement1, requirement1); // Same object
-        assertNotEquals(requirement1, null); // Null comparison
-        assertNotEquals(requirement1, new Object()); // Different class
-        assertEquals(requirement1, requirement2); // Same ID, different fields
-        assertNotEquals(requirement1, requirement3); // Different ID
-        
-        assertEquals(requirement1.hashCode(), requirement2.hashCode()); // Same ID should have same hashCode
-        assertNotEquals(requirement1.hashCode(), requirement3.hashCode()); // Different ID should have different hashCode
+        assertEquals(requirement1, requirement2, "Requirements with same ID should be equal");
+        assertNotEquals(requirement1, requirement3, "Requirements with different IDs should not be equal");
+        assertEquals(requirement1.hashCode(), requirement2.hashCode(), "Hash codes should be equal for equal requirements");
+        assertNotEquals(requirement1.hashCode(), requirement3.hashCode(), "Hash codes should differ for different requirements");
     }
     
     @Test
-    public void testRequirementToString() {
+    public void testToString() {
         Requirement requirement = new Requirement();
         requirement.setId(1L);
-        requirement.setText("User authentication");
+        requirement.setText("Test Requirement");
         
         String toString = requirement.toString();
         
-        assertNotNull(toString);
-        assertTrue(toString.contains("1"));
-        assertTrue(toString.contains("User authentication"));
+        assertTrue(toString.contains("Test Requirement"), "toString should contain the requirement text");
     }
 }

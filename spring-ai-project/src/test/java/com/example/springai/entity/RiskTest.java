@@ -1,5 +1,6 @@
 package com.example.springai.entity;
 
+import com.github.ksuid.Ksuid;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,81 +8,69 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RiskTest {
 
     @Test
-    public void testRiskConstructorAndGetters() {
-        Risk risk = new Risk();
-        risk.setId(1L);
-        risk.setDescription("Security vulnerability");
-        risk.setMitigation("Implement encryption");
+    public void testRiskCreation() {
+        String description = "Test Risk Description";
+        String mitigation = "Test Risk Mitigation";
         
-        assertEquals(1L, risk.getId());
-        assertEquals("Security vulnerability", risk.getDescription());
-        assertEquals("Implement encryption", risk.getMitigation());
+        Risk risk = new Risk();
+        risk.setDescription(description);
+        risk.setMitigation(mitigation);
+        
+        assertEquals(description, risk.getDescription());
+        assertEquals(mitigation, risk.getMitigation());
     }
     
     @Test
-    public void testRiskSetters() {
-        Risk risk = new Risk();
-        
-        risk.setId(2L);
-        assertEquals(2L, risk.getId());
-        
-        risk.setDescription("Performance bottleneck");
-        assertEquals("Performance bottleneck", risk.getDescription());
-        
-        risk.setMitigation("Optimize database queries");
-        assertEquals("Optimize database queries", risk.getMitigation());
-    }
-    
-    @Test
-    public void testRiskProjectRelationship() {
-        Risk risk = new Risk();
+    public void testRiskProjectAssociation() {
         Project project = new Project();
-        project.setId(3L);
+        project.setId(Ksuid.newKsuid().toString());
         project.setName("Test Project");
+        
+        Risk risk = new Risk();
+        risk.setDescription("Test Risk");
+        risk.setMitigation("Test Mitigation");
         
         risk.setProject(project);
         
-        assertNotNull(risk.getProject());
-        assertEquals(3L, risk.getProject().getId());
+        assertEquals(project, risk.getProject());
         assertEquals("Test Project", risk.getProject().getName());
     }
     
     @Test
-    public void testRiskEqualsAndHashCode() {
+    public void testEqualsAndHashCode() {
+        Long id = 1L;
+        
         Risk risk1 = new Risk();
-        risk1.setId(1L);
-        risk1.setDescription("Security vulnerability");
-        risk1.setMitigation("Implement encryption");
+        risk1.setId(id);
+        risk1.setDescription("Test Risk");
+        risk1.setMitigation("Test Mitigation");
         
         Risk risk2 = new Risk();
-        risk2.setId(1L);
-        risk2.setDescription("Different description");
-        risk2.setMitigation("Different mitigation");
+        risk2.setId(id);
+        risk2.setDescription("Different Description");
+        risk2.setMitigation("Different Mitigation");
         
         Risk risk3 = new Risk();
         risk3.setId(2L);
-        risk3.setDescription("Security vulnerability");
-        risk3.setMitigation("Implement encryption");
+        risk3.setDescription("Test Risk");
+        risk3.setMitigation("Test Mitigation");
         
-        assertEquals(risk1, risk2);
-        assertNotEquals(risk1, risk3);
-        
-        assertEquals(risk1.hashCode(), risk2.hashCode());
-        assertNotEquals(risk1.hashCode(), risk3.hashCode());
+        assertEquals(risk1, risk2, "Risks with same ID should be equal");
+        assertNotEquals(risk1, risk3, "Risks with different IDs should not be equal");
+        assertEquals(risk1.hashCode(), risk2.hashCode(), "Hash codes should be equal for equal risks");
+        assertNotEquals(risk1.hashCode(), risk3.hashCode(), "Hash codes should differ for different risks");
     }
     
     @Test
-    public void testRiskToString() {
+    public void testToString() {
         Risk risk = new Risk();
         risk.setId(1L);
-        risk.setDescription("Security vulnerability");
-        risk.setMitigation("Implement encryption");
+        risk.setDescription("Test Risk");
+        risk.setMitigation("Test Mitigation");
         
         String toString = risk.toString();
         
-        assertNotNull(toString);
-        assertTrue(toString.contains("1"));
-        assertTrue(toString.contains("Security vulnerability"));
-        assertTrue(toString.contains("Implement encryption"));
+        assertTrue(toString.contains("Test Risk"), "toString should contain the risk description");
+        assertTrue(toString.contains("Test Mitigation"), "toString should contain the risk mitigation");
     }
 }

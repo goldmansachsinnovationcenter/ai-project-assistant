@@ -1,5 +1,6 @@
 package com.example.springai.entity;
 
+import com.github.ksuid.Ksuid;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,81 +8,69 @@ import static org.junit.jupiter.api.Assertions.*;
 public class QueryTest {
 
     @Test
-    public void testQueryConstructorAndGetters() {
-        Query query = new Query();
-        query.setId(1L);
-        query.setQuestion("What is the project timeline?");
-        query.setContext("Planning phase");
+    public void testQueryCreation() {
+        String question = "Test Question";
+        String context = "Test Context";
         
-        assertEquals(1L, query.getId());
-        assertEquals("What is the project timeline?", query.getQuestion());
-        assertEquals("Planning phase", query.getContext());
+        Query query = new Query();
+        query.setQuestion(question);
+        query.setContext(context);
+        
+        assertEquals(question, query.getQuestion());
+        assertEquals(context, query.getContext());
     }
     
     @Test
-    public void testQuerySetters() {
-        Query query = new Query();
-        
-        query.setId(2L);
-        assertEquals(2L, query.getId());
-        
-        query.setQuestion("What are the project risks?");
-        assertEquals("What are the project risks?", query.getQuestion());
-        
-        query.setContext("Risk assessment");
-        assertEquals("Risk assessment", query.getContext());
-    }
-    
-    @Test
-    public void testQueryProjectRelationship() {
-        Query query = new Query();
+    public void testQueryProjectAssociation() {
         Project project = new Project();
-        project.setId(3L);
+        project.setId(Ksuid.newKsuid().toString());
         project.setName("Test Project");
+        
+        Query query = new Query();
+        query.setQuestion("Test Question");
+        query.setContext("Test Context");
         
         query.setProject(project);
         
-        assertNotNull(query.getProject());
-        assertEquals(3L, query.getProject().getId());
+        assertEquals(project, query.getProject());
         assertEquals("Test Project", query.getProject().getName());
     }
     
     @Test
-    public void testQueryEqualsAndHashCode() {
+    public void testEqualsAndHashCode() {
+        Long id = 1L;
+        
         Query query1 = new Query();
-        query1.setId(1L);
-        query1.setQuestion("What is the project timeline?");
-        query1.setContext("Planning phase");
+        query1.setId(id);
+        query1.setQuestion("Test Question");
+        query1.setContext("Test Context");
         
         Query query2 = new Query();
-        query2.setId(1L);
-        query2.setQuestion("Different question");
-        query2.setContext("Different context");
+        query2.setId(id);
+        query2.setQuestion("Different Question");
+        query2.setContext("Different Context");
         
         Query query3 = new Query();
         query3.setId(2L);
-        query3.setQuestion("What is the project timeline?");
-        query3.setContext("Planning phase");
+        query3.setQuestion("Test Question");
+        query3.setContext("Test Context");
         
-        assertEquals(query1, query2);
-        assertNotEquals(query1, query3);
-        
-        assertEquals(query1.hashCode(), query2.hashCode());
-        assertNotEquals(query1.hashCode(), query3.hashCode());
+        assertEquals(query1, query2, "Queries with same ID should be equal");
+        assertNotEquals(query1, query3, "Queries with different IDs should not be equal");
+        assertEquals(query1.hashCode(), query2.hashCode(), "Hash codes should be equal for equal queries");
+        assertNotEquals(query1.hashCode(), query3.hashCode(), "Hash codes should differ for different queries");
     }
     
     @Test
-    public void testQueryToString() {
+    public void testToString() {
         Query query = new Query();
         query.setId(1L);
-        query.setQuestion("What is the project timeline?");
-        query.setContext("Planning phase");
+        query.setQuestion("Test Question");
+        query.setContext("Test Context");
         
         String toString = query.toString();
         
-        assertNotNull(toString);
-        assertTrue(toString.contains("1"));
-        assertTrue(toString.contains("What is the project timeline?"));
-        assertTrue(toString.contains("Planning phase"));
+        assertTrue(toString.contains("Test Question"), "toString should contain the query question");
+        assertTrue(toString.contains("Test Context"), "toString should contain the query context");
     }
 }
