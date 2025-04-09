@@ -16,50 +16,50 @@ public class ShowProjectTool extends ProjectManagementTool {
     private final ProjectService projectService;
 
     public ShowProjectTool(ProjectService projectService) {
-<span class="nc" id="L19">        super(&quot;show-project&quot;, &quot;Show details of a specific project&quot;);</span>
-<span class="nc" id="L20">        this.projectService = projectService;</span>
-<span class="nc" id="L21">    }</span>
+<span class="fc" id="L19">        super(&quot;show-project&quot;, &quot;Show details of a specific project&quot;);</span>
+<span class="fc" id="L20">        this.projectService = projectService;</span>
+<span class="fc" id="L21">    }</span>
 
     @Override
     public ToolResult execute(Map&lt;String, String&gt; parameters) {
-<span class="nc" id="L25">        String name = parameters.get(&quot;name&quot;);</span>
+<span class="fc" id="L25">        String name = parameters.get(&quot;name&quot;);</span>
         
-<span class="nc bnc" id="L27" title="All 4 branches missed.">        if (name == null || name.trim().isEmpty()) {</span>
-<span class="nc" id="L28">            return ToolResult.failure(&quot;Project name is required&quot;);</span>
+<span class="fc bfc" id="L27" title="All 4 branches covered.">        if (name == null || name.trim().isEmpty()) {</span>
+<span class="fc" id="L28">            return ToolResult.failure(&quot;Project name is required&quot;);</span>
         }
         
         try {
-<span class="nc" id="L32">            Optional&lt;Project&gt; projectOpt = projectService.findProjectByName(name);</span>
-<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (projectOpt.isEmpty()) {</span>
-<span class="nc" id="L34">                return ToolResult.failure(String.format(&quot;Project '%s' not found. Please check the name and try again.&quot;, name));</span>
+<span class="fc" id="L32">            Optional&lt;Project&gt; projectOpt = projectService.findProjectByName(name);</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">            if (projectOpt.isEmpty()) {</span>
+<span class="fc" id="L34">                return ToolResult.failure(String.format(&quot;Project '%s' not found. Please check the name and try again.&quot;, name));</span>
             }
             
-<span class="nc" id="L37">            Project project = projectOpt.get();</span>
-<span class="nc" id="L38">            StringBuilder response = new StringBuilder();</span>
-<span class="nc" id="L39">            response.append(String.format(&quot;Project: %s\n&quot;, project.getName()));</span>
+<span class="fc" id="L37">            Project project = projectOpt.get();</span>
+<span class="fc" id="L38">            StringBuilder response = new StringBuilder();</span>
+<span class="fc" id="L39">            response.append(String.format(&quot;Project: %s\n&quot;, project.getName()));</span>
             
-<span class="nc bnc" id="L41" title="All 4 branches missed.">            if (project.getDescription() != null &amp;&amp; !project.getDescription().isEmpty()) {</span>
-<span class="nc" id="L42">                response.append(String.format(&quot;Description: %s\n\n&quot;, project.getDescription()));</span>
+<span class="pc bpc" id="L41" title="2 of 4 branches missed.">            if (project.getDescription() != null &amp;&amp; !project.getDescription().isEmpty()) {</span>
+<span class="fc" id="L42">                response.append(String.format(&quot;Description: %s\n\n&quot;, project.getDescription()));</span>
             }
             
-<span class="nc bnc" id="L45" title="All 2 branches missed.">            if (project.getRequirements().isEmpty()) {</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">            if (project.getRequirements().isEmpty()) {</span>
 <span class="nc" id="L46">                response.append(&quot;This project doesn't have any requirements yet.&quot;);</span>
             } else {
-<span class="nc" id="L48">                response.append(&quot;Requirements:\n&quot;);</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">                for (Requirement req : project.getRequirements()) {</span>
-<span class="nc" id="L50">                    response.append(String.format(&quot;- %s\n&quot;, req.getText()));</span>
-<span class="nc" id="L51">                }</span>
+<span class="fc" id="L48">                response.append(&quot;Requirements:\n&quot;);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">                for (Requirement req : project.getRequirements()) {</span>
+<span class="fc" id="L50">                    response.append(String.format(&quot;- %s\n&quot;, req.getText()));</span>
+<span class="fc" id="L51">                }</span>
             }
             
-<span class="nc" id="L54">            return ToolResult.success(response.toString());</span>
-<span class="nc" id="L55">        } catch (Exception e) {</span>
-<span class="nc" id="L56">            return ToolResult.failure(&quot;Failed to show project: &quot; + e.getMessage());</span>
+<span class="fc" id="L54">            return ToolResult.success(response.toString());</span>
+<span class="fc" id="L55">        } catch (Exception e) {</span>
+<span class="fc" id="L56">            return ToolResult.failure(&quot;Failed to show project: &quot; + e.getMessage());</span>
         }
     }
 
     @Override
     public String[] getParameterNames() {
-<span class="nc" id="L62">        return new String[]{&quot;name&quot;};</span>
+<span class="fc" id="L62">        return new String[]{&quot;name&quot;};</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

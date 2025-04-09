@@ -15,34 +15,34 @@ public class CreateProjectTool extends ProjectManagementTool {
     private final ProjectService projectService;
 
     public CreateProjectTool(ProjectService projectService) {
-<span class="nc" id="L18">        super(&quot;create-project&quot;, &quot;Create a new project with the given name&quot;);</span>
-<span class="nc" id="L19">        this.projectService = projectService;</span>
-<span class="nc" id="L20">    }</span>
+<span class="fc" id="L18">        super(&quot;create-project&quot;, &quot;Create a new project with the given name&quot;);</span>
+<span class="fc" id="L19">        this.projectService = projectService;</span>
+<span class="fc" id="L20">    }</span>
 
     @Override
     public ToolResult execute(Map&lt;String, String&gt; parameters) {
-<span class="nc" id="L24">        String name = parameters.get(&quot;name&quot;);</span>
-<span class="nc" id="L25">        String description = parameters.getOrDefault(&quot;description&quot;, &quot;&quot;);</span>
+<span class="fc" id="L24">        String name = parameters.get(&quot;name&quot;);</span>
+<span class="fc" id="L25">        String description = parameters.getOrDefault(&quot;description&quot;, &quot;&quot;);</span>
         
-<span class="nc bnc" id="L27" title="All 4 branches missed.">        if (name == null || name.trim().isEmpty()) {</span>
-<span class="nc" id="L28">            return ToolResult.failure(&quot;Project name is required&quot;);</span>
+<span class="fc bfc" id="L27" title="All 4 branches covered.">        if (name == null || name.trim().isEmpty()) {</span>
+<span class="fc" id="L28">            return ToolResult.failure(&quot;Project name is required&quot;);</span>
         }
         
         try {
-<span class="nc bnc" id="L32" title="All 2 branches missed.">            if (projectService.findProjectByName(name).isPresent()) {</span>
-<span class="nc" id="L33">                return ToolResult.failure(String.format(&quot;Project '%s' already exists&quot;, name));</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">            if (projectService.findProjectByName(name).isPresent()) {</span>
+<span class="fc" id="L33">                return ToolResult.failure(String.format(&quot;Project '%s' already exists&quot;, name));</span>
             }
             
-<span class="nc" id="L36">            Project project = projectService.createProject(name, description);</span>
-<span class="nc" id="L37">            return ToolResult.success(String.format(&quot;Project '%s' has been created successfully. You can now add requirements to it.&quot;, project.getName()));</span>
-<span class="nc" id="L38">        } catch (Exception e) {</span>
-<span class="nc" id="L39">            return ToolResult.failure(&quot;Failed to create project: &quot; + e.getMessage());</span>
+<span class="fc" id="L36">            Project project = projectService.createProject(name, description);</span>
+<span class="fc" id="L37">            return ToolResult.success(String.format(&quot;Project '%s' has been created successfully. You can now add requirements to it.&quot;, project.getName()));</span>
+<span class="fc" id="L38">        } catch (Exception e) {</span>
+<span class="fc" id="L39">            return ToolResult.failure(&quot;Failed to create project: &quot; + e.getMessage());</span>
         }
     }
 
     @Override
     public String[] getParameterNames() {
-<span class="nc" id="L45">        return new String[]{&quot;name&quot;, &quot;description&quot;};</span>
+<span class="fc" id="L45">        return new String[]{&quot;name&quot;, &quot;description&quot;};</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
