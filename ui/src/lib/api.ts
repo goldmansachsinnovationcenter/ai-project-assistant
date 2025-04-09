@@ -46,7 +46,7 @@ export async function sendMessage(message: string): Promise<string> {
  */
 export async function chatWithMcp(message: string): Promise<string> {
   try {
-    const response = await fetch(`${API_URL}/api/ai/mcp-chat?message=${encodeURIComponent(message)}`, {
+    const response = await fetch(`${API_URL}/ai/chat?message=${encodeURIComponent(message)}`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
@@ -57,7 +57,8 @@ export async function chatWithMcp(message: string): Promise<string> {
       throw new Error(`API error: ${response.status}`);
     }
     
-    return await response.text();
+    const data = await response.json();
+    return data.generation || "No response from AI";
   } catch (error) {
     console.error('Error chatting with MCP AI:', error);
     throw error;

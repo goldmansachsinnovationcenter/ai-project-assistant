@@ -55,7 +55,9 @@ const ChatInterface: React.FC = () => {
     try {
       console.log('Sending message to API:', userMessage);
       
-      const response = await chatWithAI(userMessage);
+      const response = isCommand 
+        ? await sendMessage(userMessage)
+        : await chatWithAI(userMessage);
       
       console.log('Received response from API:', response);
       
