@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { sendMessage, getChatHistory, chatWithAI } from '../lib/api';
+import React, { useState, useEffect, useRef } from "react";
+import { sendMessage, getChatHistory, chatWithAI } from "../lib/api";
 
 const ChatInterface: React.FC = () => {
-  const [messages, setMessages] = useState<{ prompt: string; response: string }[]>([]);
-  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<
+    { prompt: string; response: string }[]
+  >([]);
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -26,7 +28,7 @@ const ChatInterface: React.FC = () => {
         const history = await getChatHistory(20);
         setMessages(history);
       } catch (err) {
-        console.error('Failed to load chat history:', err);
+        console.error("Failed to load chat history:", err);
       }
     } finally {
       setIsLoadingHistory(false);
@@ -34,7 +36,7 @@ const ChatInterface: React.FC = () => {
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,41 +44,55 @@ const ChatInterface: React.FC = () => {
     if (!input.trim() || isLoading) return;
 
     const userMessage = input;
-    setInput('');
+    setInput("");
     setError(null); // Clear any previous errors
-    
+
     // Check if the message looks like a command
-    const isCommand = /^(create project|list projects|show project|add requirement|prepare stories|help)/i.test(userMessage);
-    
+    const isCommand =
+      /^(create project|list projects|show project|add requirement|prepare stories|help)/i.test(
+        userMessage
+      );
+
     // Add user message to the chat
-    setMessages(prev => [...prev, { prompt: userMessage, response: isCommand ? 'Executing command...' : 'Thinking...' }]);
-    
+    setMessages((prev) => [
+      ...prev,
+      {
+        prompt: userMessage,
+        response: isCommand ? "Executing command..." : "Thinking...",
+      },
+    ]);
+
     setIsLoading(true);
     try {
-      console.log('Sending message to API:', userMessage);
-      
-      const response = isCommand 
+      console.log("Sending message to API:", userMessage);
+
+      const response = isCommand
         ? await sendMessage(userMessage)
         : await chatWithAI(userMessage);
-      
-      console.log('Received response from API:', response);
-      
+
+      console.log("Received response from API:", response);
+
       // Update the response in the messages array
-      setMessages(prev => 
-        prev.map((msg, idx) => 
+      setMessages((prev) =>
+        prev.map((msg, idx) =>
           idx === prev.length - 1 ? { ...msg, response } : msg
         )
       );
     } catch (err: unknown) {
-      console.error('Error sending message:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      console.error('Error details:', errorMessage);
-      setError('Failed to get response from AI. Please try again.');
-      
+      console.error("Error sending message:", err);
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      console.error("Error details:", errorMessage);
+      setError("Failed to get response from AI. Please try again.");
+
       // Update the error in the messages array
-      setMessages(prev => 
-        prev.map((msg, idx) => 
-          idx === prev.length - 1 ? { ...msg, response: `Failed to get response from AI: ${errorMessage}. Please try again.` } : msg
+      setMessages((prev) =>
+        prev.map((msg, idx) =>
+          idx === prev.length - 1
+            ? {
+                ...msg,
+                response: `Failed to get response from AI: ${errorMessage}. Please try again.`,
+              }
+            : msg
         )
       );
     } finally {
@@ -86,11 +102,13 @@ const ChatInterface: React.FC = () => {
 
   return (
     <div className="w-full max-w-2xl mx-auto p-4 bg-white rounded-lg shadow-md flex flex-col h-[80vh]">
-      <h2 className="text-2xl font-bold mb-4">Chat with AI</h2>
-      
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Chat with AI</h2>
+
       <div className="flex-grow overflow-y-auto mb-4 p-2">
         {isLoadingHistory ? (
-          <div className="text-center text-gray-500 my-8">Loading chat history...</div>
+          <div className="text-center text-gray-500 my-8">
+            Loading chat history...
+          </div>
         ) : (
           <>
             {messages.length === 0 ? (
@@ -101,12 +119,14 @@ const ChatInterface: React.FC = () => {
               messages.map((msg, idx) => (
                 <div key={idx} className="mb-4">
                   <div className="bg-blue-100 p-3 rounded-lg mb-2">
-                    <p className="font-semibold">You:</p>
-                    <p>{msg.prompt}</p>
+                    <p className="font-semibold text-gray-800">You:</p>
+                    <p className="text-gray-500">{msg.prompt}</p>
                   </div>
                   <div className="bg-gray-100 p-3 rounded-lg">
-                    <p className="font-semibold">AI:</p>
-                    <p className="whitespace-pre-wrap">{msg.response}</p>
+                    <p className="font-semibold text-gray-800">AI:</p>
+                    <p className="whitespace-pre-wrap text-gray-500">
+                      {msg.response}
+                    </p>
                   </div>
                 </div>
               ))
@@ -115,18 +135,18 @@ const ChatInterface: React.FC = () => {
           </>
         )}
       </div>
-      
-      {error && !error.includes('Failed to get response') && (
+
+      {error && !error.includes("Failed to get response") && (
         <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
           {error}
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit} className="mt-auto" data-testid="chat-form">
         <div className="flex items-center">
           <textarea
             id="message"
-            className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-gray-500"
             placeholder="Type your message here..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -136,12 +156,12 @@ const ChatInterface: React.FC = () => {
             type="submit"
             disabled={isLoading || !input.trim()}
             className={`px-4 py-2 h-full rounded-r-md text-white font-medium ${
-              isLoading || !input.trim() 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-blue-600 hover:bg-blue-700'
+              isLoading || !input.trim()
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
             }`}
           >
-            {isLoading ? 'Sending...' : 'Send'}
+            {isLoading ? "Sending..." : "Send"}
           </button>
         </div>
       </form>
