@@ -2,6 +2,8 @@ package com.example.springai.mcp;
 
 import org.springframework.stereotype.Component;
 
+import com.example.springai.tool.Tool; // Updated import
+
 import java.util.List;
 import java.util.ArrayList;
 
