@@ -1,6 +1,7 @@
 package com.example.springai.controller;
 
 import com.example.springai.entity.Project;
+import com.example.springai.entity.Requirement;
 import com.example.springai.service.ProjectService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -99,4 +100,109 @@ class ProjectControllerTest {
 
         verify(projectService, never()).createProject(anyString(), anyString());
     }
+
+    @Test
+    void getProjectByName_Found_ReturnsProject() throws Exception {
+        when(projectService.findProjectByName("Project One")).thenReturn(Optional.of(project1));
+
+        mockMvc.perform(get("/api/projects/Project One"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is("proj1_id")))
+                .andExpect(jsonPath("$.name", is("Project One")));
+
+        verify(projectService, times(1)).findProjectByName("Project One");
+    }
+
+    @Test
+    void getProjectByName_NotFound_ReturnsNotFound() throws Exception {
+        when(projectService.findProjectByName("NonExistent")).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/projects/NonExistent"))
+                .andExpect(status().isNotFound());
+
+        verify(projectService, times(1)).findProjectByName("NonExistent");
+    }
+
+    @Test
+    void addRequirement_Success_ReturnsRequirement() throws Exception {
+        Requirement requirement = new Requirement();
+        requirement.setId(1L);
+        requirement.setText("New requirement text");
+        requirement.setProject(project1);
+
+        when(projectService.findProjectByName("Project One")).thenReturn(Optional.of(project1));
+        when(projectService.addRequirement(any(Project.class), eq("New requirement text"))).thenReturn(requirement);
+
+        mockMvc.perform(post("/api/projects/Project One/requirements")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"text\":\"New requirement text\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1))) // Check against Integer
+                .andExpect(jsonPath("$.text", is("New requirement text")));
+
+        verify(projectService, times(1)).findProjectByName("Project One");
+        verify(projectService, times(1)).addRequirement(project1, "New requirement text");
+    }
+
+    @Test
+    void addRequirement_ProjectNotFound_ReturnsNotFound() throws Exception {
+        when(projectService.findProjectByName("NonExistent")).thenReturn(Optional.empty());
+
+        mockMvc.perform(post("/api/projects/NonExistent/requirements")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"text\":\"New requirement text\"}"))
+                .andExpect(status().isNotFound());
+
+        verify(projectService, times(1)).findProjectByName("NonExistent");
+        verify(projectService, never()).addRequirement(any(), anyString());
+    }
+
+    @Test
+    void addRequirement_InvalidInput_ReturnsBadRequest() throws Exception {
+        mockMvc.perform(post("/api/projects/Project One/requirements")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(post("/api/projects/Project One/requirements")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"text\":\"\"}"))
+                .andExpect(status().isBadRequest());
+
+        verify(projectService, never()).findProjectByName(anyString());
+        verify(projectService, never()).addRequirement(any(), anyString());
+    }
+
+    @Test
+    void getRequirements_Success_ReturnsRequirementsList() throws Exception {
+        Requirement req1 = new Requirement();
+        req1.setId(1L); req1.setText("Req 1");
+        Requirement req2 = new Requirement();
+        req2.setId(2L); req2.setText("Req 2");
+        project1.setRequirements(Arrays.asList(req1, req2));
+
+        when(projectService.findProjectByName("Project One")).thenReturn(Optional.of(project1));
+
+        mockMvc.perform(get("/api/projects/Project One/requirements"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(1))) // Check against Integer
+                .andExpect(jsonPath("$[1].id", is(2))); // Check against Integer
+
+        verify(projectService, times(1)).findProjectByName("Project One");
+    }
+
+    @Test
+    void getRequirements_ProjectNotFound_ReturnsNotFound() throws Exception {
+        when(projectService.findProjectByName("NonExistent")).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/projects/NonExistent/requirements"))
+                .andExpect(status().isNotFound());
+
+        verify(projectService, times(1)).findProjectByName("NonExistent");
+    }
+
 }

@@ -95,26 +95,55 @@ public class ProjectTest {
 
     @Test
     public void testEqualsAndHashCode() {
-        String id = Ksuid.newKsuid().toString();
-        
+        String id1 = Ksuid.newKsuid().toString();
+        String id2 = Ksuid.newKsuid().toString();
+
         Project project1 = new Project();
-        project1.setId(id);
+        project1.setId(id1);
         project1.setName("Test Project");
         project1.setDescription("Test Description");
-        
-        Project project2 = new Project();
-        project2.setId(id);
-        project2.setName("Different Name");
-        project2.setDescription("Different Description");
-        
-        Project project3 = new Project();
-        project3.setId(Ksuid.newKsuid().toString());
-        project3.setName("Test Project");
-        project3.setDescription("Test Description");
 
-        assertEquals(project1, project2, "Projects with same ID should be equal");
-        assertNotEquals(project1, project3, "Projects with different IDs should not be equal");
-        assertEquals(project1.hashCode(), project2.hashCode(), "Hash codes should be equal for equal projects");
-        assertNotEquals(project1.hashCode(), project3.hashCode(), "Hash codes should differ for different projects");
+        Project project1Copy = new Project(); // Same ID, different object instance
+        project1Copy.setId(id1);
+        project1Copy.setName("Different Name");
+
+        Project project2 = new Project(); // Different ID
+        project2.setId(id2);
+        project2.setName("Test Project");
+
+        Project projectNullId1 = new Project(); // Null ID
+        Project projectNullId2 = new Project(); // Null ID
+
+        assertTrue(project1.equals(project1), "Equals: Same instance");
+        assertTrue(project1.equals(project1Copy), "Equals: Same ID, different instance");
+        assertTrue(project1Copy.equals(project1), "Equals: Symmetric");
+        assertFalse(project1.equals(project2), "Equals: Different ID");
+        assertFalse(project2.equals(project1), "Equals: Different ID symmetric");
+        assertFalse(project1.equals(null), "Equals: Null object");
+        assertFalse(project1.equals(new Object()), "Equals: Different type");
+        assertFalse(project1.equals(projectNullId1), "Equals: One null ID");
+        assertFalse(projectNullId1.equals(project1), "Equals: One null ID symmetric");
+        assertTrue(projectNullId1.equals(projectNullId2), "Equals: Both null IDs");
+
+        assertEquals(project1.hashCode(), project1Copy.hashCode(), "HashCode: Same ID");
+        assertNotEquals(project1.hashCode(), project2.hashCode(), "HashCode: Different ID");
+        assertNotEquals(project1.hashCode(), projectNullId1.hashCode(), "HashCode: One null ID");
+        assertEquals(projectNullId1.hashCode(), projectNullId2.hashCode(), "HashCode: Both null IDs");
+    }
+
+    @Test
+    public void testToString() {
+        Project project = new Project();
+        project.setId("proj-tostring");
+        project.setName("ToString Project");
+        project.setDescription("ToString Desc");
+
+        String expected = "Project{id=proj-tostring, name='ToString Project', description='ToString Desc'}";
+        assertEquals(expected, project.toString());
+
+        Project projectNullFields = new Project();
+        projectNullFields.setId("proj-null");
+        String expectedNull = "Project{id=proj-null, name='null', description='null'}";
+        assertEquals(expectedNull, projectNullFields.toString());
     }
 }
