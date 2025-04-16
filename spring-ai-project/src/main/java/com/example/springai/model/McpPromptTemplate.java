@@ -1,6 +1,11 @@
 package com.example.springai.model;
 
-import com.example.springai.mcp.*;
+import com.example.springai.tool.Tool; // Updated import
+import com.example.springai.mcp.McpClient; // Keep specific MCP imports
+import com.example.springai.mcp.Message;
+import com.example.springai.mcp.Prompt;
+import com.example.springai.mcp.SystemMessage;
+import com.example.springai.mcp.UserMessage;
 import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 

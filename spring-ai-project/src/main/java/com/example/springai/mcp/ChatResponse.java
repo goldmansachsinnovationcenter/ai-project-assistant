@@ -29,6 +29,9 @@ public class ChatResponse {
      * @return The first generation in the response
      */
     public Generation getResult() {
+        if (generations == null || generations.isEmpty()) {
+            return null;
+        }
         return generations.get(0);
     }
     

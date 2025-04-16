@@ -1,5 +1,6 @@
 package com.example.springai.mcp;
 
+import com.example.springai.tool.Tool; // Corrected import placement
 /**
  * Interface for chat clients that can process prompts and return responses
  */

@@ -1,6 +1,11 @@
 package com.example.springai.service;
 
-import com.example.springai.mcp.*;
+import com.example.springai.tool.*; // Updated import
+import com.example.springai.mcp.McpClient; // Keep specific MCP imports if needed
+import com.example.springai.mcp.Message;
+import com.example.springai.mcp.Prompt;
+import com.example.springai.mcp.SystemMessage;
+import com.example.springai.mcp.UserMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +26,12 @@ public class McpToolService {
             ListProjectsTool listProjectsTool,
             ShowProjectTool showProjectTool,
             AddRequirementTool addRequirementTool,
-            PrepareStoriesTool prepareStoriesTool,
             HelpTool helpTool) {
         this.tools = List.of(
             createProjectTool,
             listProjectsTool,
             showProjectTool,
             addRequirementTool,
-            prepareStoriesTool,
             helpTool
         );
     }

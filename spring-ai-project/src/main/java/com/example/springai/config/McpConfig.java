@@ -1,6 +1,7 @@
 package com.example.springai.config;
 
-import com.example.springai.mcp.*;
+import com.example.springai.tool.*; // Updated import
+import com.example.springai.mcp.McpClient; // Keep specific MCP imports
 import com.example.springai.service.McpToolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,9 +29,6 @@ public class McpConfig {
     private AddRequirementTool addRequirementTool;
 
     @Autowired
-    private PrepareStoriesTool prepareStoriesTool;
-
-    @Autowired
     private HelpTool helpTool;
 
     /**
@@ -44,7 +42,6 @@ public class McpConfig {
                 listProjectsTool,
                 showProjectTool,
                 addRequirementTool,
-                prepareStoriesTool,
                 helpTool
         );
         return new McpClient(tools);
@@ -61,7 +58,6 @@ public class McpConfig {
                 listProjectsTool,
                 showProjectTool,
                 addRequirementTool,
-                prepareStoriesTool,
                 helpTool
         );
     }
