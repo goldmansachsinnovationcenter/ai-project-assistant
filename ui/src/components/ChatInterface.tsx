@@ -19,17 +19,20 @@ const ChatInterface: React.FC = () => {
 
   useEffect(() => {
     scrollToBottom();
+    if (messages.length > 0) {
+      localStorage.setItem('chatHistory', JSON.stringify(messages));
+    }
   }, [messages]);
 
-  const loadChatHistory = async () => {
+  const loadChatHistory = () => {
     setIsLoadingHistory(true);
     try {
-      try {
-        const history = await getChatHistory(20);
-        setMessages(history);
-      } catch (err) {
-        console.error("Failed to load chat history:", err);
+      const savedHistory = localStorage.getItem('chatHistory');
+      if (savedHistory) {
+        setMessages(JSON.parse(savedHistory));
       }
+    } catch (err) {
+      console.error("Failed to load chat history:", err);
     } finally {
       setIsLoadingHistory(false);
     }
