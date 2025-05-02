@@ -1,0 +1,41 @@
+{
+  "logs": [
+    {
+      "id": "log-001",
+      "timestamp": "2025-04-07T18:30:00Z",
+      "user": "user123",
+      "action": "login",
+      "resource": "devin-platform",
+      "status": "success",
+      "ip_address": "192.168.1.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    },
+    {
+      "id": "log-002",
+      "timestamp": "2025-04-07T18:35:10Z",
+      "user": "user123",
+      "action": "create_project",
+      "resource": "project-xyz",
+      "status": "success",
+      "ip_address": "192.168.1.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    },
+    {
+      "id": "log-003",
+      "timestamp": "2025-04-07T18:40:22Z",
+      "user": "user456",
+      "action": "login",
+      "resource": "devin-platform",
+      "status": "failed",
+      "reason": "invalid_credentials",
+      "ip_address": "10.0.0.5",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+    }
+  ],
+  "pagination": {
+    "total": 3,
+    "limit": 100,
+    "offset": 0,
+    "has_more": false
+  }
+}

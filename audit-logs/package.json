@@ -1,0 +1,32 @@
+{
+  "name": "devin-audit-logs",
+  "version": "1.0.0",
+  "main": "devin-audit-logs.js",
+  "type": "module",
+  "scripts": {
+    "test": "node lambda.test.js",
+    "start": "node devin-audit-logs.js"
+  },
+  "keywords": [
+    "devin",
+    "audit",
+    "logs",
+    "s3"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "A utility for fetching Devin AI audit logs and uploading them to S3",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.782.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.0",
+    "@types/node-fetch": "^2.6.4",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
+  }
+}
