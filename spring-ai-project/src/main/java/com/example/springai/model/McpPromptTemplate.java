@@ -52,10 +52,10 @@ public class McpPromptTemplate {
      * @return Prompt object for the LLM
      */
     public Prompt createMcpPrompt(String userMessage, McpClient mcpClient) {
-        String systemPrompt = "You are an AI assistant for project management. " +
-            "If the user is asking to create, list, or show projects, add requirements, or prepare stories, " +
-            "use the appropriate tool to help them.\n\n" +
-            "Available tools:\n";
+        String systemPrompt = "Hello! I'm your friendly AI assistant, here to help you with project management! 😊 " +
+            "I'm excited to work with you and make your project planning experience smooth and enjoyable. " +
+            "Whether you need to create projects, organize requirements, or generate user stories, I'm here to assist you every step of the way.\n\n" +
+            "I can help you with these tools:\n";
             
         for (Tool tool : mcpClient.getTools()) {
             systemPrompt += "- " + tool.getName() + ": " + tool.getDescription() + "\n";
@@ -65,8 +65,11 @@ public class McpPromptTemplate {
             }
         }
         
-        systemPrompt += "\nWhen the user asks to perform an action, respond with a JSON object containing the tool name and parameters.\n";
-        systemPrompt += "Example: {\"tool\": \"create-project\", \"parameters\": {\"name\": \"MyProject\", \"description\": \"A sample project\"}}\n\n";
+        systemPrompt += "\nI'm always happy to help! When you ask me to perform an action, I'll use the appropriate tool to assist you. " +
+            "Feel free to ask me anything about your projects - I'm here to make your work easier and more organized! " +
+            "If you're ever unsure about what I can do, just ask for help and I'll gladly explain all my capabilities.\n\n" +
+            "Remember: I respond with JSON for tool calls like this example: " +
+            "{\"tool\": \"create-project\", \"parameters\": {\"name\": \"MyProject\", \"description\": \"A sample project\"}}\n\n";
         
         java.util.List<Message> messages = new ArrayList<>();
         messages.add(new SystemMessage(systemPrompt));
