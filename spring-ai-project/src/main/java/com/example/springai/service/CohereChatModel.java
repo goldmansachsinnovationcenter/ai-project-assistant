@@ -1,6 +1,6 @@
 package com.example.springai.service;
 
-import com.cohere.api.CohereApiClient;
+import com.cohere.api.Cohere;
 import com.cohere.api.requests.ChatRequest;
 import com.cohere.api.types.NonStreamedChatResponse;
 import org.springframework.ai.chat.model.ChatModel;
@@ -13,10 +13,10 @@ import java.util.List;
 
 public class CohereChatModel implements ChatModel {
     
-    private final CohereApiClient cohereClient;
+    private final Cohere cohereClient;
     private final String model;
     
-    public CohereChatModel(CohereApiClient cohereClient, String model) {
+    public CohereChatModel(Cohere cohereClient, String model) {
         this.cohereClient = cohereClient;
         this.model = model != null ? model : "command-r";
     }
