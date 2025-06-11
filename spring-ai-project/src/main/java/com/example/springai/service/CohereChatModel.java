@@ -33,7 +33,6 @@ public class CohereChatModel implements ChatModel {
             
             ChatRequest request = ChatRequest.builder()
                     .message(currentMessage)
-                    .stream(false)
                     .model(model)
                     .build();
             
