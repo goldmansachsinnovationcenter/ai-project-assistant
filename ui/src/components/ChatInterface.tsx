@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { sendMessage, getChatHistory, chatWithAI } from "../lib/api";
+import { sendMessage, getChatHistory, chatWithAI, chatWithMcp } from "../lib/api";
 
 const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<
