@@ -12,7 +12,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
  */
 export async function chatWithAI(message: string, provider: string = 'OLLAMA'): Promise<string> {
   try {
-    const response = await fetch(`${API_URL}/ai/chat?message=${encodeURIComponent(message)}&provider=${provider}`, {
+    const response = await fetch(`${API_URL}/api/ai/chat?message=${encodeURIComponent(message)}&provider=${provider}`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export async function sendMessage(message: string): Promise<string> {
  */
 export async function chatWithMcp(message: string, provider: string = 'COHERE'): Promise<string> {
   try {
-    const response = await fetch(`${API_URL}/ai/mcp-chat?message=${encodeURIComponent(message)}&provider=${provider}`, {
+    const response = await fetch(`${API_URL}/api/ai/mcp-chat?message=${encodeURIComponent(message)}&provider=${provider}`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
@@ -191,7 +191,7 @@ export interface ChatMessage {
  */
 export async function getChatHistory(limit: number = 20): Promise<ChatMessage[]> {
   try {
-    const response = await fetch(`${API_URL}/ai/chat-history?limit=${limit}`, {
+    const response = await fetch(`${API_URL}/api/ai/chat-history?limit=${limit}`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',

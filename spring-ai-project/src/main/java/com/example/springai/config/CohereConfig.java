@@ -15,7 +15,7 @@ public class CohereConfig {
     @Bean
     public CohereApiClient cohereClient() {
         ClientOptions clientOptions = ClientOptions.builder()
-                .addHeader("Authorization", "Bearer " + apiKey)
+                .apiKey(apiKey)
                 .build();
         return new CohereApiClient(clientOptions);
     }
