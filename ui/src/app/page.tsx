@@ -14,20 +14,20 @@ export default function Home() {
             height={30}
             priority
           />
-          <h1 className="text-3xl font-bold">Spring AI Chat</h1>
+          <h1 className="text-3xl font-bold">AI Project Assistant</h1>
         </div>
         
         <div className="bg-white rounded-lg shadow-md p-6">
           <p className="mb-4">
-            This application demonstrates integration between Next.js and Spring AI.
-            The UI is built with Next.js 15 and Tailwind CSS, while the backend uses
-            Spring Boot with Spring AI and Ollama integration.
+            AI-powered project management and collaboration tool. Create projects, manage requirements,
+            generate user stories, and collaborate with AI assistance. Built with Next.js, Spring Boot,
+            and Spring AI with Ollama integration.
           </p>
           
           <div className="bg-blue-50 p-4 rounded-md mb-6">
             <h2 className="text-xl font-semibold mb-2">Getting Started</h2>
             <p>
-              Use the links below to access the chat interface or topic summary tool.
+              Create and manage projects, chat with AI for assistance, or use the topic summary tool.
             </p>
           </div>
           
