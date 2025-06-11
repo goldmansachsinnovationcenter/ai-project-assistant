@@ -54,30 +54,34 @@ const ChatInterface: React.FC = () => {
     try {
       console.log('Sending message to API:', userMessage);
       
-      const apiUrl = 'http://localhost:8080/api/ai/mcp-chat?message=' + encodeURIComponent(userMessage);
-      console.log('API URL:', apiUrl);
-      
-      const fetchResponse = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'text/plain',
-        },
-      });
-      
-      console.log('Fetch response status:', fetchResponse.status);
-      
-      if (!fetchResponse.ok) {
-        throw new Error(`API error: ${fetchResponse.status}`);
-      }
-      
-      const response = await fetchResponse.text();
+      const response = await sendMessage(userMessage);
       console.log('Received response from API:', response);
+      
+      let responseText: string;
+      if (typeof response === 'string') {
+        responseText = response;
+      } else {
+        if (response.type === 'market_data' && response.data) {
+          const marketData = response.data as any;
+          responseText = `Current S&P 500 Data:\nPrice: $${marketData.price}\nVolume: ${marketData.volume}\nChange: ${marketData.change_percent}%\nLast Updated: ${marketData.timestamp}`;
+        } else if (response.type === 'market_news' && response.data) {
+          const news = response.data as any[];
+          responseText = `Latest Market News:\n${news.map(item => `• ${item.title} (${item.source})`).join('\n')}`;
+        } else if (response.type === 'market_prediction' && response.data) {
+          const prediction = response.data as any;
+          responseText = `Market Prediction:\nSymbol: ${prediction.symbol}\nPredicted Price: $${prediction.predicted_price}\nConfidence: ${prediction.confidence_score}\nTime Horizon: ${prediction.time_horizon}`;
+        } else if (response.type === 'chart_data' && response.data) {
+          const chartData = response.data as any;
+          responseText = `Chart data generated for ${chartData.symbol} (${chartData.days} days)`;
+        } else {
+          responseText = response.message || 'Market data response received';
+        }
+      }
       
       // Update the response in the messages array
       setMessages(prev => 
         prev.map((msg, idx) => 
-          idx === prev.length - 1 ? { ...msg, response } : msg
+          idx === prev.length - 1 ? { ...msg, response: responseText } : msg
         )
       );
     } catch (err: unknown) {
