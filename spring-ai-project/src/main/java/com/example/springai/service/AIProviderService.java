@@ -1,7 +1,7 @@
 package com.example.springai.service;
 
 import org.springframework.ai.chat.model.ChatModel;
-import com.cohere.api.Cohere;
+import com.cohere.api.CohereApiClient;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 public class AIProviderService {
     
     private final OllamaChatModel ollamaChatModel;
-    private final Cohere cohereClient;
+    private final CohereApiClient cohereClient;
     private final CohereChatModel cohereChatModel;
     
     public AIProviderService(OllamaChatModel ollamaChatModel, 
-                           Cohere cohereClient,
+                           CohereApiClient cohereClient,
                            @Value("${spring.ai.cohere.model:command-r}") String cohereModel) {
         this.ollamaChatModel = ollamaChatModel;
         this.cohereClient = cohereClient;
@@ -32,7 +32,7 @@ public class AIProviderService {
         };
     }
 
-    public Cohere getCohereClient() {
+    public CohereApiClient getCohereClient() {
         return cohereClient;
     }
 }
