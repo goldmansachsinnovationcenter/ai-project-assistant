@@ -7,11 +7,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 /**
  * Send a message to the AI chat endpoint
  * @param message The message to send to the AI
+ * @param provider The AI provider to use (OLLAMA or COHERE)
  * @returns The AI's response
  */
-export async function chatWithAI(message: string): Promise<string> {
+export async function chatWithAI(message: string, provider: string = 'OLLAMA'): Promise<string> {
   try {
-    const response = await fetch(`${API_URL}/ai/chat?message=${encodeURIComponent(message)}`, {
+    const response = await fetch(`${API_URL}/ai/chat?message=${encodeURIComponent(message)}&provider=${provider}`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
@@ -42,11 +43,12 @@ export async function sendMessage(message: string): Promise<string> {
 /**
  * Send a message to the AI chat endpoint using MCP
  * @param message The message to send to the AI
+ * @param provider The AI provider to use (OLLAMA or COHERE)
  * @returns The AI's response
  */
-export async function chatWithMcp(message: string): Promise<string> {
+export async function chatWithMcp(message: string, provider: string = 'COHERE'): Promise<string> {
   try {
-    const response = await fetch(`${API_URL}/ai/chat?message=${encodeURIComponent(message)}`, {
+    const response = await fetch(`${API_URL}/ai/mcp-chat?message=${encodeURIComponent(message)}&provider=${provider}`, {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
