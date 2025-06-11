@@ -1,6 +1,7 @@
 package com.example.springai.config;
 
 import com.cohere.api.CohereApiClient;
+import com.cohere.api.core.ClientOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +14,9 @@ public class CohereConfig {
 
     @Bean
     public CohereApiClient cohereClient() {
-        return CohereApiClient.builder()
-                .token(apiKey)
+        ClientOptions clientOptions = ClientOptions.builder()
+                .addHeader("Authorization", "Bearer " + apiKey)
                 .build();
+        return new CohereApiClient(clientOptions);
     }
 }
