@@ -1,6 +1,7 @@
 package com.example.springai.config;
 
 import com.cohere.api.Cohere;
+import com.cohere.api.core.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ public class CohereConfig {
     public Cohere cohereClient() {
         return Cohere.builder()
                 .token(apiKey)
+                .environment(Environment.PRODUCTION)
                 .clientName("ai-project-assistant")
                 .build();
     }
