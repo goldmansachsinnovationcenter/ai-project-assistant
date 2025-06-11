@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { getTopicSummary } from '@/lib/api';
+import Breadcrumb from '../../components/Breadcrumb';
 
 export default function SummaryPage() {
   const [topic, setTopic] = useState('');
@@ -30,7 +32,29 @@ export default function SummaryPage() {
   return (
     <main className="min-h-screen p-8 bg-gray-50">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-center">Topic Summary Tool</h1>
+        <Breadcrumb items={[
+          { label: 'Home', href: '/' },
+          { label: 'Summary' }
+        ]} />
+        
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold">Topic Summary Tool</h1>
+          
+          <div className="flex space-x-4">
+            <Link 
+              href="/"
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+            >
+              Home
+            </Link>
+            <Link 
+              href="/projects"
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+            >
+              Projects
+            </Link>
+          </div>
+        </div>
         
         <div className="w-full max-w-2xl mx-auto p-4 bg-white rounded-lg shadow-md">
           <form onSubmit={handleSubmit} className="mb-4">

@@ -1,12 +1,21 @@
-import ChatInterface from '../../components/ChatInterface';
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
+import ChatInterface from '../../components/ChatInterface';
+import Breadcrumb from '../../components/Breadcrumb';
 
 export default function ChatPage() {
   return (
     <main className="min-h-screen p-8 bg-gray-50">
       <div className="max-w-4xl mx-auto">
+        <Breadcrumb items={[
+          { label: 'Home', href: '/' },
+          { label: 'Chat' }
+        ]} />
+        
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">Spring AI Chat</h1>
+          <h1 className="text-3xl font-bold">Chat with AI</h1>
           
           <div className="flex space-x-4">
             <Link 
@@ -21,14 +30,9 @@ export default function ChatPage() {
             >
               Projects
             </Link>
-            <Link 
-              href="/chat"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Chat
-            </Link>
           </div>
         </div>
+        
         <ChatInterface />
       </div>
     </main>
