@@ -1,7 +1,7 @@
 package com.example.springai.service;
 
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.cohere.CohereChatModel;
+import com.cohere.api.CohereApiClient;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.stereotype.Service;
 
@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 public class AIProviderService {
     
     private final OllamaChatModel ollamaChatModel;
-    private final CohereChatModel cohereChatModel;
+    private final CohereApiClient cohereClient;
     
-    public AIProviderService(OllamaChatModel ollamaChatModel, CohereChatModel cohereChatModel) {
+    public AIProviderService(OllamaChatModel ollamaChatModel, CohereApiClient cohereClient) {
         this.ollamaChatModel = ollamaChatModel;
-        this.cohereChatModel = cohereChatModel;
+        this.cohereClient = cohereClient;
     }
     
     public enum Provider {
@@ -23,7 +23,11 @@ public class AIProviderService {
     public ChatModel getChatModel(Provider provider) {
         return switch (provider) {
             case OLLAMA -> ollamaChatModel;
-            case COHERE -> cohereChatModel;
+            case COHERE -> throw new UnsupportedOperationException("Cohere integration requires custom implementation");
         };
+    }
+
+    public CohereApiClient getCohereClient() {
+        return cohereClient;
     }
 }
