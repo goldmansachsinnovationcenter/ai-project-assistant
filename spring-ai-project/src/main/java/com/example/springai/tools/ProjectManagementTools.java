@@ -1,8 +1,10 @@
 package com.example.springai.tools;
 
 import com.example.springai.entity.Project;
+import com.example.springai.entity.Conversation;
 import com.example.springai.model.StoryAnalysisResponse;
 import com.example.springai.service.ProjectService;
+import com.example.springai.service.ConversationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ksuid.Ksuid;
 import org.springframework.ai.chat.client.ChatClient;
@@ -10,16 +12,19 @@ import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class ProjectManagementTools {
 
     private final ProjectService projectService;
+    private final ConversationService conversationService;
     private final OllamaChatModel chatModel;
 
-    public ProjectManagementTools(ProjectService projectService, OllamaChatModel chatModel) {
+    public ProjectManagementTools(ProjectService projectService, ConversationService conversationService, OllamaChatModel chatModel) {
         this.projectService = projectService;
+        this.conversationService = conversationService;
         this.chatModel = chatModel;
     }
 
@@ -362,6 +367,160 @@ public class ProjectManagementTools {
             return result.toString();
         } catch (Exception e) {
             return "Failed to refine requirements: " + e.getMessage();
+        }
+    }
+
+    @Tool(description = "Set chatbot personality and response style for conversations")
+    public String setChatbotPersonality(String personality, String responseStyle) {
+        System.out.println("Set chatbot personality tool called");
+        if (personality == null || personality.trim().isEmpty()) {
+            return "Personality is required. Available options: helpful, professional, friendly, technical, creative";
+        }
+        
+        try {
+            String validPersonalities = "helpful,professional,friendly,technical,creative";
+            if (!validPersonalities.contains(personality.toLowerCase())) {
+                return String.format("Invalid personality '%s'. Available options: %s", personality, validPersonalities);
+            }
+            
+            String style = responseStyle != null ? responseStyle : "balanced";
+            return String.format("Chatbot personality set to '%s' with response style '%s'. This will apply to new conversations.", personality, style);
+        } catch (Exception e) {
+            return "Failed to set chatbot personality: " + e.getMessage();
+        }
+    }
+
+    @Tool(description = "Start a new conversation with specified personality")
+    public String startConversation(String userId, String personality) {
+        System.out.println("Start conversation tool called");
+        if (userId == null || userId.trim().isEmpty()) {
+            userId = "default-user";
+        }
+        
+        try {
+            String chatbotPersonality = personality != null ? personality : "helpful";
+            Conversation conversation = conversationService.startConversation(userId, chatbotPersonality);
+            
+            return String.format("New conversation started with ID: %s. Personality: %s. You can now chat with enhanced context retention.", 
+                                 conversation.getId(), conversation.getPersonality());
+        } catch (Exception e) {
+            return "Failed to start conversation: " + e.getMessage();
+        }
+    }
+
+    @Tool(description = "Analyze conversation context and suggest next actions")
+    public String analyzeConversationContext(String conversationId) {
+        System.out.println("Analyze conversation context tool called");
+        if (conversationId == null || conversationId.trim().isEmpty()) {
+            return "Conversation ID is required";
+        }
+        
+        try {
+            var conversationOpt = conversationService.findConversationById(conversationId);
+            if (conversationOpt.isEmpty()) {
+                return String.format("Conversation '%s' not found", conversationId);
+            }
+            
+            var conversation = conversationOpt.get();
+            StringBuilder analysis = new StringBuilder();
+            analysis.append("Conversation Context Analysis:\n\n");
+            analysis.append(String.format("Conversation ID: %s\n", conversation.getId()));
+            analysis.append(String.format("Personality: %s\n", conversation.getPersonality()));
+            analysis.append(String.format("Duration: %s to %s\n", conversation.getStartTime(), conversation.getLastActivity()));
+            analysis.append(String.format("Message Count: %d\n\n", conversation.getMessages().size()));
+            
+            if (!conversation.getContext().isEmpty()) {
+                analysis.append("Current Context:\n").append(conversation.getContext()).append("\n\n");
+            }
+            
+            analysis.append("Suggested Next Actions:\n");
+            if (conversation.getMessages().size() < 3) {
+                analysis.append("- Continue building rapport and understanding user needs\n");
+            } else {
+                analysis.append("- Summarize key discussion points\n");
+                analysis.append("- Identify action items or next steps\n");
+                analysis.append("- Ask clarifying questions if needed\n");
+            }
+            
+            return analysis.toString();
+        } catch (Exception e) {
+            return "Failed to analyze conversation context: " + e.getMessage();
+        }
+    }
+
+    @Tool(description = "Generate conversation summary and action items")
+    public String generateConversationSummary(String conversationId) {
+        System.out.println("Generate conversation summary tool called");
+        if (conversationId == null || conversationId.trim().isEmpty()) {
+            return "Conversation ID is required";
+        }
+        
+        try {
+            String summary = conversationService.generateConversationSummary(conversationId);
+            var analytics = conversationService.getConversationAnalytics(conversationId);
+            
+            StringBuilder result = new StringBuilder(summary);
+            result.append("\nAnalytics Summary:\n");
+            result.append(String.format("Total Analytics Records: %d\n", analytics.size()));
+            
+            if (!analytics.isEmpty()) {
+                var recentAnalytics = analytics.get(0);
+                result.append(String.format("Latest Intent: %s\n", recentAnalytics.getIntent()));
+                result.append(String.format("Latest Sentiment: %s\n", recentAnalytics.getSentiment()));
+                if (recentAnalytics.getResponseTime() != null) {
+                    result.append(String.format("Latest Response Time: %dms\n", recentAnalytics.getResponseTime()));
+                }
+            }
+            
+            return result.toString();
+        } catch (Exception e) {
+            return "Failed to generate conversation summary: " + e.getMessage();
+        }
+    }
+
+    @Tool(description = "Get chatbot analytics and performance metrics")
+    public String getChatbotAnalytics(String timeRange) {
+        System.out.println("Get chatbot analytics tool called");
+        try {
+            LocalDateTime since;
+            switch (timeRange != null ? timeRange.toLowerCase() : "day") {
+                case "hour":
+                    since = LocalDateTime.now().minusHours(1);
+                    break;
+                case "week":
+                    since = LocalDateTime.now().minusWeeks(1);
+                    break;
+                case "month":
+                    since = LocalDateTime.now().minusMonths(1);
+                    break;
+                default:
+                    since = LocalDateTime.now().minusDays(1);
+            }
+            
+            StringBuilder analytics = new StringBuilder();
+            analytics.append(String.format("Chatbot Analytics (Last %s):\n\n", timeRange != null ? timeRange : "day"));
+            
+            var topIntents = conversationService.getTopIntents(since);
+            analytics.append("Top Intents:\n");
+            for (Object[] intent : topIntents) {
+                analytics.append(String.format("- %s: %d occurrences\n", intent[0], intent[1]));
+            }
+            analytics.append("\n");
+            
+            var avgResponseTime = conversationService.getAverageResponseTime(since);
+            if (avgResponseTime != null) {
+                analytics.append(String.format("Average Response Time: %.2fms\n\n", avgResponseTime));
+            }
+            
+            var sentimentDist = conversationService.getSentimentDistribution(since);
+            analytics.append("Sentiment Distribution:\n");
+            for (Object[] sentiment : sentimentDist) {
+                analytics.append(String.format("- %s: %d occurrences\n", sentiment[0], sentiment[1]));
+            }
+            
+            return analytics.toString();
+        } catch (Exception e) {
+            return "Failed to get chatbot analytics: " + e.getMessage();
         }
     }
 }

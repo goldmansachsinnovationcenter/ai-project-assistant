@@ -2,7 +2,7 @@
  * API client for interacting with the Spring AI backend
  */
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const API_URL = 'http://localhost:8080';
 
 /**
  * Send a message to the AI chat endpoint
@@ -309,6 +309,154 @@ export async function getAllProjectsWithDetails(): Promise<{count: number, proje
     return await response.json();
   } catch (error) {
     console.error('Error getting detailed projects:', error);
+    throw error;
+  }
+}
+
+export interface Conversation {
+  id: string;
+  userId: string;
+  personality: string;
+  context: string;
+  startTime: string;
+  lastActivity: string;
+  messages: ChatMessage[];
+}
+
+export interface ChatbotAnalytics {
+  id: string;
+  conversationId: string;
+  intent: string;
+  sentiment: string;
+  responseTime: number;
+  timestamp: string;
+}
+
+export interface ChatbotSettings {
+  personality: string;
+  responseStyle: string;
+  contextRetention: boolean;
+}
+
+export interface ConversationSummary {
+  summary: string;
+  analyticsCount: number;
+  conversation: Conversation;
+}
+
+export interface AnalyticsData {
+  timeRange: string;
+  topIntents: [string, number][];
+  averageResponseTime: number;
+  sentimentDistribution: [string, number][];
+}
+
+export async function startConversation(userId: string = 'default-user', personality: string = 'helpful'): Promise<Conversation> {
+  try {
+    const response = await fetch(`${API_URL}/api/ai/chat/conversation`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, personality }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error starting conversation:', error);
+    throw error;
+  }
+}
+
+export async function getConversation(conversationId: string): Promise<Conversation> {
+  try {
+    const response = await fetch(`${API_URL}/api/ai/chat/conversation/${conversationId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching conversation:', error);
+    throw error;
+  }
+}
+
+export async function getConversationSummary(conversationId: string): Promise<ConversationSummary> {
+  try {
+    const response = await fetch(`${API_URL}/api/ai/chat/conversation/${conversationId}/summary`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching conversation summary:', error);
+    throw error;
+  }
+}
+
+export async function updateChatbotPersonality(settings: ChatbotSettings): Promise<void> {
+  try {
+    const response = await fetch(`${API_URL}/api/ai/chat/personality`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        personality: settings.personality,
+        responseStyle: settings.responseStyle,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error updating chatbot personality:', error);
+    throw error;
+  }
+}
+
+export async function getUserConversations(userId: string = 'default-user'): Promise<Conversation[]> {
+  try {
+    const response = await fetch(`${API_URL}/api/ai/chat/conversations?userId=${encodeURIComponent(userId)}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching user conversations:', error);
+    throw error;
+  }
+}
+
+export async function updateConversationContext(conversationId: string, context: string): Promise<void> {
+  try {
+    const response = await fetch(`${API_URL}/api/ai/chat/conversation/${conversationId}/context`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ context }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error updating conversation context:', error);
+    throw error;
+  }
+}
+
+export async function getChatbotAnalytics(timeRange: string = 'day'): Promise<AnalyticsData> {
+  try {
+    const response = await fetch(`${API_URL}/api/ai/chat/analytics?timeRange=${encodeURIComponent(timeRange)}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching chatbot analytics:', error);
     throw error;
   }
 }
