@@ -1,6 +1,10 @@
 package com.example.springai.service;
 
-import com.example.springai.tool.*; // Updated import
+import com.example.springai.tool.*;
+import com.example.springai.tool.CreateJiraTicketTool;
+import com.example.springai.tool.ListJiraProjectsTool;
+import com.example.springai.tool.SearchJiraTicketsTool;
+import com.example.springai.tool.JiraHelpTool;
 import com.example.springai.mcp.McpClient; // Keep specific MCP imports if needed
 import com.example.springai.mcp.Message;
 import com.example.springai.mcp.Prompt;
@@ -26,13 +30,21 @@ public class McpToolService {
             ListProjectsTool listProjectsTool,
             ShowProjectTool showProjectTool,
             AddRequirementTool addRequirementTool,
-            HelpTool helpTool) {
+            HelpTool helpTool,
+            CreateJiraTicketTool createJiraTicketTool,
+            ListJiraProjectsTool listJiraProjectsTool,
+            SearchJiraTicketsTool searchJiraTicketsTool,
+            JiraHelpTool jiraHelpTool) {
         this.tools = List.of(
             createProjectTool,
             listProjectsTool,
             showProjectTool,
             addRequirementTool,
-            helpTool
+            helpTool,
+            createJiraTicketTool,
+            listJiraProjectsTool,
+            searchJiraTicketsTool,
+            jiraHelpTool
         );
     }
 

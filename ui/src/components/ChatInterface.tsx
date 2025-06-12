@@ -2,11 +2,19 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { sendMessage, getChatHistory, chatWithAI } from "../lib/api";
+import JiraTicketList from "./JiraTicketList";
+import { JiraTicket } from "./JiraTicketCard";
+import { parseJiraResponse, formatJiraCommand } from "../utils/jiraParser";
+
+interface ChatMessage {
+  prompt: string;
+  response: string;
+  jiraTickets?: JiraTicket[];
+  hasJiraContent?: boolean;
+}
 
 const ChatInterface: React.FC = () => {
-  const [messages, setMessages] = useState<
-    { prompt: string; response: string }[]
-  >([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +60,7 @@ const ChatInterface: React.FC = () => {
 
     // Check if the message looks like a command
     const isCommand =
-      /^(create project|list projects|show project|add requirement|prepare stories|help)/i.test(
+      /^(create project|list projects|show project|add requirement|prepare stories|help|create jira|search jira|update jira|jira|list jira|get jira)/i.test(
         userMessage
       );
 
@@ -75,10 +83,17 @@ const ChatInterface: React.FC = () => {
 
       console.log("Received response from API:", response);
 
+      const parsedJira = parseJiraResponse(response);
+
       // Update the response in the messages array
-      setMessages((prev) =>
+      setMessages((prev: ChatMessage[]) =>
         prev.map((msg, idx) =>
-          idx === prev.length - 1 ? { ...msg, response } : msg
+          idx === prev.length - 1 ? { 
+            ...msg, 
+            response,
+            jiraTickets: parsedJira.tickets,
+            hasJiraContent: parsedJira.hasTickets
+          } : msg
         )
       );
     } catch (err: unknown) {
@@ -88,7 +103,7 @@ const ChatInterface: React.FC = () => {
       setError("Failed to get response from AI. Please try again.");
 
       // Update the error in the messages array
-      setMessages((prev) =>
+      setMessages((prev: ChatMessage[]) =>
         prev.map((msg, idx) =>
           idx === prev.length - 1
             ? {
@@ -123,13 +138,24 @@ const ChatInterface: React.FC = () => {
                 <div key={idx} className="mb-4">
                   <div className="bg-blue-100 p-3 rounded-lg mb-2">
                     <p className="font-semibold text-gray-800">You:</p>
-                    <p className="text-gray-500">{msg.prompt}</p>
+                    <p className="text-gray-500 whitespace-pre-wrap">{msg.prompt}</p>
                   </div>
                   <div className="bg-gray-100 p-3 rounded-lg">
                     <p className="font-semibold text-gray-800">AI:</p>
-                    <p className="whitespace-pre-wrap text-gray-500">
+                    <p className="whitespace-pre-wrap text-gray-500 mb-3">
                       {msg.response}
                     </p>
+                    {msg.hasJiraContent && msg.jiraTickets && msg.jiraTickets.length > 0 && (
+                      <div className="mt-3 p-3 bg-white rounded border">
+                        <JiraTicketList 
+                          tickets={msg.jiraTickets}
+                          title="Related Jira Tickets"
+                          onTicketClick={(ticket) => {
+                            console.log('Clicked ticket:', ticket.key);
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               ))
