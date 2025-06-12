@@ -6,6 +6,7 @@ import com.example.springai.dto.UpdateIssueRequest;
 import com.example.springai.entity.JiraIssue;
 import com.example.springai.entity.JiraProject;
 import com.example.springai.service.JiraService;
+import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,12 @@ import java.util.List;
 public class JiraManagementTools {
     
     private final JiraService jiraService;
+    private final OllamaChatModel chatModel;
     
-    public JiraManagementTools(JiraService jiraService) {
+    public JiraManagementTools(JiraService jiraService, OllamaChatModel chatModel) {
         this.jiraService = jiraService;
+        this.chatModel = chatModel;
+        System.out.println("JiraManagementTools bean created successfully!");
     }
     
     @Tool(description = "Create a new Jira ticket with title, description, and project key")

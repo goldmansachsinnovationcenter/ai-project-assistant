@@ -10,6 +10,7 @@ import java.util.List;
 public class JiraIssue {
     
     @Id
+    @Column(name = "`key`")
     private String key;
     
     @Column(nullable = false)
