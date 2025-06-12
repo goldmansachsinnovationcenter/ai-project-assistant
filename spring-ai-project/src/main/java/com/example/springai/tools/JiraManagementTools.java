@@ -23,7 +23,7 @@ public class JiraManagementTools {
         System.out.println("JiraManagementTools bean created successfully!");
     }
     
-    @Tool(description = "List all available Jira projects")
+    @Tool(description = "List all available Jira projects from external Jira server - NOT internal project management system")
     public String listJiraProjects() {
         System.out.println("List Jira projects tool called");
         try {
@@ -48,7 +48,7 @@ public class JiraManagementTools {
         }
     }
     
-    @Tool(description = "Create a new Jira ticket with summary, description, project key, issue type, and priority")
+    @Tool(description = "Create a new Jira ticket in external Jira server with summary, description, project key, issue type, and priority")
     public String createJiraTicket(String summary, String description, String projectKey, String issueType, String priority) {
         System.out.println("Create Jira ticket tool called");
         if (summary == null || summary.trim().isEmpty()) {
@@ -70,7 +70,7 @@ public class JiraManagementTools {
         }
     }
     
-    @Tool(description = "Search for Jira tickets using JQL, project key, status, assignee, or keyword")
+    @Tool(description = "Search for Jira tickets in external Jira server using JQL, project key, status, assignee, or keyword")
     public String searchJiraTickets(String jql, String projectKey, String status, String assignee, String keyword) {
         System.out.println("Search Jira tickets tool called");
         try {
@@ -104,7 +104,7 @@ public class JiraManagementTools {
         }
     }
     
-    @Tool(description = "Display available Jira commands and usage examples")
+    @Tool(description = "Display available Jira integration commands and usage examples for external Jira server")
     public String jiraHelp() {
         System.out.println("Jira help tool called");
         StringBuilder response = new StringBuilder("Available Jira commands:\n\n");
