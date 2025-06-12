@@ -24,6 +24,10 @@ class McpToolServiceTest {
     @Mock private ShowProjectTool showProjectTool;
     @Mock private AddRequirementTool addRequirementTool;
     @Mock private HelpTool helpTool;
+    @Mock private CreateJiraTicketTool createJiraTicketTool;
+    @Mock private ListJiraProjectsTool listJiraProjectsTool;
+    @Mock private SearchJiraTicketsTool searchJiraTicketsTool;
+    @Mock private JiraHelpTool jiraHelpTool;
 
     private McpToolService mcpToolService;
 
@@ -34,25 +38,37 @@ class McpToolServiceTest {
                 listProjectsTool,
                 showProjectTool,
                 addRequirementTool,
-                helpTool
+                helpTool,
+                createJiraTicketTool,
+                listJiraProjectsTool,
+                searchJiraTicketsTool,
+                jiraHelpTool
         );
         lenient().when(createProjectTool.getName()).thenReturn("createProject");
         lenient().when(listProjectsTool.getName()).thenReturn("listProjects");
         lenient().when(showProjectTool.getName()).thenReturn("showProject");
         lenient().when(addRequirementTool.getName()).thenReturn("addRequirement");
         lenient().when(helpTool.getName()).thenReturn("help");
+        lenient().when(createJiraTicketTool.getName()).thenReturn("create-jira-ticket");
+        lenient().when(listJiraProjectsTool.getName()).thenReturn("list-jira-projects");
+        lenient().when(searchJiraTicketsTool.getName()).thenReturn("search-jira-tickets");
+        lenient().when(jiraHelpTool.getName()).thenReturn("jira-help");
     }
 
     @Test
     void getAllTools_ReturnsCorrectListOfTools() {
         List<Tool> tools = mcpToolService.getAllTools();
         assertNotNull(tools);
-        assertEquals(5, tools.size(), "Should return 5 tools");
+        assertEquals(9, tools.size(), "Should return 9 tools");
         assertTrue(tools.contains(createProjectTool));
         assertTrue(tools.contains(listProjectsTool));
         assertTrue(tools.contains(showProjectTool));
         assertTrue(tools.contains(addRequirementTool));
         assertTrue(tools.contains(helpTool));
+        assertTrue(tools.contains(createJiraTicketTool));
+        assertTrue(tools.contains(listJiraProjectsTool));
+        assertTrue(tools.contains(searchJiraTicketsTool));
+        assertTrue(tools.contains(jiraHelpTool));
         assertFalse(tools.stream().anyMatch(t -> "prepareStories".equals(t.getName())), "PrepareStoriesTool should not be present");
     }
 
@@ -111,14 +127,14 @@ class McpToolServiceTest {
     @Test
     void getMcpTools_ReturnsCorrectTools() {
         List<Tool> tools = mcpToolService.getMcpTools(); // Assuming this method exists and is relevant
-        assertEquals(5, tools.size(), "getMcpTools should return 5 tools");
+        assertEquals(9, tools.size(), "getMcpTools should return 9 tools");
         assertTrue(tools.contains(helpTool)); // Example check
     }
 
     @Test
     void getTools_ReturnsCorrectTools() {
         List<Tool> tools = mcpToolService.getTools();
-        assertEquals(5, tools.size(), "getTools should return 5 tools");
+        assertEquals(9, tools.size(), "getTools should return 9 tools");
         assertTrue(tools.contains(createProjectTool)); // Example check
     }
 }

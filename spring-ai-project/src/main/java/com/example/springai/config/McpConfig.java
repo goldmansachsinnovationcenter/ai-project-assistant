@@ -47,18 +47,5 @@ public class McpConfig {
         return new McpClient(tools);
     }
     
-    /**
-     * Configure the MCP tool service with available tools
-     * @return Configured MCP tool service
-     */
-    @Bean
-    public McpToolService mcpToolService() {
-        return new McpToolService(
-                createProjectTool,
-                listProjectsTool,
-                showProjectTool,
-                addRequirementTool,
-                helpTool
-        );
-    }
+
 }
