@@ -33,7 +33,7 @@ public class ProjectManagementTools {
         return this.projectService.createProject(name, description);
     }
 
-    @Tool(description = "list or show all available Projects")
+    // @Tool(description = "list or show all available Projects") // Temporarily disabled to test Jira tools
     public List<Project> listProject() {
         System.out.println("List projects tool called");
         return this.projectService.getAllProjects();
@@ -118,7 +118,7 @@ public class ProjectManagementTools {
         }
     }
 
-    @Tool(description = "Display available commands and usage examples")
+    // @Tool(description = "Display available commands and usage examples") // Temporarily disabled to test Jira tools
     public String help() {
         System.out.println("Help tool called");
         StringBuilder response = new StringBuilder("Available commands:\n\n");

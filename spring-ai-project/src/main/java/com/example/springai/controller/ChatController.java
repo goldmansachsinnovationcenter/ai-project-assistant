@@ -1,6 +1,7 @@
 package com.example.springai.controller;
 
 import com.example.springai.tools.ProjectManagementTools;
+import com.example.springai.tools.JiraManagementTools;
 import com.siva.ai.tools.DateTimeTools;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.ollama.OllamaChatModel;
@@ -15,10 +16,12 @@ public class ChatController {
 
     private final OllamaChatModel chatModel;
     private final ProjectManagementTools projectManagementTools;
+    private final JiraManagementTools jiraManagementTools;
 
-    public ChatController(OllamaChatModel chatModel, ProjectManagementTools projectManagementTools) {
+    public ChatController(OllamaChatModel chatModel, ProjectManagementTools projectManagementTools, JiraManagementTools jiraManagementTools) {
         this.chatModel = chatModel;
         this.projectManagementTools = projectManagementTools;
+        this.jiraManagementTools = jiraManagementTools;
     }
 
     @GetMapping("/ai/chat")
@@ -27,7 +30,7 @@ public class ChatController {
 
         String response = ChatClient.create(chatModel)
                 .prompt(message)
-                .tools(new DateTimeTools(), projectManagementTools)
+                .tools(new DateTimeTools(), projectManagementTools, jiraManagementTools)
                 .call()
                 .content();
 
