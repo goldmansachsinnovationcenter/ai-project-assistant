@@ -312,3 +312,103 @@ export async function getAllProjectsWithDetails(): Promise<{count: number, proje
     throw error;
   }
 }
+
+/**
+ * Jira Issue interface
+ */
+export interface JiraIssue {
+  key: string;
+  summary: string;
+  description?: string;
+  status: string;
+  assignee?: string;
+  priority?: string;
+  issueType?: string;
+  projectKey: string;
+  created?: string;
+  updated?: string;
+}
+
+/**
+ * Jira Project interface
+ */
+export interface JiraProject {
+  key: string;
+  name: string;
+  description?: string;
+}
+
+/**
+ * Send a Jira-specific command to the AI
+ * @param command The Jira command to execute
+ * @returns The AI's response with potential Jira data
+ */
+export async function sendJiraCommand(command: string): Promise<string> {
+  try {
+    const response = await fetch(`${API_URL}/api/ai/mcp-chat?message=${encodeURIComponent(command)}`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.generation || "No response from AI";
+  } catch (error) {
+    console.error('Error sending Jira command:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get Jira projects available
+ * @returns List of Jira projects
+ */
+export async function getJiraProjects(): Promise<JiraProject[]> {
+  try {
+    const response = await fetch(`${API_URL}/api/jira/projects`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error getting Jira projects:', error);
+    throw error;
+  }
+}
+
+/**
+ * Search Jira issues
+ * @param query Search query or JQL
+ * @returns List of matching Jira issues
+ */
+export async function searchJiraIssues(query: string): Promise<JiraIssue[]> {
+  try {
+    const response = await fetch(`${API_URL}/api/jira/search?q=${encodeURIComponent(query)}`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error searching Jira issues:', error);
+    throw error;
+  }
+}
