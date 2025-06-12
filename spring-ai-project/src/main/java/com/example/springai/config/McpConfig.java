@@ -31,6 +31,18 @@ public class McpConfig {
     @Autowired
     private HelpTool helpTool;
 
+    @Autowired
+    private CreateJiraTicketTool createJiraTicketTool;
+
+    @Autowired
+    private ListJiraProjectsTool listJiraProjectsTool;
+
+    @Autowired
+    private SearchJiraTicketsTool searchJiraTicketsTool;
+
+    @Autowired
+    private JiraHelpTool jiraHelpTool;
+
     /**
      * Configure the MCP client with available tools
      * @return Configured MCP client
@@ -42,10 +54,32 @@ public class McpConfig {
                 listProjectsTool,
                 showProjectTool,
                 addRequirementTool,
-                helpTool
+                helpTool,
+                createJiraTicketTool,
+                listJiraProjectsTool,
+                searchJiraTicketsTool,
+                jiraHelpTool
         );
         return new McpClient(tools);
     }
     
+    /**
+     * Configure the MCP tool service with available tools
+     * @return Configured MCP tool service
+     */
+    @Bean
+    public McpToolService mcpToolService() {
+        return new McpToolService(
+                createProjectTool,
+                listProjectsTool,
+                showProjectTool,
+                addRequirementTool,
+                helpTool,
+                createJiraTicketTool,
+                listJiraProjectsTool,
+                searchJiraTicketsTool,
+                jiraHelpTool
+        );
+    }
 
 }
