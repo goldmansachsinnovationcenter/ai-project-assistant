@@ -11,7 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
     "com.example.springai.service",
     "com.example.springai.config",
     "com.example.springai.mcp",
-    "com.example.springai.model"
+    "com.example.springai.model",
+    "com.example.springai.onboarding"
 })
 public class Application {
     public static void main(String[] args) {

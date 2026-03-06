@@ -31,7 +31,7 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link 
               href="/chat" 
               className="block p-4 bg-blue-600 text-white rounded-md text-center hover:bg-blue-700 transition-colors"
@@ -49,6 +49,12 @@ export default function Home() {
               className="block p-4 bg-gray-200 text-gray-800 rounded-md text-center hover:bg-gray-300 transition-colors"
             >
               Topic Summary Tool
+            </Link>
+            <Link 
+              href="/onboarding" 
+              className="block p-4 bg-slate-900 text-white rounded-md text-center hover:bg-slate-800 transition-colors"
+            >
+              GSIC-TRACK Onboarding Platform
             </Link>
           </div>
         </div>
